@@ -1,0 +1,53 @@
+<div id="{{section}}_content_wrapper" class="menu_section_content_wrapper">
+    {{#members}}
+    {{#visible}}
+    <div class="bio scrollable" id="{{section}}_{{#slugify}}{{name}}{{/slugify}}">
+        <h2>{{#toUppercase}}{{name}}{{/toUppercase}}</h2>
+        {{#character}}<h3>{{character}}</h3>{{/character}}
+        <div class="scroll_wrapper">
+            <div class="content viewport">
+                <div class="inner overview">
+                    <p>{{{bio}}}</p>
+                </div>
+            </div>
+
+            <div class="scrollbar" style="height: 230px;">
+                <div class="track" style="height: 230px;">
+                    <div class="trackStart"></div>
+                    <div class="trackEnd"></div>
+                    <div class="thumb" style="top: 93px; height: 42.59259259259259px;">
+                        <div class="thumb_inner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/visible}}
+    {{/members}}
+</div>
+<div id="{{section}}_list" class="section_side_menu scrollable">
+    <div class="scroll_wrapper">
+        <div class="content viewport">
+            <div class="inner overview">
+                <ul>
+                    {{#members}}
+                    {{#visible}}
+                    <li>
+                        <a data-backplate="{{backplate}}" href="#{{section}}_{{#slugify}}{{name}}{{/slugify}}">{{#toUppercase}}{{name}}{{/toUppercase}}</a>
+                    </li>
+                    {{/visible}}
+                    {{/members}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="scrollbar" style="height: 230px;">
+        <div class="track" style="height: 230px;">
+            <div class="trackStart"></div>
+            <div class="trackEnd"></div>
+            <div class="thumb" style="top: 93px; height: 42.59259259259259px;">
+                <div class="thumb_inner"></div>
+            </div>
+        </div>
+    </div>
+</div>

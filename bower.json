@@ -1,0 +1,12 @@
+{
+  "name": "oblio.js",
+  "version": "0.0.1",
+  "homepage": "http://theflock.com",
+  "ignore": [
+      ".bowerrc",
+      ".gitignore",
+      "bower.json",
+      "README.md"
+  ],
+  "description": "A set of utilities for Flock sites"
+}
