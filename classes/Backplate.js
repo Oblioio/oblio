@@ -92,8 +92,8 @@
             } else {
                 console.log('oblio.settings.window_dimensions.width & height ', oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
                 w = oblio.settings.window_dimensions.width;
-                h = oblio.settings.window_dimensions.height - (oblio.settings.header_height + oblio.settings.footer_height);
-                backplate_wrapper.style.top = oblio.settings.header_height + 'px';
+                h = oblio.settings.window_dimensions.height - (oblio.settings.headerHeight + oblio.settings.footerHeight);
+                backplate_wrapper.style.top = oblio.settings.headerHeight + 'px';
             }
         }
 

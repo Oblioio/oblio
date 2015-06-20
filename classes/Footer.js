@@ -208,7 +208,7 @@
         $('#sharelabel').on('click', this.toggleShare.bind(this));
 
         // $('#shareShelf').css('width', 'auto');
-        $('#shareShelf').css('top', oblio.settings.footer_height+'px');
+        $('#shareShelf').css('top', oblio.settings.footerHeight+'px');
         $('#shareShelfContents').css('width', 'auto');
 
         shareShelf_width = $('#shareShelfContents').width()+10;
@@ -225,7 +225,7 @@
         if (shareShelf[0].className.match('active') !== null || e === 'close') {
             shareShelf[0].className = shareShelf[0].className.replace('active', '');
             sharelabel.className = sharelabel.className.replace('active', '');
-            TweenLite.to(shareShelf, 0.5, {top: oblio.settings.footer_height + 'px', ease:Power4.easeInOut});
+            TweenLite.to(shareShelf, 0.5, {top: oblio.settings.footerHeight + 'px', ease:Power4.easeInOut});
             TweenLite.to(sharelabel, 0.5, {top:'0px', ease:Power4.easeInOut, onComplete: function () {
                 shareShelf[0].style.zIndex = 0;
                 sharelabel.style.zIndex = 1;
@@ -239,8 +239,8 @@
             sharelabel.style.zIndex = 11;
             document.getElementById('share').style.zIndex = 9;
 
-            TweenLite.to(shareShelf, 0.5, {top:-(shelf_height - oblio.settings.footer_height) + 'px', ease:Power4.easeInOut});
-            TweenLite.to(sharelabel, 0.5, {top:-(shelf_height - oblio.settings.footer_height) + 'px', ease:Power4.easeInOut});
+            TweenLite.to(shareShelf, 0.5, {top:-(shelf_height - oblio.settings.footerHeight) + 'px', ease:Power4.easeInOut});
+            TweenLite.to(sharelabel, 0.5, {top:-(shelf_height - oblio.settings.footerHeight) + 'px', ease:Power4.easeInOut});
 
             if (document.getElementById('credits-button').className.match('active')) {
                 this.toggleCredits();
@@ -311,7 +311,7 @@
     }
 
     function hide () {
-        TweenLite.to(this.elements.el, 0.25, {bottom: -oblio.settings.footer_height + 'px', ease:Power2.easeInOut, onComplete: function () {
+        TweenLite.to(this.elements.el, 0.25, {bottom: -oblio.settings.footerHeight + 'px', ease:Power2.easeInOut, onComplete: function () {
             // that.elements.el.style.display = 'none';
         }});
     }

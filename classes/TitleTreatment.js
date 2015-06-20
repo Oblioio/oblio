@@ -47,7 +47,7 @@
 
         this.fullwidth = oblio.settings.window_dimensions.width - 72;
         this.width = initial === 'large' ? this.fullwidth : 500;
-        this.height = oblio.settings.window_dimensions.height / 2 - oblio.settings.header_height / 2;
+        this.height = oblio.settings.window_dimensions.height / 2 - oblio.settings.headerHeight / 2;
 
         // set the width and height of the title wrappers
         // for (var i = this.elements.images.length - 1; i >= 0; i--) {
@@ -66,7 +66,7 @@
 
         this.elements.el.style.width = this.width + 'px';
         this.elements.el.style.height = this.height + 'px';
-        this.elements.el.style.bottom = ((oblio.settings.window_dimensions.height - (this.height + this.elements.el.offsetTop)) + oblio.settings.footer_height) + 'px';
+        this.elements.el.style.bottom = ((oblio.settings.window_dimensions.height - (this.height + this.elements.el.offsetTop)) + oblio.settings.footerHeight) + 'px';
         this.elements.el.style.left = -this.width + 'px';
 
         this.changeTitle(initial, 'right');
@@ -190,7 +190,7 @@
 
     /* change height to height available for title */
     function resize (h) {
-        h -= (17 + oblio.settings.footer_height);
+        h -= (17 + oblio.settings.footerHeight);
 
         if (isNaN(this.elements.large.ratio)) {
             this.elements.large.ratio = this.elements.large.img.offsetHeight / this.elements.large.img.offsetWidth;
