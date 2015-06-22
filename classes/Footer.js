@@ -39,7 +39,7 @@ define([
         if(document.getElementById('creditsbox-close'))$('#creditsbox-close').on('click', toggleCredits);
 
         this.initFollow(data);
-        this.initShare(data);
+        //this.initShare(data);
 
         if(this.init_extend)this.init_extend(data);
 
@@ -131,10 +131,11 @@ define([
         }
     }
 
-    function initShare(data){
+    function initShare () {
 
             //share buttons
-            var shareObj = data.footerShare,
+            var data = oblio.app.dataSrc.sections.main.data,
+                shareObj = data.footerShare,
                 node;
 
             if (shareObj) {
