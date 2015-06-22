@@ -142,7 +142,7 @@ define([
                 if(shareObj.VISIBLE === false){
                     $('#share').css('display', 'none');
                 } else {
-                    for (var btn_name in shareObj) {
+                    for (var btn_name in shareObj.show_buttons) {
                         if (shareObj.hasOwnProperty(btn_name)) {
                             switch (btn_name) {
                                 case 'googlePlus':
