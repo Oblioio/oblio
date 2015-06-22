@@ -1,26 +1,11 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'mustache',
-                'oblio/utils/DeviceDetect',
-                'greensock/TweenLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min'
-            ], function ($, Mustache) {
-            return (root.classes.Footer = factory($, Mustache));
-        });
-    } else {
-        root.classes.Footer = factory($, Mustache);
-    }
-}(window.oblio = window.oblio || {}, function ($, Mustache) {
+define([
+        'jquery',
+        'mustache',
+        'oblio/utils/DeviceDetect',
+        'greensock/TweenLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min'
+    ], function ($, Mustache) {
 
     'use strict';
 
@@ -57,6 +42,12 @@
         //Credits button
         $('#credits-button').on('click', this.toggleCredits.bind(this));
         if(document.getElementById('creditsbox-close'))$('#creditsbox-close').on('click', toggleCredits);
+
+        if (FB) {
+            initFB();
+        } else {
+            window.fbAsyncInit = initFB;
+        }
 
         this.initFollow(data);
         this.initShare(data);
@@ -321,7 +312,6 @@
         TweenLite.to(this.elements.el, 0.25, {bottom: '0px', ease:Power2.easeInOut});
     }
 
-
     Footer.prototype.initFollow = initFollow;
     Footer.prototype.initShare = initShare;
     Footer.prototype.toggleShare = toggleShare;
@@ -338,5 +328,25 @@
     Footer.prototype.showMPAARequirements = showMPAARequirements;
     Footer.prototype.hideMPAARequirements = hideMPAARequirements;
 
+    function initFB () {
+        FB.init({
+            appId: '',
+            xfbml      : true,  // parse social plugins on this page
+            version    : 'v2.1' // use version 2.1
+        });
+    }
+
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.Footer = new Footer();
+
     return Footer;
-}));
+});
