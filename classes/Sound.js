@@ -1,34 +1,29 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.app = root.app || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'howler'
-            ], function () {
-            return (root.app.Sound = factory());
-        });
-    } else {
-        root.app.Sound = factory();
-    }
-}(window.oblio = window.oblio || {}, function () {
+define([
+        'howler',
+        'greensock/TweenLite.min',
+        'utils/PageVisibility'
+    ], function () {
 
     'use strict';
-
+    /*jshint validthis:true*/
     var that;
 
     var Sound = function (sound) {
         console.log('Sound');
-        this.sounds = {}
-    }
+        this.sounds = {};
+        this.btn = null;
+    };
 
     function play (soundID, volume, loop) {
-        var sound = this.sounds[soundID],
-            loop = loop || false;
+        var sound = this.sounds[soundID];
+
+        if (volume === undefined) {
+            volume = 1;
+        }
+
+        if (loop === undefined) {
+            loop = false;
+        }
 
         if (typeof sound === 'undefined') {
             sound = this.addSound(soundID, {
@@ -42,15 +37,18 @@
                 sound.prev_volume = volume;
             }
             sound.play(soundID);
-            return sound;;
+            return sound;
         }
 
         if (volume) {
             sound.volume(volume);
             sound.prev_volume = volume;
+            sound.play();
+        } else {
+            sound.play();
+            fadeInAll();
         }
 
-        sound.play();
         return sound;
     }
 
@@ -64,40 +62,15 @@
     }
 
     function fadeInAll () {
-        var sound,
-            targetVolume;
-        for (var sound_name in this.sounds) {
-            if (this.sounds.hasOwnProperty(sound_name)) {
-                sound = this.sounds[sound_name];
-                if (typeof sound === 'string') {
-                    sound = this.sounds[sound];
-                }
-
-                targetVolume = sound.prev_volume || 1;
-                // sound.volume(1);
-                sound.fade(0, targetVolume, 1000, function () {
-                    console.log('fade in complete');
-                });
-            }
-        }
+        TweenLite.to({volume:0}, 0.5, {volume: 1, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+            Howler.volume(tween.target.volume);
+        }});
     }
 
     function fadeOutAll () {
-        var sound;
-
-        for (var sound_name in this.sounds) {
-            if (this.sounds.hasOwnProperty(sound_name)) {
-                sound = this.sounds[sound_name];
-                if (typeof sound === 'string') {
-                    sound = this.sounds[sound];
-                }
-                // sound.volume(0);
-                sound.prev_volume = sound.volume();
-                sound.fade(sound.volume(), 0, 1000, function () {
-                    console.log('fade out complete');
-                });
-            }
-        }
+        TweenLite.to({volume:1}, 0.5, {volume: 0, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+            Howler.volume(tween.target.volume);
+        }});
     }
 
     function stop (soundID) {
@@ -106,8 +79,6 @@
     }
 
     function mute (soundID) {
-        var sound = this.sounds[soundID];
-
         if (typeof sound === 'string') {
             sound = this.sounds[sound];
         }
@@ -121,13 +92,13 @@
     }
 
     function muteAll () {
-        // Howler.mute(); // mute doesn't do anything for some reason
         Howler.volume(0);
     }
 
     function unmuteAll () {
-        // Howler.unmute(); // mute not working
-        Howler.volume(1);
+        if (this.btn && this.btn.className.match(' on')) {
+            fadeInAll.apply(this);
+        }
     }
 
     function volume (soundID, targetVolume) {
@@ -189,6 +160,36 @@
 
     }
 
+    function initSoundButton (id) {
+        id = id || 'soundBars';
+        this.btn = document.getElementById(id);
+        this.btn.className = this.btn.className.replace(' off', '') + ' on';
+        $(this.btn).on('click', toggleSound.bind(this));
+
+        $(window).on('onPageVisibilityChange', function (e, status) {
+            switch (status) {
+                case 'hidden':
+                    muteAll.apply(this);
+                    break;
+                case 'visible':
+                    unmuteAll.apply(this);
+                    break;
+                default:
+            }
+        }.bind(this));
+    }
+
+    function toggleSound (e) {
+        e.preventDefault();
+        if (this.btn.className.match('on')) {
+            this.btn.className = this.btn.className.replace(' on', '') + ' off';
+            fadeOutAll.apply(this);
+        } else {
+            this.btn.className = this.btn.className.replace(' off', '') + ' on';
+            fadeInAll.apply(this);
+        }
+    }
+
     Sound.prototype.on = on;
     Sound.prototype.off = off;
     Sound.prototype.addSound = addSound;
@@ -205,5 +206,11 @@
     Sound.prototype.pauseAll = pauseAll;
     Sound.prototype.volume = volume;
 
-    return new Sound();
-}));
+    Sound.prototype.initSoundButton = initSoundButton;
+
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.sound = new Sound();
+
+    return oblio.classes.sound;
+});
