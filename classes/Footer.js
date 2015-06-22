@@ -1,7 +1,6 @@
 define([
         'jquery',
         'mustache',
-        'oblio/utils/DeviceDetect',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
@@ -9,16 +8,11 @@ define([
 
     'use strict';
 
-    var that,
-        isMobile = oblio.utils.DeviceDetect.isMobile,
-        shareShelf_width,
+    var shareShelfWidth,
         data;
 
-    var Footer = function (el) {
-        // console.log(oblio.app.dataSrc.sections);
-
-        that = this;
-    }
+    var Footer = function () {
+    };
 
     function init (el) {
         data = oblio.app.dataSrc.sections.main.data;
@@ -28,7 +22,7 @@ define([
 
         this.elements = {
             el: el
-        }
+        };
 
         var linkLists = data['footerLinks'] || [],
             list_container,
@@ -202,8 +196,8 @@ define([
         $('#shareShelf').css('top', oblio.settings.footerHeight+'px');
         $('#shareShelfContents').css('width', 'auto');
 
-        shareShelf_width = $('#shareShelfContents').width()+10;
-        $('#shareShelfContents').css('width', shareShelf_width+'px');
+        shareShelfWidth = $('#shareShelfContents').width()+10;
+        $('#shareShelfContents').css('width', shareShelfWidth+'px');
     }
 
     function toggleShare(e){
@@ -346,7 +340,7 @@ define([
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};
-    oblio.classes.Footer = new Footer();
+    oblio.classes.Footer = Footer;
 
     return Footer;
 });
