@@ -103,13 +103,13 @@
 
         var w, h;
 
-        oblio.settings.window_dimensions = {
+        oblio.settings.windowDimensions = {
             width: this.elements.window.width(),
             height: this.elements.window.height()
         }
 
-        w = Math.max(oblio.settings.min_width, oblio.settings.window_dimensions.width),
-        h = Math.max(oblio.settings.min_height, oblio.settings.window_dimensions.height);
+        w = Math.max(oblio.settings.minWidth, oblio.settings.windowDimensions.width),
+        h = Math.max(oblio.settings.minHeight, oblio.settings.windowDimensions.height);
 
         this.elements.shell[0].style.width = w + 'px';
 
@@ -137,7 +137,7 @@
                 } else {
                     portraitDiv.style.display = 'none';
                     if (oblio.settings.isIpad) {
-                        h = oblio.settings.window_dimensions.height = 672;
+                        h = oblio.settings.windowDimensions.height = 672;
                     }
                 }
             }
@@ -165,7 +165,7 @@
             oblio.settings.menu_width = oblio.app.mainMenu.resize();
         }
 
-        if (oblio.settings.window_dimensions.width < oblio.settings.min_width || oblio.settings.window_dimensions.height < oblio.settings.min_height) {
+        if (oblio.settings.windowDimensions.width < oblio.settings.minWidth || oblio.settings.windowDimensions.height < oblio.settings.minHeight) {
             this.elements.shell[0].style.position = 'absolute';
         } else {
             this.elements.shell[0].style.position = 'fixed';

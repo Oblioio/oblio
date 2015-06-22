@@ -682,8 +682,8 @@
                 w = this.elements.resizeContainer.offsetWidth;
                 h = this.elements.resizeContainer.offsetHeight;
             } else {
-                w = oblio.settings.window_dimensions.width;
-                h = oblio.settings.window_dimensions.height - (this.settings.headerHeight + this.settings.footerHeight);
+                w = oblio.settings.windowDimensions.width;
+                h = oblio.settings.windowDimensions.height - (this.settings.headerHeight + this.settings.footerHeight);
             }
         }
 
@@ -715,8 +715,8 @@
             this.state.next_index = 0;
         }
 
-        var w = oblio.settings.window_dimensions.width,
-            h = oblio.settings.window_dimensions.height;
+        var w = oblio.settings.windowDimensions.width,
+            h = oblio.settings.windowDimensions.height;
 
         this.slides[this.state.current_index].backplate.resize();
         this.slides[this.state.previous_index].backplate.resize();

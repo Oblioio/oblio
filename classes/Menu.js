@@ -263,7 +263,7 @@
 
     function resize () {
         if (this.menuPaginator) {
-            this.menuPaginator.resize(oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
+            this.menuPaginator.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
         }
 
         if (this.elements === undefined) {

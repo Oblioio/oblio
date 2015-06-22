@@ -43,7 +43,7 @@
         this.player_obj = new oblio.utils.VideoPlayerME(div, playerVars);
         
         this.ratio = ratio || default_ratio;
-        // this.resize(oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
+        // this.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
 
         this.player_obj.onLoadedMetadata = function () {
             var vid_width = that.player_obj.player.videoWidth,
@@ -59,7 +59,7 @@
 
             // console.log('on loaded metadata ' + that.ratio);
 
-            // that.resize(oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
+            // that.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
         }
     }
 

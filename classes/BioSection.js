@@ -223,7 +223,7 @@
     }
 
     function resize () {
-        var windowHeight = oblio.settings.window_dimensions.height,
+        var windowHeight = oblio.settings.windowDimensions.height,
             idealWindowHeight = 1500,
             percentageOfIdealHeight = Math.min(1, windowHeight / idealWindowHeight),
             minPercentage = 0.03,

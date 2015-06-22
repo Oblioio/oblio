@@ -45,9 +45,9 @@
         this.elements.small.img = $(this.elements.small.inner).find('img')[0];
         this.elements.small.ratio = this.elements.small.img.offsetHeight / this.elements.small.img.offsetWidth;
 
-        this.fullwidth = oblio.settings.window_dimensions.width - 72;
+        this.fullwidth = oblio.settings.windowDimensions.width - 72;
         this.width = initial === 'large' ? this.fullwidth : 500;
-        this.height = oblio.settings.window_dimensions.height / 2 - oblio.settings.headerHeight / 2;
+        this.height = oblio.settings.windowDimensions.height / 2 - oblio.settings.headerHeight / 2;
 
         // set the width and height of the title wrappers
         // for (var i = this.elements.images.length - 1; i >= 0; i--) {
@@ -66,11 +66,11 @@
 
         this.elements.el.style.width = this.width + 'px';
         this.elements.el.style.height = this.height + 'px';
-        this.elements.el.style.bottom = ((oblio.settings.window_dimensions.height - (this.height + this.elements.el.offsetTop)) + oblio.settings.footerHeight) + 'px';
+        this.elements.el.style.bottom = ((oblio.settings.windowDimensions.height - (this.height + this.elements.el.offsetTop)) + oblio.settings.footerHeight) + 'px';
         this.elements.el.style.left = -this.width + 'px';
 
         this.changeTitle(initial, 'right');
-        this.update(oblio.settings.window_dimensions.width);
+        this.update(oblio.settings.windowDimensions.width);
         this.finished = true;
 
         this.resize(this.height);
@@ -94,10 +94,10 @@
         this.waningWrapper = wrapper === 'large' ? 'small' : 'large';
 
         // if (wrapper === 'large') {
-        //     this.width = oblio.settings.window_dimensions.width - 72;
+        //     this.width = oblio.settings.windowDimensions.width - 72;
         //     offset = 0;
         // } else {
-        //     offset = oblio.settings.window_dimensions.width - 72 - this.elements.small.img.offsetWidth;
+        //     offset = oblio.settings.windowDimensions.width - 72 - this.elements.small.img.offsetWidth;
         // }
 
         switch (direction) {
@@ -118,7 +118,7 @@
             offset = 0;
         } else {
             // this.width = this.elements.small.img.offsetWidth;
-            offset = oblio.settings.window_dimensions.width - this.elements.small.img.offsetWidth;
+            offset = oblio.settings.windowDimensions.width - this.elements.small.img.offsetWidth;
         }
 
         this.elements.el.style.width = this.fullwidth + 'px';
@@ -200,7 +200,7 @@
             this.elements.small.ratio = this.elements.small.img.offsetHeight / this.elements.small.img.offsetWidth;
         }
 
-        this.fullwidth = oblio.settings.window_dimensions.width - 72;
+        this.fullwidth = oblio.settings.windowDimensions.width - 72;
 
         if (this.waxingWrapper === 'large') {
 

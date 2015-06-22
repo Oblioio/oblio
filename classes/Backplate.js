@@ -90,9 +90,9 @@
                 w = this.elements.resizeContainer.offsetWidth;
                 h = this.elements.resizeContainer.offsetHeight;
             } else {
-                console.log('oblio.settings.window_dimensions.width & height ', oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
-                w = oblio.settings.window_dimensions.width;
-                h = oblio.settings.window_dimensions.height - (oblio.settings.headerHeight + oblio.settings.footerHeight);
+                console.log('oblio.settings.windowDimensions.width & height ', oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
+                w = oblio.settings.windowDimensions.width;
+                h = oblio.settings.windowDimensions.height - (oblio.settings.headerHeight + oblio.settings.footerHeight);
                 backplate_wrapper.style.top = oblio.settings.headerHeight + 'px';
             }
         }

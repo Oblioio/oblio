@@ -163,7 +163,7 @@
         this.elements.el.appendChild(this.elements.thumb_wrapper);
         this.elements.thumbs = $(this.elements.thumb_list).find('.thumb'); //this.elements.thumb_list.getElementsByClassName('thumb');
 
-        this.resize(oblio.settings.window_dimensions.width, oblio.settings.window_dimensions.height);
+        this.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
         window.setTimeout(this._resizeThumbHolder.bind(this), 10); // not sure why this needs to be in a settimeout, but if it's not, the features are positioned partially off the screen to the right
     
         if (this.rotate) {

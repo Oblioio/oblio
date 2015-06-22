@@ -171,7 +171,7 @@
         this.elements.el.style.paddingRight = oblio.settings.menu_width + 'px';
 
         var quotes_height = $('.quote').height(),
-            padding_top = Math.min(tt_top - (quotes_height + 30), oblio.settings.window_dimensions.height / 2 - quotes_height / 2);
+            padding_top = Math.min(tt_top - (quotes_height + 30), oblio.settings.windowDimensions.height / 2 - quotes_height / 2);
         this.elements.el.style.paddingTop = padding_top + 'px';
         // console.log($('.quote').height());
     }

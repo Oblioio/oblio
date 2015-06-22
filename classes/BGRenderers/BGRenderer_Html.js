@@ -189,7 +189,7 @@
 
         if(!this.inner1)return;
         if(!w)w = oblio.settings.sectionWidth;
-        if(!h)h = oblio.settings.window_dimensions.height;
+        if(!h)h = oblio.settings.windowDimensions.height;
         this.width = w;
         this.height = h;
 
