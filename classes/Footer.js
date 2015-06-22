@@ -141,39 +141,59 @@ define([
     function initShare(data){
 
             //share buttons
-            var shareObj = data["footerShare"];
+            var shareObj = data.footerShare,
+                node;
 
             if (shareObj) {
-                if(String(shareObj["VISIBLE"]).toLowerCase() == "false"){
-                    $("#share").css("display", "none");
+                if(shareObj.VISIBLE === false){
+                    $('#share').css('display', 'none');
                 } else {
-                    var shareBtns = [
-                        {
-                            "JSON_ID": "getGlue",
-                            "HTML_ID": "getGlueBtn",
-                        },
-                        {
-                            "JSON_ID": "googlePlus",
-                            "HTML_ID": "gPlusBtn",
-                        },
-                        {
-                            "JSON_ID": "tweet",
-                            "HTML_ID": "tweetBtn",
-                        },
-                        {
-                            "JSON_ID": "facebook_like",
-                            "HTML_ID": "fbLikeBtn",
-                        },
-                        {
-                            "JSON_ID": "facebook_share",
-                            "HTML_ID": "share-facebook",
+                    for (var btn_name in shareObj) {
+                        if (shareObj.hasOwnProperty(btn_name)) {
+                            switch (btn_name) {
+                                case 'googlePlus':
+                                    if (shareObj[btn_name] === false) {
+                                        node = document.getElementById('gPlusBtn');
+                                        if (shareObj[btn_name] === false) {
+                                            node.parentNode.removeChild(node);
+                                        }
+                                    } else {
+                                        googlePlusScript();
+                                    }
+                                break;
+                                case 'tweet':
+                                    if (shareObj[btn_name] === false) {
+                                        node = document.getElementById('tweetBtn');
+                                        if (shareObj[btn_name] === false) {
+                                            node.parentNode.removeChild(node);
+                                        }
+                                    } else {
+                                        twitterScript();
+                                    }
+                                break;
+                                case 'facebook_like':
+                                    if (shareObj[btn_name] === false) {
+                                        node = document.getElementById('fbLike');
+                                        if (shareObj[btn_name] === false) {
+                                            node.parentNode.removeChild(node);
+                                        }
+                                    } else {
+                                        facebookScript();
+                                    }
+                                break;
+                                case 'facebook_share':
+                                    if (shareObj[btn_name] === false) {
+                                        node = document.getElementById('fbShare');
+                                        if (shareObj[btn_name] === false) {
+                                            node.parentNode.removeChild(node);
+                                        }
+                                    } else {
+                                        facebookScript();
+                                    }
+                                break;
+                                default:
+                            }
                         }
-                    ];
-
-                    for(var b=0; b<shareBtns.length; b++){
-                        var currBtn = shareBtns[b];
-                        var btnDisp = (shareObj["show_buttons"][currBtn["JSON_ID"]].toLowerCase() == "true")?"inherit":"none";
-                        $("#"+currBtn["HTML_ID"]).css("display", btnDisp);
                     }
                 }
             }
@@ -238,22 +258,14 @@ define([
         }
     }
 
-    function attachSocialScripts(callbackFn){
-        console.log('FOOTER | attachSocialScripts')
-        // getGlueScript();
-        twitterScript();
-        googlePlusScript();
-        if(callbackFn)callbackFn();
-    }
+    // function attachSocialScripts(callbackFn){
+    //     console.log('FOOTER | attachSocialScripts')
+    //     twitterScript();
+    //     googlePlusScript();
+    //     if(callbackFn)callbackFn();
+    // }
 
-    function getGlueScript(){
-        var s=document.createElement("script");
-        s.src="//widgets.getglue.com/checkin.js";
-        var n=document.getElementsByTagName("script")[0];
-        n.parentNode.insertBefore(s,n);
-    }
-
-    function twitterScript(){
+    function twitterScript () {
 
         window.twttr = (function (d,s,id) {
             var t, js, fjs = d.getElementsByTagName(s)[0];
@@ -269,12 +281,37 @@ define([
         });
     }
 
-    function googlePlusScript(){
+    function facebookScript () {
+
+        var initFB = function () {
+            FB.init({
+                appId: '',
+                xfbml      : true,  // parse social plugins on this page
+                version    : 'v2.1' // use version 2.1
+            });
+        };
+
+        if (FB) {
+            initFB();
+        } else {
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            window.fbAsyncInit = initFB;
+        }
+    }
+
+    function googlePlusScript () {
         var gPlusOne,
             container = document.getElementById('gPlusBtn');
 
         if (container) {
-            gPlusOne = document.createElement('g:plusone')
+            gPlusOne = document.createElement('g:plusone');
             gPlusOne.setAttribute("size", "medium");
             gPlusOne.setAttribute("annotation", "none");
             gPlusOne.setAttribute("href", oblio.settings.base_url);
@@ -310,7 +347,7 @@ define([
     Footer.prototype.initShare = initShare;
     Footer.prototype.toggleShare = toggleShare;
     Footer.prototype.toggleCredits = toggleCredits;
-    Footer.prototype.attachSocialScripts = attachSocialScripts;
+    // Footer.prototype.attachSocialScripts = attachSocialScripts;
 
     Footer.prototype.closeMenus = closeMenus;
     Footer.prototype.init = init;
@@ -322,21 +359,21 @@ define([
     Footer.prototype.showMPAARequirements = showMPAARequirements;
     Footer.prototype.hideMPAARequirements = hideMPAARequirements;
 
-    function initFB () {
-        FB.init({
-            appId: '',
-            xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.1' // use version 2.1
-        });
-    }
+    // function initFB () {
+    //     FB.init({
+    //         appId: '',
+    //         xfbml      : true,  // parse social plugins on this page
+    //         version    : 'v2.1' // use version 2.1
+    //     });
+    // }
 
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    // (function(d, s, id) {
+    //   var js, fjs = d.getElementsByTagName(s)[0];
+    //   if (d.getElementById(id)) return;
+    //   js = d.createElement(s); js.id = id;
+    //   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+    //   fjs.parentNode.insertBefore(js, fjs);
+    // }(document, 'script', 'facebook-jssdk'));
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};
