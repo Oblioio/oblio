@@ -24,24 +24,19 @@ define([
             el: el
         };
 
-        var linkLists = data['footerLinks'] || [],
+        var linkLists = data.footerLinks || [],
             list_container,
             list;
+
         for (var i = 0; i < linkLists.length; i++) {
             list = Mustache.render(linkList_template, {links:linkLists[i].links});
             list_container = document.getElementById(linkLists[i].id);
             list_container.innerHTML = list;
-        };
+        }
 
         //Credits button
         $('#credits-button').on('click', this.toggleCredits.bind(this));
         if(document.getElementById('creditsbox-close'))$('#creditsbox-close').on('click', toggleCredits);
-
-        if (FB) {
-            initFB();
-        } else {
-            window.fbAsyncInit = initFB;
-        }
 
         this.initFollow(data);
         this.initShare(data);
@@ -53,7 +48,7 @@ define([
     function showMPAARequirements(){
 
         var data = oblio.app.dataSrc.sections.main.data,
-            mpaaRequirementsJSON = data["MPAA_requirements"],
+            mpaaRequirementsJSON = data.MPAA_requirements,
             mpaaRequirementsElement = $("#MPAA_requirements");
 
         if (!mpaaRequirementsJSON.VISIBLE || mpaaRequirementsJSON.VISIBLE === 'false') {
@@ -69,7 +64,6 @@ define([
             that.hideMPAARequirements();
         }, 6000);
 
-        // TweenLite.to($("#bottomRight"), 1, {css:{bottom: 0}, ease:Power4.easeInOut, delay: 6});
     }
 
     function hideMPAARequirements(){
@@ -117,21 +111,20 @@ define([
     function initFollow(data){
 
         //addIcons to Follow Us Menu
-        var followUsObj = data["footerFollowUs"];
+        var followUsObj = data.footerFollowUs;
 
         if (followUsObj) {
-            var followUsElem = document.getElementById("follow");
-            if(String(followUsObj["VISIBLE"]).toLowerCase() == "false"){
-                followUsElem.style.display = "none";
+            var followUsElem = document.getElementById('follow');
+            if (followUsObj.VISIBLE === false) {
+                followUsElem.parentNode.removeChild(followUsElem);
             } else {
-                for(var l=0; l<followUsObj.links.length; l++){
-                    if(String(followUsObj.links[l]["VISIBLE"]).toLowerCase() == "true"){
-                        var followUsA = document.createElement("a");
-                        followUsA.className = 'icon-' + followUsObj.links[l]["CLASS"] + ' social-icon';
-                        followUsA.target = "_blank";
-                        followUsA.href = followUsObj.links[l]["URL"];
+                for ( var l = 0; l < followUsObj.links.length; l++) {
+                    if (followUsObj.links[l].VISIBLE === true){
+                        var followUsA = document.createElement('a');
+                        followUsA.className = 'icon-' + followUsObj.links[l].CLASS + ' social-icon';
+                        followUsA.target = '_blank';
+                        followUsA.href = followUsObj.links[l].URL;
                         followUsElem.appendChild(followUsA);
-                        // $(followUsA).on('click', oblio.functions.externalLink);
                     }
                 }
             }
