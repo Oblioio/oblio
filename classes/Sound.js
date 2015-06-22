@@ -1,7 +1,7 @@
 define([
         'howler',
         'greensock/TweenLite.min',
-        'utils/PageVisibility'
+        'oblio/utils/PageVisibility'
     ], function () {
 
     'use strict';
@@ -210,7 +210,7 @@ define([
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};
-    oblio.classes.sound = new Sound();
+    oblio.classes.Sound = Sound;
 
-    return oblio.classes.sound;
+    return oblio.classes.Sound;
 });
