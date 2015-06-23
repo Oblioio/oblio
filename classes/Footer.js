@@ -39,7 +39,7 @@ define([
         if(document.getElementById('creditsbox-close'))$('#creditsbox-close').on('click', toggleCredits);
 
         this.initFollow(data);
-        //this.initShare(data);
+        this.initShare();
 
         if(this.init_extend)this.init_extend(data);
 
@@ -136,19 +136,20 @@ define([
             //share buttons
             var data = oblio.app.dataSrc.sections.main.data,
                 shareObj = data.footerShare,
+                buttonsObj = shareObj.show_buttons,
                 node;
 
             if (shareObj) {
                 if(shareObj.VISIBLE === false){
                     $('#share').css('display', 'none');
                 } else {
-                    for (var btn_name in shareObj.show_buttons) {
-                        if (shareObj.hasOwnProperty(btn_name)) {
+                    for (var btn_name in buttonsObj) {
+                        if (buttonsObj.hasOwnProperty(btn_name)) {
                             switch (btn_name) {
                                 case 'googlePlus':
-                                    if (shareObj[btn_name] === false) {
+                                    if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('gPlusBtn');
-                                        if (shareObj[btn_name] === false) {
+                                        if (buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -156,9 +157,9 @@ define([
                                     }
                                 break;
                                 case 'tweet':
-                                    if (shareObj[btn_name] === false) {
+                                    if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('tweetBtn');
-                                        if (shareObj[btn_name] === false) {
+                                        if (buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -166,9 +167,9 @@ define([
                                     }
                                 break;
                                 case 'facebook_like':
-                                    if (shareObj[btn_name] === false) {
+                                    if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('fbLike');
-                                        if (shareObj[btn_name] === false) {
+                                        if (buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -176,9 +177,9 @@ define([
                                     }
                                 break;
                                 case 'facebook_share':
-                                    if (shareObj[btn_name] === false) {
+                                    if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('fbShare');
-                                        if (shareObj[btn_name] === false) {
+                                        if (buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -252,13 +253,6 @@ define([
         }
     }
 
-    // function attachSocialScripts(callbackFn){
-    //     console.log('FOOTER | attachSocialScripts')
-    //     twitterScript();
-    //     googlePlusScript();
-    //     if(callbackFn)callbackFn();
-    // }
-
     function twitterScript () {
 
         window.twttr = (function (d,s,id) {
@@ -285,7 +279,7 @@ define([
             });
         };
 
-        if (FB) {
+        if (window.FB) {
             initFB();
         } else {
             (function(d, s, id) {
