@@ -11,7 +11,7 @@
                 'jquery',
                 'oblio/classes/Paginator',
                 'oblio/classes/Backplate',
-                'oblio/classes/VideoBackplate',
+                // 'oblio/classes/VideoBackplate',
                 'greensock/TweenLite.min',
                 'greensock/easing/EasePack.min',
                 'greensock/plugins/CSSPlugin.min'
