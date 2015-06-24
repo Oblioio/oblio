@@ -46,9 +46,26 @@
         window.onpopstate = onPopState.bind(this);
     };
 
-    function parseDeepLink(deeplink){
-        // split the deeplink at slash to grab the section name
-        this.currentSection = typeof(deeplink) === 'undefined' || deeplink === '' ? 'home' : deeplink.split('/')[0];
+    function parseDeepLink(){
+        var base = document.getElementsByTagName('base')[0],
+            path_arr;
+        if (base) {
+            url_arr = base.href.split('/');
+            path_arr = window.pathname.split('/');
+            url_arr.pop();
+            oblio.settings.basePath = url_arr.join('/') + '/';
+            this.currentSection = path_arr[0] || 'home';
+            this.currentSubsection = path_arr[1];
+        } else {
+            var hash = window.location.hash;
+            if (hash.match('#/')) {
+                path_arr = hash.replace('#/', '').split('/');
+                this.currentSection = path_arr[0] || 'home';
+                this.currentSubsection = path_arr[1];
+            } else {
+                this.currentSection = 'home';
+            }
+        }
     }
 
     function changeSection(sectionID, subSectionID, completeFn, pop){
