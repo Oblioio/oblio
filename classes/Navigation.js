@@ -43,6 +43,7 @@
             'section_show_next'
         ];
 
+        window.onpopstate = onPopState.bind(this);
     };
 
     function parseDeepLink(deeplink){
@@ -50,12 +51,17 @@
         this.currentSection = typeof(deeplink) === 'undefined' || deeplink === '' ? 'home' : deeplink.split('/')[0];
     }
 
-    function changeSection(sectionID, subSectionID, completeFn){
+    function changeSection(sectionID, subSectionID, completeFn, pop){
+
         if (this.verbose) {
-            console.log('Navigation | changeSection: '+sectionID+' | '+subSectionID);
+            console.log('Navigation | changeSection: ' + sectionID + ' | ' + subSectionID);
         }
 
+        // if the user clicked the back or forward button while section is changing, tack the change on to arrayExecuter
         if (!this.active) {
+            if (pop) {
+                this.arrayExecuter.tackOn([{fn: this.changeSection, scope: this, vars: [sectionID, subSectionID, null, true]}]);
+            }
             return;
         }
         
@@ -76,11 +82,31 @@
         }
 
         this.currentSection = sectionID;
+        this.currentSubsection = subSectionID || '';
 
-        if (oblio.settings.deepLinking !== false && window.history && window.history.pushState && this.previous_section !== '' ) {
-            // pushState breaks fullscreen in chrome, so check if fullscreen first
-            if( window.innerHeight != screen.height) {
-                history.pushState('data', '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '.php' ));
+        if (!pop && oblio.settings.deepLinking !== false && window.history && window.history.pushState && this.previous_section !== '' ) {
+
+            var data = {
+                currentSection: this.currentSection,
+                currentSubsection: this.currentSubsection
+            };
+
+            // if base element exists, make sure we're using that for our pushstate stuff
+            var base = document.getElementsByTagName('base')[0];
+            if (base) {
+                var url_arr = base.href.split('/');
+                url_arr.pop();
+                oblio.settings.basePath = url_arr.join('/') + '/';
+
+                // pushState breaks fullscreen in chrome, so check if fullscreen first
+                if( window.innerHeight !== screen.height) {
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                }
+            } else {
+                // pushState breaks fullscreen in chrome, so check if fullscreen first
+                if( window.innerHeight !== screen.height) {
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
+                }
             }
         }
 
@@ -89,6 +115,10 @@
         this.arrayExecuter.execute(this.assembleChangeFunction(completeFn));
 
         this.forceChange = false;
+    }
+
+    function onPopState (event) {
+        this.changeSection(event.state.currentSection, event.state.currentSubSection, null, true);
     }
 
     function assembleChangeFunction (completeFn) {
@@ -297,17 +327,17 @@
 
     // remove htmlData from DOM
     function section_remove(sectionID, callbackFn){
-    	if(this.verbose)console.log('Navigation | section_remove '+sectionID);
+        if(this.verbose)console.log('Navigation | section_remove '+sectionID);
         if(!oblio.sections[sectionID]){
-    		callbackFn();
-    		return;
-    	}
+            callbackFn();
+            return;
+        }
         var shell = (oblio.sections[sectionID] && oblio.sections[sectionID].shell)?oblio.sections[sectionID].shell:"#"+this.shell;
 
         if (oblio.sections[sectionID].destroy) {
             oblio.sections[sectionID].destroy();
             oblio.sections[sectionID].initialized = false;
-    	}
+        }
 
         if(oblio.sections[sectionID].added){
             oblio.sections[sectionID].added = false;
@@ -315,7 +345,7 @@
             oblio.sections[sectionID].htmlElem = null;
         }
 
-    	callbackFn();
+        callbackFn();
     }
 
     /*
@@ -335,18 +365,18 @@
 
     // disable navigation
     function disable(completeFn){
-    	if(this.verbose)console.log('/////// navigation_disable /////////');
-    	this.active = false;
+        if(this.verbose)console.log('/////// navigation_disable /////////');
+        this.active = false;
 
         /* turn on cover's display */
-    	if(this.cover)this.cover.style.display = 'block';
+        if(this.cover)this.cover.style.display = 'block';
 
-    	if(completeFn)completeFn();
+        if(completeFn)completeFn();
     }
 
     // freeze site when external link launched
     function freezeSite(){
-    	if(this.verbose)console.log('navigation_freezeSite');
+        if(this.verbose)console.log('navigation_freezeSite');
 
         if (oblio.sections[sectionID].freeze) {
             oblio.sections[sectionID].freeze();
@@ -358,33 +388,33 @@
 
         /* turn off the sound, and remember if it was off*/
 
-    	// freezeSoundWasOn = soundIsOn;
-    	// if(freezeSoundWasOn)soundToggle();
+        // freezeSoundWasOn = soundIsOn;
+        // if(freezeSoundWasOn)soundToggle();
     }
 
     // un-freeze site when returning from external link
     function unFreezeSite(){
-    	if(this.verbose)console.log('navigation_unFreezeSite');
+        if(this.verbose)console.log('navigation_unFreezeSite');
 
         if (oblio.sections[sectionID].unfreeze) {
             oblio.sections[sectionID].unfreeze();
         }
 
         /* if the sound was on before the freeze, turn it back on */
-    	// if(freezeSoundWasOn)soundToggle();
+        // if(freezeSoundWasOn)soundToggle();
 
         /* tween out whatever visuals were added, then call done */
 
-    	// TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 0}, onComplete:unFreezeSiteDone});
+        // TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 0}, onComplete:unFreezeSiteDone});
     }
 
     function unFreezeSiteDone(){
-    	if(this.verbose)console.log('navigation_unFreezeSiteDone');
+        if(this.verbose)console.log('navigation_unFreezeSiteDone');
 
         /* turn of display of any overlays */
 
-    	// $('#darkenContent').css('display', 'none');
-    	// $('#freezeSite').css('display', 'none');
+        // $('#darkenContent').css('display', 'none');
+        // $('#freezeSite').css('display', 'none');
     }
 
 
