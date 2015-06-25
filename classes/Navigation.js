@@ -48,6 +48,7 @@
 
     function parseDeepLink(){
         var base = document.getElementsByTagName('base')[0],
+            url_arr,
             path_arr;
         if (base) {
             url_arr = base.href.split('/');
