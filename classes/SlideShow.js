@@ -297,7 +297,7 @@
 
     function buildSlideshow (slides) {
 
-        var slide = '<div class="slide"><div class="backplate_wrapper"><img alt="Slideshow Image" class="backplate" data-thumb="{{backplate.thumb}}" data-mode="{{backplate.mode}}" data-anchor="{{backplate.anchor}}" src="' + oblio.settings.base_url + '{{backplate.img}}"></div></div>',
+        var slide = '<div class="slide"><div class="backplate_wrapper"><img alt="Slideshow Image" class="backplate" data-thumb="{{backplate.thumb}}" data-mode="{{backplate.mode}}" data-anchor="{{backplate.anchor}}" src="' + oblio.settings.basePath + '{{backplate.img}}"></div></div>',
             slides_html = '';
 
         for (var i = 0; i < slides.length; i++) {

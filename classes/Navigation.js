@@ -81,7 +81,7 @@
             }
             return;
         }
-        
+
         if (this.currentSection === sectionID && !this.forceChange) {
             // go to subsection if defined
             if (subSectionID && oblio.sections[sectionID].enterSubSection) {
