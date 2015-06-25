@@ -1,17 +1,6 @@
-;(function (root, factory) {
-    // Browser globals
-    root.utils = root.utils || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], function () {
-            // Add to namespace
-            return (root.utils.VideoPlayerYT = factory());
-        });
-    } else {
-        root.utils.VideoPlayerYT = factory();
-    }
-}(window.oblio = window.oblio || {}, function () {
+define([
+        'jquery'
+    ], function ($) {
 
     function videoPlayerYT(div, parameters){
 
@@ -76,10 +65,6 @@
             var current_time = this.player.getCurrentTime(),
                 percent = Math.ceil(current_time/this.duration * 100); //calculate % complete
 
-            // trace(this.duration);
-            // trace(current_time);
-            // trace(percent);
-
             if (percent >= this.nextPercentage) {
                 app.trackEvent('Video Completion', this.title, this.nextPercentage + '% complete');
 
@@ -87,10 +72,6 @@
                     this.nextPercentage += 10;
                 }
             }
-
-            // if (percent === 100) {
-            //     window.clearInterval(this.progressInterval);
-            // }
         }
 
     }
@@ -98,7 +79,7 @@
     function detectMobile(){        
         var ua = navigator.userAgent.toLowerCase();
         isAndroid = ua.indexOf("android") > -1;
-        isiPad = navigator.userAgent.match(/iPad/i) != null;
+        isiPad = navigator.userAgent.match(/iPad/i) !== null;
         var p = navigator.platform.toLowerCase();
         if( isAndroid || isiPad || p === 'ipad' || p === 'iphone' || p === 'ipod' || p === 'android' || p === 'palm' || p === 'windows phone' || p === 'blackberry'){
             this.isMobile = true;
@@ -161,7 +142,7 @@
     function ytPlay(){
         try{
             this.player.playVideo();
-        } catch(e){};
+        } catch(e){}
     }
     
     function ytLoadVideo(src){
@@ -174,13 +155,13 @@
             } else {
                 this.player.loadVideoById(src);
             }
-        } catch(e){};   
+        } catch(e){}
     }
     
     function ytPause(){
         try{
             this.player.pauseVideo();       
-        } catch(e){};       
+        } catch(e){}     
     }
     
     function ytDestroy(){
@@ -199,7 +180,7 @@
             this.player.destroy();  
             this.div.innerHTML = "";
             this.player = null;         
-        } catch(e){};   
+        } catch(e){}
     }
     
     function ytResize(w, h){
@@ -208,7 +189,7 @@
     function bind(fn, scope){
         return function() {
             return fn.apply(scope, arguments);
-        }
+        };
     }
 
     //public functions
@@ -219,5 +200,9 @@
     videoPlayerYT.prototype.destroy = ytDestroy;
     videoPlayerYT.prototype.resize = ytResize;
 
-    return videoPlayerYT;
-}));
+    window.oblio = window.oblio || {};
+    oblio.utils = oblio.utils || {};
+    oblio.utils.VideoPlayerYT = VideoPlayerYT;
+
+    return oblio.utils.VideoPlayerYT;
+});

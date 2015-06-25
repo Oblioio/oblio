@@ -1,27 +1,12 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'oblio/utils/DeviceDetect',
-                'greensock/TweenLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min',
-                'oblio/classes/BG_Image',
-                // 'oblio/classes/BG_Video' // need to require this in child class so media element isn't required for projects that don't need video
-            ], function ($) {
-            return (root.classes.BGManager = factory($));
-        });
-    } else {
-        root.classes.BGManager = factory($);
-    }
-}(window.oblio = window.oblio || {}, function ($) {
+define([
+        'jquery',
+        'oblio/utils/DeviceDetect',
+        'greensock/TweenLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min',
+        'oblio/classes/BG_Image',
+        'oblio/classes/BG_Video'
+    ], function ($) {
 
     'use strict';
 
@@ -33,27 +18,30 @@
 
         this.sections = data.sections;
         this.images = data.images;
-
-    }
+    };
 
     function init(){
+        /*jshint validthis:true*/
         if(this.verbose)console.log("BGManager | init");
+
         this.initialized = true;
         this.currBgObj = null;
 
         var sectionsLength = this.sections.length;
 
         // randomize the imgIDs array of each section
-        while(sectionsLength--){
+        while (sectionsLength--) {
             var sectionObj = this.sections[sectionsLength];
-            if(sectionObj.imgIDs && String(sectionObj.randomize).toLowerCase() != 'false')sectionObj.imgIDs = randomizeArray(sectionObj.imgIDs);
+            if (sectionObj.imgIDs && String(sectionObj.randomize).toLowerCase() !== 'false') {
+                sectionObj.imgIDs = randomizeArray(sectionObj.imgIDs);
+            }
         }
 
         // create sectionLoader entries for each image
         for (var imageName in this.images){
             this.images[imageName].img = null;
             if (this.images[imageName].type === 'image') {
-                oblio.utils.SectionLoader.addSection('background_'+imageName, {
+                oblio.utils.SectionLoader.addSection('background_' + imageName, {
                     files: {
                         images: [this.images[imageName].url]
                     }
@@ -63,13 +51,14 @@
 
     }
 
-    function returnSectionObj(id){
+    function returnSectionObj (id) {
+        /*jshint validthis:true*/
         if(this.verbose)console.log("BGManager | returnSectionObj: "+id);
         var sectionObj = null,
             numSections = this.sections.length;
 
-        while(numSections--){
-            if(this.sections[numSections].id == id){
+        while (numSections--) {
+            if (this.sections[numSections].id === id) {
                 sectionObj = this.sections[numSections];
                 break;
             }
@@ -78,23 +67,25 @@
         return sectionObj;
     }
 
-    function deprioritize(imgID){
+    function deprioritize (imgID) {
+        /*jshint validthis:true*/
         if(this.verbose)console.log("BGManager | deprioritize: "+imgID);
         var sectionsLength = this.sections.length,
             numIDs;
 
         // if image exists in any sections... move it to the end of their queue
-        while(sectionsLength--){
+        while (sectionsLength--) {
             numIDs = (this.sections[sectionsLength].imgIDs) ? this.sections[sectionsLength].imgIDs.length : 0;
-            while(numIDs--){
-                if(this.sections[sectionsLength].imgIDs[numIDs] == imgID){
+            while (numIDs--) {
+                if (this.sections[sectionsLength].imgIDs[numIDs] === imgID) {
                     this.sections[sectionsLength].imgIDs.push(this.sections[sectionsLength].imgIDs.splice(numIDs,1)[0]);
                 }
             }
         }
     }
 
-    function getBg(sectionId, sectionLoaderId, keepPriority){
+    function getBg (sectionId, sectionLoaderId, keepPriority) {
+        /*jshint validthis:true*/
         if(this.verbose)console.log("BGManager | getBg: "+sectionId);
         if(!this.initialized)this.init();
 
@@ -102,8 +93,7 @@
             imgID;
 
         // check that section exists and has images
-        if (!sectionObj || !sectionObj.imgIDs || sectionObj.imgIDs.length <= 0)
-        {
+        if (!sectionObj || !sectionObj.imgIDs || sectionObj.imgIDs.length <= 0) {
             return false;
         }
 
@@ -116,25 +106,26 @@
     }
 
     function changeBg(sectionId, instant, callbackFn){
+        /*jshint validthis:true*/
         var bgId = this.getBg(sectionId, false, false),
             imgObj = this.images[bgId],
             loadCatch = false,
             that = this;
 
-        if(bgId === false){
+        if (bgId === false) {
             imgObj = {
                 img: false
-            }
+            };
         }
 
-        if(imgObj == this.currBgObj){
+        if (imgObj === this.currBgObj) {
             if(callbackFn)callbackFn();
             return;
         }
 
         this.currBgObj = imgObj;
 
-        if(imgObj.img === false || (imgObj.img && imgObj.loaded)){
+        if (imgObj.img === false || (imgObj.img && imgObj.loaded)) {
             this.renderer.changeBg(imgObj, instant, callbackFn);
         } else {
             if (imgObj.type === 'image') {
@@ -172,6 +163,7 @@
     }
 
     function preloadNextBg(sectionId, callbackFn){
+        /*jshint validthis:true*/
         var bgId = this.getBg(sectionId, false, true);
         if(!bgId)return;
         var imgObj = this.images[bgId];
@@ -189,6 +181,7 @@
     }
 
     function clear(){
+        /*jshint validthis:true*/
         this.renderer.clear();
     }
 
@@ -217,4 +210,4 @@
     BGManager.prototype.changeBg = changeBg;
 
     return BGManager;
-}));
+});

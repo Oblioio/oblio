@@ -1,27 +1,11 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'oblio/classes/Paginator',
-                'oblio/classes/Backplate',
-                // 'oblio/classes/VideoBackplate',
-                'greensock/TweenLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min'
-            ], function ($) {
-            return (root.classes.SlideShow = factory($));
-        });
-    } else {
-        root.classes.SlideShow = factory($);
-    }
-}(window.oblio = window.oblio || {}, function ($) {
+define([
+        'jquery',
+        'oblio/classes/Paginator',
+        'oblio/classes/Backplate',
+        'greensock/TweenLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min'
+    ], function ($) {
 
     var cantransform3d = Modernizr.csstransforms3d,
         transformPrefixed = cantransform3d ? Modernizr.prefixed('transform') : '',
@@ -84,12 +68,12 @@
             headerHeight: headerHeight,
             footerHeight: footerHeight,
             mode: data.mode || 'cover'
-        }
+        };
 
         this.animationState = {};
 
         this.buildSlideshow(data.slides);
-    }
+    };
 
     function addEventHandlers () {
         var _wrapper = $(this.elements.wrapper),
@@ -188,13 +172,8 @@
     */
     function positionSlides (slides) {
         for (var i = slides.length - 1; i >= 0; i--) {
-            // if (cantransform3d) {
-            //     slides[i].slide.el.style.backfaceVisibility = 'hidden';
-            //     slides[i].slide.el.style[transformPrefixed] = 'translate3d(' + slides[i].targetLeft.toFixed(4) + 'px,0,0)';
-            // } else {
-                slides[i].slide.el.style.left = slides[i].targetLeft.toFixed(2) + 'px';
-            //}
-        };
+            slides[i].slide.el.style.left = slides[i].targetLeft.toFixed(2) + 'px';
+        }
     }
 
     function stopDrag (pageX, pageY) {
@@ -221,7 +200,7 @@
         this.animationState = {
             currX: this.dragPosition.x,
             currVelocity: Math.abs(this.dragPosition.velocity) < 5 ? change / Math.abs(change) : this.dragPosition.velocity
-        }
+        };
 
         if (change > 20) {
             // last drag velocity can override the overall change in position
@@ -298,9 +277,10 @@
     function buildSlideshow (slides) {
 
         var slide = '<div class="slide"><div class="backplate_wrapper"><img alt="Slideshow Image" class="backplate" data-thumb="{{backplate.thumb}}" data-mode="{{backplate.mode}}" data-anchor="{{backplate.anchor}}" src="' + oblio.settings.basePath + '{{backplate.img}}"></div></div>',
-            slides_html = '';
+            slides_html = '',
+            i;
 
-        for (var i = 0; i < slides.length; i++) {
+        for (i = 0; i < slides.length; i++) {
             if (slides[i].visible === 'false') {
                 continue;
             }
@@ -308,7 +288,8 @@
                                 .replace('{{backplate.mode}}', slides[i].mode)
                                 .replace('{{backplate.img}}', slides[i].img)
                                 .replace('{{backplate.thumb}}', slides[i].thumb);
-        };
+        }
+
         this.elements.wrapper.innerHTML = slides_html;
 
         if (slides.length <= 1) {
@@ -317,14 +298,15 @@
         }
 
         var slideElements = this.elements.wrapper.getElementsByClassName('slide');
-        for (var i = 0; i < slideElements.length; i++) {
+        
+        for (i = 0; i < slideElements.length; i++) {
             var loaded = i === 0 ? true : false; // TODO: this won't apply in all cases, need to determine if a backplate has been preloaded rather than just assuming the first one always is
 
             this.addSlide({
                 el: slideElements[i],
                 loaded: loaded
             });
-        };
+        }
 
         $(this.elements.wrapper).on('click', '.internal', function (e) {
             oblio.functions.internalLink($(this).attr('href'));
@@ -347,14 +329,15 @@
         this.elements.wrapper.style.top = this.settings.headerHeight + 'px';
 
         var thumbs = [];
-        for (var i = 0; i < this.slides.length; i++) {
+        
+        for (i = 0; i < this.slides.length; i++) {
             if (this.slides[i].thumb && this.slides[i].thumb !== 'false' && this.slides[i].thumb !== 'undefined' && this.slides[i].thumb !== '') {
                 thumbs.push({
                     src: this.slides[i].thumb,
                     index: i
                 });
             }
-        };
+        }
 
         if (thumbs.length === 0) {
             this.paginator = false;
@@ -729,7 +712,7 @@
             if (this.slides[i].video_player) {
                 this.slides[i].video_player.reset();
             }
-        };
+        }
 
         this.state.current_index = 0;
 
@@ -764,7 +747,6 @@
             this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
             this.previous();
             return false;
-            break;
         case 'next_slide': // right arrow
             if (this.state.animating) {
                 return;
@@ -777,7 +759,6 @@
             this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
             this.next();
             return false;
-            break;
         default:
             // nothin'
         }
@@ -858,5 +839,9 @@
     SlideShow.prototype.drag = drag;
     SlideShow.prototype.stopDrag = stopDrag;
 
-    return SlideShow;
-}));
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.SlideShow = SlideShow;
+
+    return oblio.classes.SlideShow;
+});
