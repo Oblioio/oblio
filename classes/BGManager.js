@@ -209,5 +209,9 @@ define([
     BGManager.prototype.clear = clear;
     BGManager.prototype.changeBg = changeBg;
 
-    return BGManager;
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.BGManager = BGManager;
+
+    return oblio.classes.BGManager;
 });

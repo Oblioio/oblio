@@ -202,7 +202,7 @@ define([
 
     window.oblio = window.oblio || {};
     oblio.utils = oblio.utils || {};
-    oblio.utils.VideoPlayerYT = VideoPlayerYT;
+    oblio.utils.VideoPlayerYT = videoPlayerYT;
 
     return oblio.utils.VideoPlayerYT;
 });
