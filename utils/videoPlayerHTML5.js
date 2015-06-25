@@ -72,6 +72,7 @@ define(function () {
 		this.player.style.left = '0px';
 		this.player.style.top = '0px';
 		this.player.autoplay = this.autoplay;
+		this.player.loop = this.loop;
 		this.player.src = this.videoSrc;
 		this.div.appendChild(this.player);
 	}
