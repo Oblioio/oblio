@@ -31,7 +31,7 @@ define([
         if (this.type === 'youTube'){
             this.playerObj = new oblio.utils.VideoPlayerYT(wrapper, playerVars);
         } else if (this.type === 'htmlVideo'){
-            this.playerObj = new oblio.utils.videoPlayerHTML5(wrapper, playerVars);
+            this.playerObj = new oblio.utils.VideoPlayerHTML5(wrapper, playerVars);
             this.playerObj.player.width = 'auto';
             this.playerObj.player.height = 'auto';
             this.playerObj.player.style.position = 'absolute';
