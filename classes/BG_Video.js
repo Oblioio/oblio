@@ -24,7 +24,7 @@ define([
         var playerVars = {
                 videoSrc: String(this.videoSrc),
                 autoplay: 1,
-                loop: true,
+                loop: 1,
                 controls: false
             };
 

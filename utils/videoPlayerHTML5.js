@@ -7,7 +7,7 @@ define(function () {
 		this.div = typeof div === 'string' ? document.getElementById(div) : div;
 
 		this.autoplay = parameters.autoplay || 0;
-		this.loop = parameters.loop || false;
+		this.loop = parameters.loop || 0;
 		this.controls = parameters.controls !== undefined ? parameters.controls : true;
 		this.videoSrc = parameters.videoSrc;
 		this.isReady = false;

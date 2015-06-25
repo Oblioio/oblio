@@ -130,7 +130,7 @@ define([
         } else {
             if (imgObj.type === 'image') {
 
-                imgObj = new oblio.classes.BG_Image(this.images[bgId], function () {
+                imgObj = new oblio.classes.BG_Image(imgObj, function () {
                     if(loadCatch)return;
                     loadCatch = true;
                     imgObj.loaded = true;
@@ -141,8 +141,8 @@ define([
             } else {
 
                 if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
-                    this.images[bgId].url = this.images[bgId].fallback;
-                    imgObj = new oblio.classes.BG_Image(this.images[bgId], function () {
+                    imgObj.url = imgObj.fallback;
+                    imgObj = new oblio.classes.BG_Image(imgObj, function () {
                         if(loadCatch)return;
                         loadCatch = true;
                         imgObj.loaded = true;
@@ -150,7 +150,7 @@ define([
                         that.renderer.changeBg(imgObj, instant, callbackFn);
                     });
                 } else {
-                    imgObj = new oblio.classes.BG_Video(this.images[bgId], function () {
+                    imgObj = new oblio.classes.BG_Video(imgObj, function () {
                         if(loadCatch)return;
                         loadCatch = true;
                         this.loaded = true;

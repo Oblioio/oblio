@@ -52,16 +52,16 @@
             path_arr;
         if (base) {
             url_arr = base.href.split('/');
-            path_arr = window.location.pathname.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
-            this.currentSection = path_arr[0] || 'home';
+            path_arr = window.location.href.replace(oblio.settings.basePath, '').split('/');
+            this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
             this.currentSubsection = path_arr[1];
         } else {
             var hash = window.location.hash;
             if (hash.match('#/')) {
                 path_arr = hash.replace('#/', '').split('/');
-                this.currentSection = path_arr[0] || 'home';
+                this.currentSection = path_arr.length > 0 ? path_arr[0] : 'home';
                 this.currentSubsection = path_arr[1];
             } else {
                 this.currentSection = 'home';
