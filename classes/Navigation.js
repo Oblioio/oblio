@@ -52,7 +52,7 @@
             path_arr;
         if (base) {
             url_arr = base.href.split('/');
-            path_arr = window.pathname.split('/');
+            path_arr = window.location.pathname.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
             this.currentSection = path_arr[0] || 'home';
