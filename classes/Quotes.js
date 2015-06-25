@@ -167,8 +167,8 @@
 
     // set number of visible thumbs
     function resize (tt_top) {
-        this.elements.el.style.paddingLeft = oblio.settings.menu_width + 'px';
-        this.elements.el.style.paddingRight = oblio.settings.menu_width + 'px';
+        this.elements.el.style.paddingLeft = oblio.settings.menuWidth + 'px';
+        this.elements.el.style.paddingRight = oblio.settings.menuWidth + 'px';
 
         var quotes_height = $('.quote').height(),
             padding_top = Math.min(tt_top - (quotes_height + 30), oblio.settings.windowDimensions.height / 2 - quotes_height / 2);

@@ -50,7 +50,7 @@
 
         oblio.app.Footer.init(document.getElementById('footer'));
 
-        if (oblio.app.navigation.current_section !== 'videos') {
+        if (oblio.app.navigation.currentSection !== 'videos') {
             oblio.app.Footer.show();
         }
 
@@ -74,7 +74,7 @@
         if(menuTemplate)menuData.template = menuTemplate.innerHTML;
         oblio.app.mainMenu = new oblio.classes.Menu(menuData);
 
-        oblio.app.mainMenu.init(oblio.app.navigation.current_section);
+        oblio.app.mainMenu.init(oblio.app.navigation.currentSection);
 
         // setup menu clicks
         $('#menu').on('click', 'a', function (e) {
@@ -118,7 +118,7 @@
         }
 
         if (oblio.app.mainMenu && oblio.app.mainMenu.elements) {
-            oblio.settings.menu_width = oblio.app.mainMenu.elements.el.offsetWidth;
+            oblio.settings.menuWidth = oblio.app.mainMenu.elements.el.offsetWidth;
         }
 
         /**
@@ -155,14 +155,14 @@
             oblio.app.BGRenderer.resize();
         }
 
-        if (oblio.sections[oblio.app.navigation.current_section]) {
-            if (oblio.sections[oblio.app.navigation.current_section].initialized) {
-                oblio.sections[oblio.app.navigation.current_section].resize(w, h);
+        if (oblio.sections[oblio.app.navigation.currentSection]) {
+            if (oblio.sections[oblio.app.navigation.currentSection].initialized) {
+                oblio.sections[oblio.app.navigation.currentSection].resize(w, h);
             }
         }
 
         if (oblio.app.mainMenu) {
-            oblio.settings.menu_width = oblio.app.mainMenu.resize();
+            oblio.settings.menuWidth = oblio.app.mainMenu.resize();
         }
 
         if (oblio.settings.windowDimensions.width < oblio.settings.minWidth || oblio.settings.windowDimensions.height < oblio.settings.minHeight) {

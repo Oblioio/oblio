@@ -673,7 +673,7 @@ define([
         wrapper.style.height = h + 'px';
 
         if (curr_slide.isQuote) {
-            w -= Math.max(oblio.settings.menu_width, oblio.settings.features_width);
+            w -= Math.max(oblio.settings.menuWidth, oblio.settings.features_width);
         }
 
         if (backplate) {
