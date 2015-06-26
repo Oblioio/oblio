@@ -32,7 +32,7 @@ define([
         // randomize the imgIDs array of each section
         while (sectionsLength--) {
             var sectionObj = this.sections[sectionsLength];
-            if (sectionObj.imgIDs && String(sectionObj.randomize).toLowerCase() !== 'false') {
+            if (sectionObj.imgIDs && sectionObj.randomize !== false) {
                 sectionObj.imgIDs = randomizeArray(sectionObj.imgIDs);
             }
         }
