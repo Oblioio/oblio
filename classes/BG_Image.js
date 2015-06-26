@@ -1,39 +1,32 @@
 define([
-        'jquery'
-    ], function ($) {
+        'jquery',
+        'oblio/classes/BG'
+    ], function ($, BG) {
 
     'use strict';
 
     var BG_Image = function (imgObj, onReady) {
+        
         for (var param in imgObj) {
             if (imgObj.hasOwnProperty(param)) {
                 this[param] = imgObj[param];
             }
         }
         
-        this.img = new Image();
-        this.el = this.img;
+        this.el = new Image();
 
-        this.img.style.position = 'absolute';
-        this.img.alt = 'Background';
-        $(this.img).on('load', function () {
-            onReady();
-        });
-        this.img.src = imgObj.url;
+        this.el.style.position = 'absolute';
+        this.el.alt = 'Background';
+        $(this.el).on('load', function () {
+            this.onReady();
+        }.bind(this));
+        this.el.src = imgObj.url;
+
+        BG.apply(this, [this.el, onReady]);
     };
 
-    function place (wrapper) {
-        wrapper.appendChild(this.img);
+    BG_Image.prototype = Object.create(BG.prototype);
+    BG_Image.prototype.constructor = BG_Image;
 
-        return this.img;
-    }
-
-    // override base class functions
-    BG_Image.prototype.place = place;
-
-    window.oblio = window.oblio || {};
-    oblio.classes = oblio.classes || {};
-    oblio.classes.BG_Image = BG_Image;
-
-    return oblio.classes.BG_Image;
+    return BG_Image;
 });
