@@ -1,12 +1,12 @@
 define([
         'jquery',
+        'oblio/classes/BG_Image',
+        'oblio/classes/BG_Video',
         'oblio/utils/DeviceDetect',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
-        'greensock/plugins/CSSPlugin.min',
-        'oblio/classes/BG_Image',
-        'oblio/classes/BG_Video'
-    ], function ($) {
+        'greensock/plugins/CSSPlugin.min'
+    ], function ($, BG_Image, BG_Video) {
 
     'use strict';
 
@@ -130,7 +130,7 @@ define([
         } else {
             if (imgObj.type === 'image') {
 
-                imgObj = new oblio.classes.BG_Image(imgObj, function () {
+                imgObj = new BG_Image(imgObj, function () {
                     if(loadCatch)return;
                     loadCatch = true;
                     imgObj.loaded = true;
@@ -142,7 +142,7 @@ define([
 
                 if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
                     imgObj.url = imgObj.fallback;
-                    imgObj = new oblio.classes.BG_Image(imgObj, function () {
+                    imgObj = new BG_Image(imgObj, function () {
                         if(loadCatch)return;
                         loadCatch = true;
                         imgObj.loaded = true;
@@ -150,7 +150,7 @@ define([
                         that.renderer.changeBg(imgObj, instant, callbackFn);
                     });
                 } else {
-                    imgObj = new oblio.classes.BG_Video(imgObj, function () {
+                    imgObj = new BG_Video(imgObj, function () {
                         if(loadCatch)return;
                         loadCatch = true;
                         this.loaded = true;

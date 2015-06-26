@@ -17,9 +17,11 @@ define([
 
         this.el.style.position = 'absolute';
         this.el.alt = 'Background';
+
         $(this.el).on('load', function () {
             this.onReady();
         }.bind(this));
+
         this.el.src = imgObj.url;
 
         BG.apply(this, [this.el, onReady]);

@@ -44,5 +44,8 @@ define([
         BG.apply(this, [this.el, onReady]);
     };
 
+    BG_Video.prototype = Object.create(BG.prototype);
+    BG_Video.prototype.constructor = BG_Video;
+    
     return BG_Video;
 });
