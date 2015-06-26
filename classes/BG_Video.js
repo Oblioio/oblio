@@ -38,9 +38,9 @@ define([
         this.el = this.playerObj.player;
 
         this.playerObj.onPlaying = function () {
-            this.onReady();
         }.bind(this);
 
+        onReady.call(this);
         BG.apply(this, [this.el, onReady]);
     };
 

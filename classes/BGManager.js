@@ -156,6 +156,7 @@ define([
                         this.loaded = true;
                         if(that.verbose)console.log("BGManager | image loaded: ", this);
                         that.renderer.changeBg(this, instant, callbackFn);
+                        oblio.app.Shell.resize();
                     }, this.renderer.resize);
                 }
             }
