@@ -274,81 +274,46 @@ define([
         return false;
     }
 
-    function bgImgReady () {
-        console.log('imgready');
-    }
-
-    function bgVidReady () {
-        console.log('imgready');
-    }
-
     function buildSlideshow (slides) {
 
-        var bg,
-            slidesFrag = document.createDocumentFragment(),
-            slide,
+        var slide = '<div class="slide"><div class="backplate_wrapper"><img alt="Slideshow Image" class="backplate" data-thumb="{{backplate.thumb}}" data-mode="{{backplate.mode}}" data-anchor="{{backplate.anchor}}" src="' + oblio.settings.basePath + '{{backplate.img}}"></div></div>',
+            slides_html = '',
             i;
 
         for (i = 0; i < slides.length; i++) {
-            if (slides[i].visible === false) {
+            if (slides[i].visible === 'false') {
                 continue;
             }
-            switch (slides[i].type) {
-                case 'image':
-                    bg = new BG_Image(slides[i], bgImgReady);
-                    break;
-                case 'htmlVideo':
-                case 'youtube':
-                    if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
-                        slides[i].url = slides[i].fallback;
-                        bg = new BG_Image(slides[i], bgImgReady);
-                    } else {
-                        bg = new BG_Video(slides[i], bgVidReady);
-                    }
-                    break;
-                default:
-                    bg = new BG_Image(slides[i], bgImgReady.bind(this));
-                    break;
-            }
-
-            slide = new Backplate(bg, false, this.elements.wrapper, this.settings.mode);
-
-            /*
-            * TODO: i'm just adding these classes because they were there before, 
-            * prob won't need them once i go through the css and js and clean up
-            */
-            slide.elements.outer.className = slide.elements.outer.className + ' slide';
-            slide.elements.inner.className = slide.elements.inner.className + ' backplate_wrapper';
-            bg.el.className = bg.el.className + ' backplate';
-
-            slidesFrag.appendChild(slide.elements.outer);
+            slides_html += slide.replace('{{backplate.anchor}}', slides[i].anchor)
+                                .replace('{{backplate.mode}}', slides[i].mode)
+                                .replace('{{backplate.img}}', slides[i].img)
+                                .replace('{{backplate.thumb}}', slides[i].thumb);
         }
 
-        this.elements.wrapper.appendChild(slidesFrag);
-
+        this.elements.wrapper.innerHTML = slides_html;
 
         if (slides.length <= 1) {
             this.elements.prev.parentNode.removeChild(this.elements.prev);
             this.elements.next.parentNode.removeChild(this.elements.next);
         }
 
-        // var slideElements = this.elements.wrapper.getElementsByClassName('slide');
+        var slideElements = this.elements.wrapper.getElementsByClassName('slide');
         
-        // for (i = 0; i < slideElements.length; i++) {
-        //     var loaded = i === 0 ? true : false; // TODO: this won't apply in all cases, need to determine if a backplate has been preloaded rather than just assuming the first one always is
+        for (i = 0; i < slideElements.length; i++) {
+            var loaded = i === 0 ? true : false; // TODO: this won't apply in all cases, need to determine if a backplate has been preloaded rather than just assuming the first one always is
 
-        //     this.addSlide({
-        //         el: slideElements[i],
-        //         loaded: loaded
-        //     });
-        // }
+            this.addSlide({
+                el: slideElements[i],
+                loaded: loaded
+            });
+        }
 
-        // $(this.elements.wrapper).on('click', '.internal', function (e) {
-        //     oblio.functions.internalLink($(this).attr('href'));
+        $(this.elements.wrapper).on('click', '.internal', function (e) {
+            oblio.functions.internalLink($(this).attr('href'));
 
-        //     // e.preventDefault();
-        //     return false;
-        // });
+            // e.preventDefault();
+            return false;
+        });
 
         this.state = {
             current_index: 0,
@@ -363,30 +328,30 @@ define([
 
         this.elements.wrapper.style.top = this.settings.headerHeight + 'px';
 
-        // var thumbs = [];
+        var thumbs = [];
         
-        // for (i = 0; i < this.slides.length; i++) {
-        //     if (this.slides[i].thumb && this.slides[i].thumb !== 'false' && this.slides[i].thumb !== 'undefined' && this.slides[i].thumb !== '') {
-        //         thumbs.push({
-        //             src: this.slides[i].thumb,
-        //             index: i
-        //         });
-        //     }
-        // }
+        for (i = 0; i < this.slides.length; i++) {
+            if (this.slides[i].thumb && this.slides[i].thumb !== 'false' && this.slides[i].thumb !== 'undefined' && this.slides[i].thumb !== '') {
+                thumbs.push({
+                    src: this.slides[i].thumb,
+                    index: i
+                });
+            }
+        }
 
-        // if (thumbs.length === 0) {
-        //     this.paginator = false;
-        // }
+        if (thumbs.length === 0) {
+            this.paginator = false;
+        }
 
-        // if (this.paginator !== false) {
-        //     this.paginator = new oblio.classes.Paginator({
-        //         thumbs: thumbs
-        //     });
+        if (this.paginator !== false) {
+            this.paginator = new oblio.classes.Paginator({
+                thumbs: thumbs
+            });
 
-        //     this.paginator.prev = this.previous.bind(this);
-        //     this.paginator.next = this.next.bind(this);
-        //     this.paginator.goToIndex = this.goToIndex.bind(this);
-        // }
+            this.paginator.prev = this.previous.bind(this);
+            this.paginator.next = this.next.bind(this);
+            this.paginator.goToIndex = this.goToIndex.bind(this);
+        }
 
 
         if (this.close_fn) {
@@ -405,10 +370,10 @@ define([
             $(this.elements.close_btn).on('click', this.close);
         }
 
-        // if (this.paginator) {
-        //     this.elements.paginator_container.appendChild(this.paginator.elements.el);
-        //     this.paginator.update(this.state.current_index + 1, this.slides.length);
-        // }
+        if (this.paginator) {
+            this.elements.paginator_container.appendChild(this.paginator.elements.el);
+            this.paginator.update(this.state.current_index + 1, this.slides.length);
+        }
 
         if (this.slides.length > 0) {
             this.slides[this.state.current_index].backplate.onScreen = true;
