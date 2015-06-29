@@ -2,12 +2,12 @@ define([
         'jquery',
         'oblio/classes/BG_Image',
         'oblio/classes/BG_Video',
-        'oblio/classes/Paginator',
         'oblio/classes/Backplate',
+        'oblio/classes/Paginator',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function ($, BG_Image, BG_Video) {
+    ], function ($, BG_Image, BG_Video, Backplate) {
 
     var cantransform3d = Modernizr.csstransforms3d,
         transformPrefixed = cantransform3d ? Modernizr.prefixed('transform') : '',
