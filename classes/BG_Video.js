@@ -41,6 +41,7 @@ define([
         }.bind(this);
 
         onReady.call(this);
+        this.el.play();
         BG.apply(this, [this.el, onReady]);
     };
 
