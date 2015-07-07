@@ -4,16 +4,31 @@ define([
 
     var Backplate = function (bg, loaded, resizeContainer, mode) {
 
-        this.obj = bg;
+        // set loaded to true by default because most backplates will be preloaded with the section
+        this.loaded = loaded === undefined ? true : loaded;
 
         this.elements = {
             outer: document.createElement('div'),
             inner: document.createElement('div'),
-            backplate: bg.el,
             resizeContainer: resizeContainer || false
         };
 
         this.container = this.elements.outer;
+
+        if (bg) {
+            changeImage.call(this, bg);
+        }
+
+        this.elements.outer.appendChild(this.elements.inner);
+    };
+
+    function changeImage (bg) {
+        if (this.obj) {
+            this.obj.destroy();
+        }
+        
+        this.obj = bg;
+        this.elements.backplate = bg.el;
 
         this.settings = {
             h: bg.h,
@@ -22,11 +37,14 @@ define([
             mode: 'cover'
         };
 
-        this.elements.inner.appendChild(this.elements.backplate);
-        this.elements.outer.appendChild(this.elements.inner);
+        var node = this.elements.inner;
+        while (node.lastChild) {
+            node.removeChild(node.lastChild);
+        }
 
-        // set loaded to true by default because most backplates will be preloaded with the section
-        this.loaded = loaded === undefined ? true : loaded;
+        this.elements.backplate = bg.el;
+        this.elements.inner.appendChild(this.elements.backplate);
+
         this.onScreen = true;
 
         if (!this.loaded) {
@@ -35,8 +53,7 @@ define([
 
             $(this.elements.backplate).addClass('loading').on('load', this._onImageLoaded.bind(this));
         }
-
-    };
+    }
 
     function getRatio () {
         var ratio = this.elements.backplate.height / this.elements.backplate.width;
@@ -58,6 +75,10 @@ define([
     }
 
     function resize(w, h){
+        if (!this.obj) {
+            return;
+        }
+
         /*jshint validthis:true*/
         if(!w)w = this.container.offsetWidth;
         if(!h)h = this.container.offsetHeight;
@@ -105,6 +126,7 @@ define([
     Backplate.prototype._getRatio = getRatio;
 
     Backplate.prototype.resize = resize;
+    Backplate.prototype.changeImage = changeImage;
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};

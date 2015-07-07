@@ -13,5 +13,13 @@ define([], function () {
         return this.el;
     };
 
+    BG.prototype.destroy = function () {
+        for (var prop in this) {
+            if (this.hasOwnProperty(prop)) {
+                this[prop] = null;
+            }
+        }
+    };
+
     return BG;
 });
