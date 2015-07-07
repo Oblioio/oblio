@@ -23,6 +23,7 @@ define([
         this.duration = data.duration || 0.75; // speed of animation
         this.rotate = data.rotate || false;
         this.rotation_delay = data.rotation_delay || 3000; // switch slide every 3 seconds
+        this.activeSlides = [];
 
         this.dragPosition = {};
         this.dragOffset = {};
@@ -37,8 +38,13 @@ define([
 
         this.elements = {
             wrapper: el,
-            resizeContainer: data.resizeContainer || false,
+            resizeContainer: data.resizeContainer || window,
             paginator_container: data.paginator_container || el
+        };
+
+        this.slideDimensions = {
+            w: $(this.elements.resizeContainer).width(),
+            h: $(this.elements.resizeContainer).height()
         };
 
         var prev_btn = document.getElementsByClassName('prev_slide');
@@ -109,23 +115,15 @@ define([
         this.dragOffset.x = this.dragPosition.x = pageX;
         this.dragOffset.y = this.dragPosition.y = pageY;
 
-        var leftSlide = this.slides[this.state.previous_index],
-            rightSlide = this.slides[this.state.next_index];
-
         /*
         * Call drag once to get slides into position before setting display
         * to block to avoid flash of slides that are supposed to be offscreen
         */
         this.drag(pageX, pageY);
 
-        leftSlide.elements.outer.style.display = 'block';
-        // leftSlide.backplate.elements.wrapper.style.display = 'block';
+        activate.call(this, this.state.previous_index);
 
-        rightSlide.elements.outer.style.display = 'block';
-        // rightSlide.backplate.elements.wrapper.style.display = 'block';
-
-        // leftSlide.backplate.resize(w, h);
-        // rightSlide.backplate.resize(w, h);
+        activate.call(this, this.state.next_index);
     }
 
     function drag (pageX, pageY) {
@@ -361,7 +359,8 @@ define([
 
         if (this.slides.length > 0) {
             this.slides[this.state.current_index].onScreen = true;
-            this.slides[this.state.current_index].elements.outer.style.display = 'block';
+            activate.call(this, this.state.current_index);
+            // this.slides[this.state.current_index].elements.outer.style.display = 'block';
 
             positionSlides([
                 {
@@ -491,13 +490,9 @@ define([
             window.requestAnimationFrame(animate.bind(this));
         } else {
             if (this.animationState.currSlideX === 0) {
-                this.animationState.lastSlide.elements.outer.style.display = 'none';
-                if (this.animationState.otherSlide) {
-                    this.animationState.otherSlide.elements.outer.style.display = 'none';
-                }
-
                 this.animationState.otherSlide = null;
                 this.state.animating = false;
+                onTransitionComplete.call(this);
             } else {
                 this.animationState.currSlideX = 0;
                 this.animationState.currVelocity = 0;
@@ -528,9 +523,8 @@ define([
             this.animationState.currSlideX = -this.animationState.lastSlide.elements.outer.offsetWidth;
         }
 
-        //console.log(this.animationState.currSlideX);
-        this.animationState.currSlide.elements.outer.style.display = 'block';
-        // this.animationState.currSlide.backplate.elements.wrapper.style.display = 'block';
+        // this.animationState.currSlide.elements.outer.style.display = 'block';
+        activate.call(this, this.state.current_index);
 
         this.state.last_index = this.state.current_index;
         this.state.current_index = i;
@@ -564,7 +558,7 @@ define([
         var w = width,
             h = height,
             wrapper = this.elements.wrapper,
-            curr_slide = this.slides[this.state.current_index];
+            currSlide = this.slides[this.state.current_index];
 
         if (w === undefined || h === undefined) {
             if (this.elements.resizeContainer) {
@@ -576,9 +570,20 @@ define([
             }
         }
 
+        this.slideDimensions = {
+            w: w,
+            h: h
+        };
+
         wrapper.style.height = h + 'px';
 
-        curr_slide.resize(w,h);
+        for (var i = this.slides.length - 1; i >= 0; i--) {
+            if (i !== this.state.current_index) {
+                this.slides[i].needsUpdate = true;
+            }
+        }
+
+        currSlide.resize(w,h);
     }
 
     function updateState () {
@@ -622,7 +627,14 @@ define([
     }
 
     function onTransitionComplete () {
-        console.log('onTransitionComplete');
+        var i;
+        while (this.activeSlides.length) {
+            i = this.activeSlides.pop();
+            if (i !== this.state.current_index) {
+                this.slides[i].elements.outer.className = this.slides[i].elements.outer.className.replace(' active', '');
+            }
+        }
+        this.activeSlides.push(this.state.current_index);
     }
 
     function clickHandler (e) {
@@ -637,8 +649,8 @@ define([
             this.dragOffset.x = 0;
             this.animationState.currVelocity = 1;
             this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.previous_index].elements.outer.style.display = 'block';
-            //this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
+            activate.call(this, this.state.previous_index);
+            
             this.previous();
             return false;
         case 'next_slide': // right arrow
@@ -649,12 +661,28 @@ define([
             this.dragOffset.x = 0;
             this.animationState.currVelocity = -1;
             this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.next_index].elements.outer.style.display = 'block';
-            //this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
+            activate.call(this, this.state.next_index);
             this.next();
             return false;
         default:
             // nothin'
+        }
+    }
+
+    function activate (slideIndex) {
+        var slide = this.slides[slideIndex],
+            slideEl = slide.elements.outer;
+
+        if (!slideEl.className.match('active')) {
+            slideEl.className = slideEl.className + ' active';
+            if (slide.needsUpdate) {
+                slide.resize(this.slideDimensions.w, this.slideDimensions.h);
+                slide.needsUpdate = false;
+            }
+        }
+
+        if (this.activeSlides.indexOf(slideIndex) === -1) {
+            this.activeSlides.push(slideIndex);
         }
     }
 
@@ -668,8 +696,7 @@ define([
             this.dragOffset.x = 0;
             this.animationState.currVelocity = 1;
             this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.previous_index].elements.outer.style.display = 'block';
-            // this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
+            activate.call(this, this.state.previous_index);
             this.previous();
             break;
         case 39: // right arrow
@@ -681,8 +708,7 @@ define([
             this.animationState.currVelocity = -1;
 
             this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.next_index].elements.outer.style.display = 'block';
-            // this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
+            activate.call(this, this.state.next_index);
             this.next();
             break;
         default:
