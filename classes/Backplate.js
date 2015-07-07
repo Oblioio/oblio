@@ -4,7 +4,7 @@ define([
 
     var Backplate = function (bg, loaded, resizeContainer, mode) {
 
-        this.data = bg;
+        this.obj = bg;
 
         this.elements = {
             outer: document.createElement('div'),
@@ -67,9 +67,9 @@ define([
         var imgWidth,
             imgHeight;
 
-        if (this.data.dimensions) {
-            imgWidth = this.data.dimensions.width;
-            imgHeight = this.data.dimensions.height;
+        if (this.obj.dimensions) {
+            imgWidth = this.obj.dimensions.width;
+            imgHeight = this.obj.dimensions.height;
         } else {
             imgWidth = this.elements.backplate ? this.elements.backplate.offsetWidth : 0;
             imgHeight = this.elements.backplate ? this.elements.backplate.offsetHeight : 0;
@@ -93,8 +93,8 @@ define([
         bg1OffsetTopMax = ((h-bg1AdjustedHeight)+(paddingH/2))-bgOffsetTopMin;
 
         if(this.elements.backplate){
-            this.elements.backplate.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.data.v)).toFixed() + 'px';
-            this.elements.backplate.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.data.h)).toFixed() + 'px';
+            this.elements.backplate.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.obj.v)).toFixed() + 'px';
+            this.elements.backplate.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.obj.h)).toFixed() + 'px';
             this.elements.backplate.style.width = bg1AdjustedWidth+'px';
             this.elements.backplate.style.height = bg1AdjustedHeight+'px';
         }
