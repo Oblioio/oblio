@@ -633,9 +633,9 @@ define([
             i = this.activeSlides.pop();
             if (i !== this.state.current_index) {
                 this.slides[i].elements.outer.className = this.slides[i].elements.outer.className.replace(' active', '');
-            }
-            if (slide.obj.el.pause) {
-                slide.obj.el.pause();
+                if (this.slides[i].obj.el.pause) {
+                    this.slides[i].obj.el.pause();
+                }
             }
         }
         this.activeSlides.push(this.state.current_index);
