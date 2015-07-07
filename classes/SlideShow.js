@@ -27,6 +27,7 @@ define([
 
         this.dragPosition = {};
         this.dragOffset = {};
+        this.state = {};
 
         isMobile = oblio.settings.isMobile;
         useFallbackImage = isMobile || oblio.settings.isIOS;
@@ -38,7 +39,7 @@ define([
 
         this.elements = {
             wrapper: el,
-            resizeContainer: data.resizeContainer || window,
+            resizeContainer: data.resizeContainer || document.body,
             paginator_container: data.paginator_container || el
         };
 
@@ -276,8 +277,8 @@ define([
         console.log('imgready');
     }
 
-    function bgVidReady () {
-        console.log('imgready');
+    function bgVidReady (vid) {
+        console.log('vidready');
     }
 
     function buildSlideshow (slides) {
@@ -633,6 +634,9 @@ define([
             if (i !== this.state.current_index) {
                 this.slides[i].elements.outer.className = this.slides[i].elements.outer.className.replace(' active', '');
             }
+            if (slide.obj.el.pause) {
+                slide.obj.el.pause();
+            }
         }
         this.activeSlides.push(this.state.current_index);
     }
@@ -678,6 +682,9 @@ define([
             if (slide.needsUpdate) {
                 slide.resize(this.slideDimensions.w, this.slideDimensions.h);
                 slide.needsUpdate = false;
+            }
+            if (slide.obj.el.play) {
+                slide.obj.el.play();
             }
         }
 
