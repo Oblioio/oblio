@@ -13,6 +13,8 @@ define([
             resizeContainer: resizeContainer || false
         };
 
+        this.container = this.elements.outer;
+
         this.settings = {
             h: bg.h,
             v: bg.v,
@@ -20,13 +22,16 @@ define([
             mode: 'cover'
         };
 
+        this.elements.inner.appendChild(this.elements.backplate);
+        this.elements.outer.appendChild(this.elements.inner);
+
         // set loaded to true by default because most backplates will be preloaded with the section
         this.loaded = loaded === undefined ? true : loaded;
         this.onScreen = true;
 
         if (!this.loaded) {
-            this.elements.wrapper.className += ' loading';
-            this.elements.wrapper.style.display = 'none';
+            // this.elements.wrapper.className += ' loading';
+            // this.elements.wrapper.style.display = 'none';
 
             $(this.elements.backplate).addClass('loading').on('load', this._onImageLoaded.bind(this));
         }
@@ -41,7 +46,7 @@ define([
 
     function onImageLoaded (e) {
 
-        this.elements.wrapper.className = this.elements.wrapper.className.replace('loading', '');
+        // this.elements.wrapper.className = this.elements.wrapper.className.replace('loading', '');
         
         this.resize();
         window.setTimeout(this.resize.bind(this), 100);
@@ -62,14 +67,12 @@ define([
         var imgWidth,
             imgHeight;
 
-        if (this.image1.obj) {
-            if (this.image1.obj.dimensions) {
-                imgWidth = this.image1.obj.dimensions.width;
-                imgHeight = this.image1.obj.dimensions.height;
-            } else {
-                imgWidth = this.image1.image ? this.image1.image.offsetWidth : 0;
-                imgHeight = this.image1.image ? this.image1.image.offsetHeight : 0;
-            }
+        if (this.data.dimensions) {
+            imgWidth = this.data.dimensions.width;
+            imgHeight = this.data.dimensions.height;
+        } else {
+            imgWidth = this.elements.backplate ? this.elements.backplate.offsetWidth : 0;
+            imgHeight = this.elements.backplate ? this.elements.backplate.offsetHeight : 0;
         }
 
         var imgDimensions = {
@@ -87,13 +90,13 @@ define([
         bg1OffsetLeftMax = ((w-bg1AdjustedWidth)+(paddingW/2))-bgOffsetLeftMin,
 
         bgOffsetTopMin = -paddingH/2,
-        bg1OffsetTopMax = ((h-bg1AdjustedHeight)+(paddingH/2))-bgOffsetTopMin,
+        bg1OffsetTopMax = ((h-bg1AdjustedHeight)+(paddingH/2))-bgOffsetTopMin;
 
-        if(this.image1.image){
-            this.image1.image.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.image1.obj.v)).toFixed() + 'px';
-            this.image1.image.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.image1.obj.h)).toFixed() + 'px';
-            this.image1.image.style.width = bg1AdjustedWidth+'px';
-            this.image1.image.style.height = bg1AdjustedHeight+'px';
+        if(this.elements.backplate){
+            this.elements.backplate.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.data.v)).toFixed() + 'px';
+            this.elements.backplate.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.data.h)).toFixed() + 'px';
+            this.elements.backplate.style.width = bg1AdjustedWidth+'px';
+            this.elements.backplate.style.height = bg1AdjustedHeight+'px';
         }
 
     }

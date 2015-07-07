@@ -3,7 +3,6 @@ define([
         'oblio/classes/BG_Image',
         'oblio/classes/BG_Video',
         'oblio/classes/Backplate',
-        'oblio/classes/Paginator',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
@@ -20,7 +19,6 @@ define([
         var el = data.el || data;
 
         this.close_fn = data.close_fn || false;
-        this.paginator = data.paginator;
         this.axis = data.axis || 'x'; // direction to animate
         this.duration = data.duration || 0.75; // speed of animation
         this.rotate = data.rotate || false;
@@ -120,11 +118,11 @@ define([
         */
         this.drag(pageX, pageY);
 
-        leftSlide.el.style.display = 'block';
-        leftSlide.backplate.elements.wrapper.style.display = 'block';
+        leftSlide.elements.outer.style.display = 'block';
+        // leftSlide.backplate.elements.wrapper.style.display = 'block';
 
-        rightSlide.el.style.display = 'block';
-        rightSlide.backplate.elements.wrapper.style.display = 'block';
+        rightSlide.elements.outer.style.display = 'block';
+        // rightSlide.backplate.elements.wrapper.style.display = 'block';
 
         // leftSlide.backplate.resize(w, h);
         // rightSlide.backplate.resize(w, h);
@@ -157,11 +155,11 @@ define([
             },
             {
                 slide: leftSlide,
-                targetLeft: targetLeft - currSlide.el.offsetWidth
+                targetLeft: targetLeft - currSlide.elements.outer.offsetWidth
             },
             {
                 slide: rightSlide,
-                targetLeft: targetLeft + currSlide.el.offsetWidth
+                targetLeft: targetLeft + currSlide.elements.outer.offsetWidth
             }
         ]);
 
@@ -174,7 +172,7 @@ define([
     */
     function positionSlides (slides) {
         for (var i = slides.length - 1; i >= 0; i--) {
-            slides[i].slide.el.style.left = slides[i].targetLeft.toFixed(2) + 'px';
+            slides[i].slide.elements.outer.style.left = slides[i].targetLeft.toFixed(2) + 'px';
         }
     }
 
@@ -208,7 +206,7 @@ define([
             // last drag velocity can override the overall change in position
             if (this.dragPosition.velocity < -5) {
                 this.animationState.otherSlide = this.slides[this.state.previous_index];
-                this.animationState.otherSlideX = -this.slides[this.state.current_index].el.offsetWidth;
+                this.animationState.otherSlideX = -this.slides[this.state.current_index].elements.outer.offsetWidth;
                 direction = 'next';
             } else {
                 direction = 'previous';
@@ -217,7 +215,7 @@ define([
             // last drag velocity can override the overall change in position
             if (this.dragPosition.velocity > 5) {
                 this.animationState.otherSlide = this.slides[this.state.next_index];
-                this.animationState.otherSlideX = this.slides[this.state.current_index].el.offsetWidth;
+                this.animationState.otherSlideX = this.slides[this.state.current_index].elements.outer.offsetWidth;
                 direction = 'previous';
             } else {
                 direction = 'next';
@@ -226,7 +224,7 @@ define([
             this.animationState.currVelocity = change > 0 ? -1 : 1;
             this.animationState.currSlide = this.slides[this.state.current_index];
             this.animationState.lastSlide = change > 0 ? this.slides[this.state.previous_index] : this.slides[this.state.next_index];
-            this.animationState.lastSlideX = change > 0 ? this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.el.offsetWidth : this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.el.offsetWidth;
+            this.animationState.lastSlideX = change > 0 ? this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.elements.outer.offsetWidth : this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.elements.outer.offsetWidth;
             this.animationState.currSlideX = this.dragPosition.x - this.dragOffset.x;
             window.requestAnimationFrame(animate.bind(this));
             return;
@@ -324,33 +322,16 @@ define([
             bg.el.className = bg.el.className + ' backplate';
 
             slidesFrag.appendChild(slide.elements.outer);
+
+            this.slides.push(slide);
         }
 
         this.elements.wrapper.appendChild(slidesFrag);
-
 
         if (slides.length <= 1) {
             this.elements.prev.parentNode.removeChild(this.elements.prev);
             this.elements.next.parentNode.removeChild(this.elements.next);
         }
-
-        // var slideElements = this.elements.wrapper.getElementsByClassName('slide');
-        
-        // for (i = 0; i < slideElements.length; i++) {
-        //     var loaded = i === 0 ? true : false; // TODO: this won't apply in all cases, need to determine if a backplate has been preloaded rather than just assuming the first one always is
-
-        //     this.addSlide({
-        //         el: slideElements[i],
-        //         loaded: loaded
-        //     });
-        // }
-
-        // $(this.elements.wrapper).on('click', '.internal', function (e) {
-        //     oblio.functions.internalLink($(this).attr('href'));
-
-        //     // e.preventDefault();
-        //     return false;
-        // });
 
         this.state = {
             current_index: 0,
@@ -365,32 +346,6 @@ define([
 
         this.elements.wrapper.style.top = this.settings.headerHeight + 'px';
 
-        // var thumbs = [];
-        
-        // for (i = 0; i < this.slides.length; i++) {
-        //     if (this.slides[i].thumb && this.slides[i].thumb !== 'false' && this.slides[i].thumb !== 'undefined' && this.slides[i].thumb !== '') {
-        //         thumbs.push({
-        //             src: this.slides[i].thumb,
-        //             index: i
-        //         });
-        //     }
-        // }
-
-        // if (thumbs.length === 0) {
-        //     this.paginator = false;
-        // }
-
-        // if (this.paginator !== false) {
-        //     this.paginator = new oblio.classes.Paginator({
-        //         thumbs: thumbs
-        //     });
-
-        //     this.paginator.prev = this.previous.bind(this);
-        //     this.paginator.next = this.next.bind(this);
-        //     this.paginator.goToIndex = this.goToIndex.bind(this);
-        // }
-
-
         if (this.close_fn) {
             this.close = close_fn;
 
@@ -398,24 +353,15 @@ define([
             this.elements.close_btn.href = '#';
             this.elements.close_btn.className = 'close';
 
-            if (this.paginator) {
-                this.paginator.elements.el.appendChild(this.elements.close_btn);
-            } else {
-                this.elements.wrapper.appendChild(this.elements.close_btn);
-            }
+            this.elements.wrapper.appendChild(this.elements.close_btn);
+
 
             $(this.elements.close_btn).on('click', this.close);
         }
 
-        // if (this.paginator) {
-        //     this.elements.paginator_container.appendChild(this.paginator.elements.el);
-        //     this.paginator.update(this.state.current_index + 1, this.slides.length);
-        // }
-
         if (this.slides.length > 0) {
-            this.slides[this.state.current_index].backplate.onScreen = true;
-            this.slides[this.state.current_index].el.style.display = 'block';
-            this.slides[this.state.current_index].backplate.elements.wrapper.style.display = 'block';
+            this.slides[this.state.current_index].onScreen = true;
+            this.slides[this.state.current_index].elements.outer.style.display = 'block';
 
             positionSlides([
                 {
@@ -424,7 +370,7 @@ define([
                 },
                 {
                     slide: this.slides[this.state.last_index],
-                    targetLeft: -this.slides[this.state.last_index].el.offsetWidth
+                    targetLeft: -this.slides[this.state.last_index].elements.outer.offsetWidth
                 }
             ]);
 
@@ -441,91 +387,13 @@ define([
         this.resize();
     }
 
-    /**
-    * if element exists, el is the only required property
-    * if element does not exist, we need src, anchor, and sizing ('contain' or 'cover')
-    */
-    function addSlide (data) {
-        var slide_obj = {},
-            slide_element = data.el,
-            loaded = data.loaded;
-
-        if (slide_element === undefined) {
-
-            if (slide_ids[data.src]) {
-                console.log('ALREADY ADDED');
-                return;
-            } else {
-                slide_ids[data.src] = this.slides.length;
-            }
-
-            slide_element = document.createElement('div');
-            slide_element.className = 'slide';
-
-            var backplate_wrapper = document.createElement('div'),
-                backplate = document.createElement('img');
-
-            backplate_wrapper.className = 'backplate_wrapper';
-
-            backplate.className = 'backplate';
-            backplate.src = data.src;
-
-            backplate.anchor = data.anchor;
-
-            backplate_wrapper.appendChild(backplate);
-
-            slide_element.appendChild(backplate_wrapper);
-
-            this.elements.wrapper.appendChild(slide_element);
-        }
-
-        slide_obj.el = slide_element;
-
-        slide_obj.backplate = new oblio.classes.Backplate(slide_element.getElementsByClassName('backplate_wrapper')[0], loaded, this.elements.wrapper, this.settings.mode);
-
-        if (slide_obj.backplate.elements.wrapper.className.match('quote')) {
-            slide_obj.isQuote = true;
-            slide_obj.backplate.settings.mode = 'contain';
-        }
-
-        slide_obj.thumb = slide_obj.backplate.elements.backplate.getAttribute('data-thumb');
-        slide_obj.backplate.onScreen = false;
-
-        slide_obj.video_wrapper = slide_element.getElementsByClassName('video_backplate')[0];
-
-        if (slide_obj.video_wrapper) {
-            // use fallback image instead of background video for mobile devices because the video can't auto-play
-            if (useFallbackImage) {
-                slide_obj.backplate = document.createElement('img');
-                slide_obj.backplate.src = slide_obj.video_wrapper.getAttribute('data-image');
-                slide_obj.backplate.className = 'backplate';
-                slide_obj.video_wrapper.className = 'backplate_wrapper';
-                slide_obj.video_wrapper.appendChild(slide_obj.backplate);
-            } else {
-                slide_obj.video_player = new oblio.classes.VideoBackplate(slide_obj.video_wrapper);
-            }
-        }
-
-        if (isMobile) {
-            slide_obj.backplate_wrapper = slide_obj.el.getElementsByClassName('backplate_wrapper')[0];
-        }
-
-        this.slides.push(slide_obj);
-
-    }
-
     function go (instant) {
         this.state.animating = true;
 
         if (instant) {
             this.animationState.currSlideX = 0;
-            this.animationState.lastSlideX = this.animationState.currSlide.el.offsetWidth;
+            this.animationState.lastSlideX = this.animationState.currSlide.elements.outer.offsetWidth;
         }
-
-        if (this.paginator) {
-            this.paginator.update(this.state.current_index + 1, this.slides.length);
-        }
-
         window.requestAnimationFrame(animate.bind(this));
     }
 
@@ -544,7 +412,7 @@ define([
         this.animationState.currSlide = this.slides[this.state.next_index];
         this.animationState.lastSlide = this.slides[this.state.current_index];
         this.animationState.lastSlideX = this.dragPosition.x - this.dragOffset.x;
-        this.animationState.currSlideX = this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.el.offsetWidth;
+        this.animationState.currSlideX = this.dragPosition.x - this.dragOffset.x + this.animationState.currSlide.elements.outer.offsetWidth;
 
         this.state.last_index = this.state.current_index;
 
@@ -575,7 +443,7 @@ define([
         this.animationState.lastSlide = this.slides[this.state.current_index];
         this.animationState.currSlide = this.slides[this.state.previous_index];
         this.animationState.lastSlideX = this.dragPosition.x - this.dragOffset.x;
-        this.animationState.currSlideX = this.dragPosition.x - this.dragOffset.x - this.animationState.currSlide.el.offsetWidth;
+        this.animationState.currSlideX = this.dragPosition.x - this.dragOffset.x - this.animationState.currSlide.elements.outer.offsetWidth;
 
         this.state.last_index = this.state.current_index;
 
@@ -623,7 +491,10 @@ define([
             window.requestAnimationFrame(animate.bind(this));
         } else {
             if (this.animationState.currSlideX === 0) {
-                this.animationState.lastSlide.el.style.display = 'none';
+                this.animationState.lastSlide.elements.outer.style.display = 'none';
+                if (this.animationState.otherSlide) {
+                    this.animationState.otherSlide.elements.outer.style.display = 'none';
+                }
 
                 this.animationState.otherSlide = null;
                 this.state.animating = false;
@@ -648,18 +519,18 @@ define([
             this.animationState.lastSlide = this.slides[this.state.current_index];
             this.animationState.lastSlideX = 0;
             this.animationState.currSlide = this.slides[i];
-            this.animationState.currSlideX = this.animationState.lastSlide.el.offsetWidth;
+            this.animationState.currSlideX = this.animationState.lastSlide.elements.outer.offsetWidth;
         } else if (this.state.direction === 'right') {
             this.animationState.currVelocity = 1;
             this.animationState.lastSlide = this.slides[this.state.current_index];
             this.animationState.lastSlideX = 0;
             this.animationState.currSlide = this.slides[i];
-            this.animationState.currSlideX = -this.animationState.lastSlide.el.offsetWidth;
+            this.animationState.currSlideX = -this.animationState.lastSlide.elements.outer.offsetWidth;
         }
 
         //console.log(this.animationState.currSlideX);
-        this.animationState.currSlide.el.style.display = 'block';
-        this.animationState.currSlide.backplate.elements.wrapper.style.display = 'block';
+        this.animationState.currSlide.elements.outer.style.display = 'block';
+        // this.animationState.currSlide.backplate.elements.wrapper.style.display = 'block';
 
         this.state.last_index = this.state.current_index;
         this.state.current_index = i;
@@ -693,9 +564,7 @@ define([
         var w = width,
             h = height,
             wrapper = this.elements.wrapper,
-            curr_slide = this.slides[this.state.current_index],
-            backplate = curr_slide.backplate,
-            video_player = curr_slide.video_player;
+            curr_slide = this.slides[this.state.current_index];
 
         if (w === undefined || h === undefined) {
             if (this.elements.resizeContainer) {
@@ -709,19 +578,7 @@ define([
 
         wrapper.style.height = h + 'px';
 
-        if (curr_slide.isQuote) {
-            w -= Math.max(oblio.settings.menuWidth, oblio.settings.features_width);
-        }
-
-        if (backplate) {
-            backplate.resize(w,h);
-        } else if (video_player) {
-        }
-
-        if (this.paginator) {
-            this.paginator.resize(w,h);
-        }
-
+        curr_slide.resize(w,h);
     }
 
     function updateState () {
@@ -738,9 +595,9 @@ define([
         var w = oblio.settings.windowDimensions.width,
             h = oblio.settings.windowDimensions.height;
 
-        this.slides[this.state.current_index].backplate.resize();
-        this.slides[this.state.previous_index].backplate.resize();
-        this.slides[this.state.next_index].backplate.resize();
+        this.slides[this.state.current_index].resize();
+        this.slides[this.state.previous_index].resize();
+        this.slides[this.state.next_index].resize();
     }
 
     function reset (go) {
@@ -774,26 +631,26 @@ define([
         switch (clicked.className) {
         case 'prev_slide': // left arrow
             if (this.state.animating) {
-                return;
+                return false;
             }
             this.dragPosition.x = 0;
             this.dragOffset.x = 0;
             this.animationState.currVelocity = 1;
-            this.slides[this.state.next_index].el.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.previous_index].el.style.display = 'block';
-            this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
+            this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
+            this.slides[this.state.previous_index].elements.outer.style.display = 'block';
+            //this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
             this.previous();
             return false;
         case 'next_slide': // right arrow
             if (this.state.animating) {
-                return;
+                return false;
             }
             this.dragPosition.x = 0;
             this.dragOffset.x = 0;
             this.animationState.currVelocity = -1;
-            this.slides[this.state.next_index].el.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.next_index].el.style.display = 'block';
-            this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
+            this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
+            this.slides[this.state.next_index].elements.outer.style.display = 'block';
+            //this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
             this.next();
             return false;
         default:
@@ -810,9 +667,9 @@ define([
             this.dragPosition.x = 0;
             this.dragOffset.x = 0;
             this.animationState.currVelocity = 1;
-            this.slides[this.state.next_index].el.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.previous_index].el.style.display = 'block';
-            this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
+            this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
+            this.slides[this.state.previous_index].elements.outer.style.display = 'block';
+            // this.slides[this.state.previous_index].backplate.elements.wrapper.style.display = 'block';
             this.previous();
             break;
         case 39: // right arrow
@@ -823,9 +680,9 @@ define([
             this.dragOffset.x = 0;
             this.animationState.currVelocity = -1;
 
-            this.slides[this.state.next_index].el.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
-            this.slides[this.state.next_index].el.style.display = 'block';
-            this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
+            this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
+            this.slides[this.state.next_index].elements.outer.style.display = 'block';
+            // this.slides[this.state.next_index].backplate.elements.wrapper.style.display = 'block';
             this.next();
             break;
         default:
@@ -852,7 +709,6 @@ define([
     SlideShow.prototype._updateState = updateState;
 
     SlideShow.prototype.buildSlideshow = buildSlideshow;
-    SlideShow.prototype.addSlide = addSlide;
     SlideShow.prototype.reset = reset;
     SlideShow.prototype.keyHandler = keyHandler;
     SlideShow.prototype.next = next;
