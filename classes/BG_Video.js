@@ -1,8 +1,9 @@
 define([
         'jquery',
+        'oblio/classes/BG',
         'oblio/utils/videoPlayerYT',
         'oblio/utils/videoPlayerHTML5'
-    ], function ($) {
+    ], function ($, BG, VideoPlayerYT, VideoPlayerHTML5) {
 
     'use strict';
     /*jshint validthis:true*/
@@ -13,14 +14,7 @@ define([
                 this[param] = vidObj[param];
             }
         }
-        this.loaded = true;
-        this.resizeFn = resize;
 
-        if(this.verbose)console.log("BGManager | image loaded: "+vidObj.videoSrc);
-        onReady.apply(this);
-    };
-
-    function place (wrapper) {
         var playerVars = {
                 videoSrc: String(this.videoSrc),
                 autoplay: 1,
@@ -29,9 +23,9 @@ define([
             };
 
         if (this.type === 'youTube'){
-            this.playerObj = new oblio.utils.VideoPlayerYT(wrapper, playerVars);
+            this.playerObj = new VideoPlayerYT(wrapper, playerVars);
         } else if (this.type === 'htmlVideo'){
-            this.playerObj = new oblio.utils.VideoPlayerHTML5(wrapper, playerVars);
+            this.playerObj = new VideoPlayerHTML5(wrapper, playerVars);
             this.playerObj.player.width = 'auto';
             this.playerObj.player.height = 'auto';
             this.playerObj.player.style.position = 'absolute';
@@ -41,20 +35,18 @@ define([
             return false;
         }
 
-        var that = this;
+        this.el = this.playerObj.player;
+
         this.playerObj.onPlaying = function () {
-            oblio.app.Shell.resize();
-        };
+        }.bind(this);
 
-        return this.playerObj.player;
-    }
+        onReady.call(this);
+        this.el.play();
+        BG.apply(this, [this.el, onReady]);
+    };
 
-    // override base class functions
-    BG_Video.prototype.place = place;
-
-    window.oblio = window.oblio || {};
-    oblio.classes = oblio.classes || {};
-    oblio.classes.BG_Video = BG_Video;
-
-    return oblio.classes.BG_Video;
+    BG_Video.prototype = Object.create(BG.prototype);
+    BG_Video.prototype.constructor = BG_Video;
+    
+    return BG_Video;
 });

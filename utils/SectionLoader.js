@@ -1,17 +1,8 @@
-;(function (root, factory) {
-    // Browser globals
-    root.utils = root.utils || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery', 'oblio/utils/DeviceDetect', 'oblio/utils/ArrayExecuter'], function ($) {
-            // Add to namespace
-            return (root.utils.SectionLoader = factory($));
-        });
-    } else {
-        root.utils.SectionLoader = factory($);
-    }
-}(window.oblio = window.oblio || {}, function ($) {
+define([
+        'jquery',
+        'oblio/utils/DeviceDetect',
+        'oblio/utils/ArrayExecuter'
+    ], function ($) {
 
     var arrayExecuter = new oblio.utils.ArrayExecuter(),
         DeviceDetect = oblio.utils.DeviceDetect,
@@ -89,12 +80,12 @@
         var sectionOBJ = returnSectionOBJ(section_id);
         sectionOBJ.files = sectionOBJ.files || {};
         // sectionOBJ.addFiles = typeof files === 'String' ? sectionOBJ.addFiles.push(files) : files;
-        if (typeof files === 'String') {
+        if (typeof files === 'string') {
             sectionOBJ.addFiles.push(files);
         } else {
             for (var i = files.length - 1; i >= 0; i--) {
                 sectionOBJ.addFiles.push(files[i]);
-            };
+            }
         }
     }
 
@@ -136,6 +127,8 @@
     }
 
     function loadSection () {
+        var i;
+
         //Load section content by passing in the ID of the section, or an array of IDs
         if(this.verbose){
             console.log('////////////////////////////////////////////');
@@ -149,13 +142,13 @@
 
         if (args.length === 1 && args[0] === 'all') {
             args = [];
-            for (var i = sectionLoaderState.sections.length - 1; i >= 0; i--) {
+            for (i = sectionLoaderState.sections.length - 1; i >= 0; i--) {
                 args.push(sectionLoaderState.sections[i].id);
-            };
+            }
         }
 
         if(args !== undefined && args !== null){
-            for (var i = args.length - 1; i >= 0; i--) {
+            for (i = args.length - 1; i >= 0; i--) {
                 if (typeof args[i] === 'function') {
                     callback = args[i];
                 } else {
@@ -166,7 +159,7 @@
                         console.log("SECTION LOADER ERROR! section: "+args[i]+" does not exist");
                     }
                 }
-            };
+            }
         } else {
             if(this.verbose)console.log('SectionLoader | this.loadSection: input not valid');
         }
@@ -186,7 +179,8 @@
             id = args.pop(),
             numAddFiles,
             numImages,
-            sectionOBJ = this.returnSectionOBJ(id);
+            sectionOBJ = this.returnSectionOBJ(id),
+            fileURL;
 
         //confirm sectionOBJ was found
         if(sectionOBJ === undefined){
@@ -207,7 +201,7 @@
         // add any templates
         for( var partial in sectionOBJ.partials ) {
             if (sectionOBJ.partials.hasOwnProperty(partial)) {
-                sectionLoaderState.templatesToLoad.push({template_name: partial, template_path: sectionOBJ.partials[partial]})
+                sectionLoaderState.templatesToLoad.push({template_name: partial, template_path: sectionOBJ.partials[partial]});
             }
         }
 
@@ -215,7 +209,7 @@
         numAddFiles = sectionOBJ.addFiles.length;
 
         while (numAddFiles--){
-            var fileURL = sectionOBJ.addFiles[numAddFiles];
+            fileURL = sectionOBJ.addFiles[numAddFiles];
 
             if(fileURL.indexOf('.gif') > 0 || fileURL.indexOf('.jpg') > 0 || fileURL.indexOf('.jpeg') > 0 || fileURL.indexOf('.png') > 0){
                 addImage.call(this, fileURL);               
@@ -228,7 +222,7 @@
         numImages = sectionOBJ.images.length;
 
         while (numImages--){
-            var fileURL = sectionOBJ.images[numImages];
+            fileURL = sectionOBJ.images[numImages];
 
             if(fileURL.indexOf('.gif') > 0 || fileURL.indexOf('.jpg') > 0 || fileURL.indexOf('.jpeg') > 0 || fileURL.indexOf('.png') > 0){
                 addImage.call(this, fileURL);
@@ -249,7 +243,7 @@
 
         for (var i = sectionLoaderState.templatesToLoad.length - 1; i >= 0; i--) {
             function_arr.push({scope: this, fn: this.loadTemplate,  vars: [sectionOBJ, sectionLoaderState.templatesToLoad[i]]});
-        };
+        }
 
         if(sectionOBJ.cssPath) {
             function_arr.push({scope: this, fn: this.loadCSS,   vars: [sectionOBJ]});
@@ -287,18 +281,18 @@
             var currObj;
             
             //handle the shared 'html' category 
-            if(sectionLoader.localizationJSON.sections['shared'] && sectionLoader.localizationJSON.sections['shared']["html"]){
-                htmlObjs = sectionLoader.localizationJSON.sections['shared']["html"];
+            if (sectionLoader.localizationJSON.sections.shared && sectionLoader.localizationJSON.sections.shared.html) {
+                htmlObjs = sectionLoader.localizationJSON.sections.shared.html;
                 numHtmlObjs = htmlObjs.length;
-                while(numHtmlObjs--){
+                while (numHtmlObjs--) {
                     currObj = htmlObjs[numHtmlObjs];
                     sectionOBJ.htmlData = getHTMLString(sectionOBJ.htmlData, currObj);
                 }
             }
 
             //handle the section specifc 'html' category
-            if(sectionLoader.localizationJSON.sections[sectionID] && sectionLoader.localizationJSON.sections[sectionID]["html"]){
-                htmlObjs = sectionLoader.localizationJSON.sections[sectionID]["html"];
+            if (sectionLoader.localizationJSON.sections[sectionID] && sectionLoader.localizationJSON.sections[sectionID].html) {
+                htmlObjs = sectionLoader.localizationJSON.sections[sectionID].html;
                 numHtmlObjs = htmlObjs.length;
                 while(numHtmlObjs--){
                     currObj = htmlObjs[numHtmlObjs];
@@ -314,7 +308,7 @@
             for (var i = markers.length - 1; i >= 0; i--) {
                 markers[i].parentNode.setAttribute('style', markers[i].getAttribute('data-style'));
                 markers[i].parentNode.removeChild(markers[i]); // remove styleholder span
-            };
+            }
 
             sectionOBJ.htmlData = tmp.innerHTML;
         }
@@ -343,19 +337,19 @@
             newStr,
             currSpanStyle;
 
-        while(html_str.indexOf(String(html_obj["ID"])) > 0){
-            spanStyle = "";
-            spanStyleNum = (html_obj["css"])?html_obj["css"].length:0;
+        while (html_str.indexOf(String(html_obj.ID)) > 0){
+            spanStyle = '';
+            spanStyleNum = (html_obj.css)?html_obj.css.length:0;
             while(spanStyleNum--){
-                currSpanStyle = html_obj["css"][spanStyleNum];
-                if (currSpanStyle["VAL"]) {
-                    spanStyle += currSpanStyle["ID"]+':'+currSpanStyle["VAL"]+';';
+                currSpanStyle = html_obj.css[spanStyleNum];
+                if (currSpanStyle.VAL) {
+                    spanStyle += currSpanStyle.ID + ':' + currSpanStyle.VAL + ';';
                 }
             }
             // create a 'styleholder' span to hold style data from the json
-            newStr = (spanStyle == "")?String(html_obj["VAL"]):'<span class="styleholder" data-style="' + spanStyle + '"></span>'+String(html_obj["VAL"]);
-            if(html_obj["visible"] && String(html_obj["visible"]).toLowerCase() == "false")newStr = "";
-            html_str = html_str.replace(String(html_obj["ID"]), newStr);
+            newStr = (spanStyle === '') ? String(html_obj.VAL) : '<span class="styleholder" data-style="' + spanStyle + '"></span>' + String(html_obj.VAL);
+            if (html_obj.visible && html_obj.visible === false) newStr = '';
+            html_str = html_str.replace(String(html_obj.ID), newStr);
         }
 
         return html_str;
@@ -372,26 +366,24 @@
     }
 
     function cssLoaded (sectionOBJ, data){
-        if(this.verbose)console.log('SectionLoader | this.cssLoaded: '+sectionOBJ.id);
+        if (this.verbose) console.log('SectionLoader | this.cssLoaded: ' + sectionOBJ.id);
         sectionOBJ.cssData = String(data);
 
         var sectionID = sectionOBJ.id;
 
-        if(sectionLoader.localizationJSON && sectionLoader.localizationJSON.sections && sectionLoader.localizationJSON.sections[sectionID] && sectionLoader.localizationJSON.sections[sectionID].css){
+        if (sectionLoader.localizationJSON && sectionLoader.localizationJSON.sections && sectionLoader.localizationJSON.sections[sectionID] && sectionLoader.localizationJSON.sections[sectionID].css) {
             var cssObjs = sectionLoader.localizationJSON.sections[sectionID].css;
             var numCssObjs = cssObjs.length;
             while(numCssObjs--){
-
                 while(String(sectionOBJ.cssData).indexOf(String(cssObjs[numCssObjs].ID)) > 0){
                     sectionOBJ.cssData = sectionOBJ.cssData.replace(String(cssObjs[numCssObjs].ID), String(cssObjs[numCssObjs].VAL));
                 }
-
             }
         }
 
         var imgUrls = sectionOBJ.cssData.match(/[^\(]+\.(gif|jpg|jpeg|png)/g);
 
-        if(imgUrls){
+        if (imgUrls) {
             var numImages = imgUrls.length;
             while (numImages--) {
                 var fileURL = imgUrls[numImages].replace('../', '');
@@ -406,7 +398,7 @@
     function loadJS (sectionOBJ){
         var that = this;
 
-        if(this.verbose)console.log('SectionLoader | loadJS: '+sectionOBJ.jsPath);
+        if (this.verbose) console.log('SectionLoader | loadJS: '+sectionOBJ.jsPath);
 
         if (sectionOBJ.jsPath) {
             that.jsLoaded(sectionOBJ, null);
@@ -415,7 +407,7 @@
     }
 
     function jsLoaded (sectionOBJ, data){
-        if(this.verbose)console.log('SectionLoader | loadJS: success');
+        if (this.verbose) console.log('SectionLoader | loadJS: success');
         sectionOBJ.jsAttached = true;
 
         arrayExecuter.stepComplete();
@@ -423,13 +415,13 @@
 
     function isDuplicate (fileURL){
         var numImages = sectionLoaderState.imagesToLoad.length;
-        while(numImages--){
+        while (numImages--) {
             if (sectionLoaderState.imagesToLoad[numImages].url === fileURL) {
                 return true;
             }
         }
         var numMisc = sectionLoaderState.miscToLoad.length;
-        while(numMisc--){
+        while (numMisc--) {
             if(sectionLoaderState.miscToLoad[numMisc].url === fileURL) {
                 return true;
             }
@@ -463,7 +455,7 @@
             newImage,
             that = this;
 
-        if((numImages+numMisc) < 1){
+        if ((numImages+numMisc) < 1) {
             this.complete();
             return;
         }
@@ -496,7 +488,7 @@
         fileObj.size = this.getFileSize(fileURL);
         
         newImage = new Image();
-        newImage.alt = String(fileObj.index)
+        newImage.alt = String(fileObj.index);
         $(newImage).load(function(){
             if(this.verbose)console.log('SectionLoader | image Loaded: '+fileObj.url);
             
@@ -564,7 +556,7 @@
     function getPerc () {
         var loaded = 0;
         var totalLoad = 0;
-        for(var m=0; m<sectionLoaderState.miscToLoad.length; m++){
+        for (var m=0; m<sectionLoaderState.miscToLoad.length; m++) {
             totalLoad += sectionLoaderState.miscToLoad[m].size;
             if(sectionLoaderState.miscToLoad[m].done){
                 loaded += sectionLoaderState.miscToLoad[m].size;
@@ -572,7 +564,7 @@
                 loaded += sectionLoaderState.miscToLoad[m].size*sectionLoaderState.miscToLoad[m].perc;
             }
         }
-        for(var i=0; i<sectionLoaderState.imagesToLoad.length; i++){
+        for (var i=0; i<sectionLoaderState.imagesToLoad.length; i++) {
             totalLoad += sectionLoaderState.imagesToLoad[i].size;
             if(sectionLoaderState.imagesToLoad[i].done){
                 loaded += sectionLoaderState.imagesToLoad[i].size;
@@ -584,7 +576,7 @@
     }
 
     function fileError (e) {
-        if(this.verbose){
+        if (this.verbose) {
             console.log('SectionLoader | fileError');
             console.log(e);
         }
@@ -592,8 +584,9 @@
 
     function checkComplete(){
         // console.log('checkComplete '+sectionLoaderState.imagesLoaded+' vs. '+sectionLoaderState.imagesToLoad.length+' | '+sectionLoaderState.miscLoaded+' vs. '+sectionLoaderState.miscToLoad.length);
-        if(sectionLoaderState.imagesLoaded >= sectionLoaderState.imagesToLoad.length
-        && sectionLoaderState.miscLoaded >= sectionLoaderState.miscToLoad.length)this.complete();
+        if (sectionLoaderState.imagesLoaded >= sectionLoaderState.imagesToLoad.length && sectionLoaderState.miscLoaded >= sectionLoaderState.miscToLoad.length) {
+            this.complete();
+        }
     }
 
     function complete () {
@@ -646,7 +639,7 @@
             numSections = sectionLoaderState.sections.length;
 
         while (numSections--) {
-            if(sectionLoaderState.sections[numSections].id === id){
+            if (sectionLoaderState.sections[numSections].id === id) {
                 sectionOBJ = sectionLoaderState.sections[numSections];
             }
         }
@@ -685,6 +678,10 @@
         returnSectionOBJ: returnSectionOBJ
     };
 
-    return sectionLoader;
+    window.oblio = window.oblio || {};
+    oblio.utils = oblio.utils || {};
+    oblio.utils.SectionLoader = sectionLoader;
 
-}));
+    return oblio.utils.SectionLoader;
+
+});
