@@ -456,6 +456,9 @@ define([
 
         if ((numImages+numMisc) < 1) {
             this.complete();
+            if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
+                oblio.settings.prepreloader.goOut();
+            }
             return;
         }
 
