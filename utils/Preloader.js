@@ -45,6 +45,10 @@ define([
         this.finished = false;
         perc = 0;
 
+        if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
+            oblio.settings.prepreloader.goOut();
+        }
+        
         //
         if(curr_loaderID && loaderUIObjects[curr_loaderID].bringIn !== undefined){
             //custom bringIn
