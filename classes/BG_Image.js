@@ -1,7 +1,6 @@
 define([
-        'jquery',
         'oblio/classes/BG'
-    ], function ($, BG) {
+    ], function (BG) {
 
     'use strict';
 

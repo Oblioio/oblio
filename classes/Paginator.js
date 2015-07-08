@@ -1,24 +1,8 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'greensock/TweenLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min'
-            ], function () {
-            return (root.classes.Paginator = factory());
-        });
-    } else {
-        root.classes.Paginator = factory();
-    }
-}(window.oblio = window.oblio || {}, function () {
+define([
+        'greensock/TweenLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min'
+    ], function () {
 
     var Paginator = function (data) {
 
@@ -339,5 +323,9 @@
     Paginator.prototype.update = update;
     Paginator.prototype.resize = resize;
 
-    return Paginator;
-}));
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.Paginator = Paginator;
+
+    return oblio.classes.Paginator;
+});

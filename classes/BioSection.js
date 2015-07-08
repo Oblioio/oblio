@@ -1,31 +1,15 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'mustache',
-                'text!oblio/templates/BioSectionTemplate.mustache',
-                'oblio/utils/Inherit',
-                'oblio/utils/DeviceDetect',
-                'oblio/classes/Navigation',
-                'oblio/packages/jquery.tinyscrollbar',
-                'oblio/classes/Section',
-                'greensock/TweenLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min'
-            ], function ($, Mustache, biosTemplate) {
-            return (root.classes.BioSection = factory($, Mustache, biosTemplate));
-        });
-    } else {
-        root.classes.BioSection = factory($, Mustache, biosTemplate);
-    }
-}(window.oblio = window.oblio || {}, function ($, Mustache, biosTemplate) {
+define([
+        'mustache',
+        'text!oblio/templates/BioSectionTemplate.mustache',
+        'oblio/utils/Inherit',
+        'oblio/utils/DeviceDetect',
+        'oblio/classes/Navigation',
+        'oblio/packages/jquery.tinyscrollbar',
+        'oblio/classes/Section',
+        'greensock/TweenLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min'
+    ], function (Mustache, biosTemplate) {
 
     var myName = "BioSection",
         that,
@@ -257,5 +241,9 @@
     BioSection.prototype.resize = resize;
     BioSection.prototype.onHideComplete = onHideComplete;
 
-    return BioSection;
-}));
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.BioSection = BioSection;
+
+    return oblio.classes.BioSection;
+});

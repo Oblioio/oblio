@@ -1,11 +1,10 @@
 define([
-        'jquery',
         'oblio/classes/Backplate',
         'oblio/utils/DeviceDetect',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function ($, Backplate) {
+    ], function (Backplate) {
 
     'use strict';
 

@@ -1,8 +1,7 @@
 define([
-        'jquery',
         'oblio/utils/DeviceDetect',
         'oblio/utils/ArrayExecuter'
-    ], function ($) {
+    ], function () {
 
     var arrayExecuter = new oblio.utils.ArrayExecuter(),
         DeviceDetect = oblio.utils.DeviceDetect,

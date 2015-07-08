@@ -1,24 +1,8 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'oblio/utils/SectionLoader',
-                'oblio/utils/ArrayExecuter',
-                'oblio/classes/Menu'
-            ], function () {
-            return (root.classes.Navigation = factory());
-        });
-    } else {
-        root.classes.Navigation = factory();
-    }
-}(window.oblio = window.oblio || {}, function () {
+define([
+        'oblio/utils/SectionLoader',
+        'oblio/utils/ArrayExecuter',
+        'oblio/classes/Menu'
+    ], function () {
 
     'use strict';
 /*jshint validthis:true */
@@ -456,5 +440,9 @@
     Navigation.prototype.enable = enable;
     Navigation.prototype.disable = disable;
 
-    return Navigation;
-}));
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.Navigation = Navigation;
+
+    return oblio.classes.Navigation;
+});

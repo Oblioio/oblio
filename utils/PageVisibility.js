@@ -1,4 +1,4 @@
-define(['jquery'], function () {
+define([], function () {
     (function() {
       var hidden = "hidden";
 

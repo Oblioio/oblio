@@ -1,9 +1,8 @@
 define([
-        'jquery',
         'oblio/classes/BG',
         'oblio/utils/videoPlayerYT',
         'oblio/utils/videoPlayerHTML5'
-    ], function ($, BG, VideoPlayerYT, VideoPlayerHTML5) {
+    ], function (BG, VideoPlayerYT, VideoPlayerHTML5) {
 
     'use strict';
     /*jshint validthis:true*/

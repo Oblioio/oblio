@@ -1,6 +1,4 @@
-define([
-        'jquery'
-    ], function ($) {
+define([], function () {
 
     var Backplate = function (bg, loaded, resizeContainer, mode) {
 

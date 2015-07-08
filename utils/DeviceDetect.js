@@ -1,17 +1,4 @@
-;(function (root, factory) {
-    // Browser globals
-    root.utils = root.utils || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([], function () {
-            // Add to namespace
-            return (root.utils.DeviceDetect = factory());
-        });
-    } else {
-        root.utils.DeviceDetect = factory();
-    }
-}(window.oblio = window.oblio || {}, function () {
+define([], function () {
 
     var exports = {},
         DeviceDetect =
@@ -73,6 +60,9 @@
     exports.isIETouch = (exports.browser === 'Explorer' && navigator.userAgent.indexOf('Touch') >= 0)?true:false;
     exports.isEarlyIE = (navigator.userAgent.indexOf('MSIE 8.0') >= 0)?true:false;
 
-    return exports;
+    window.oblio = window.oblio || {};
+    oblio.utils = oblio.utils || {};
+    oblio.utils.DeviceDetect = exports;
 
-}));
+    return oblio.utils.DeviceDetect;
+});

@@ -1,6 +1,4 @@
-define([
-        'jquery'
-    ], function ($) {
+define([], function () {
 
     function videoPlayerYT(div, parameters){
 

@@ -1,10 +1,9 @@
 define([
-        'jquery',
         'mustache',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function ($, Mustache) {
+    ], function (Mustache) {
 
     'use strict';
 

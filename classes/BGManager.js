@@ -1,12 +1,11 @@
 define([
-        'jquery',
         'oblio/classes/BG_Image',
         'oblio/classes/BG_Video',
         'oblio/utils/DeviceDetect',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function ($, BG_Image, BG_Video) {
+    ], function (BG_Image, BG_Video) {
 
     'use strict';
 

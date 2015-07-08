@@ -1,28 +1,12 @@
-// UMD (Universal Module Definition) patterns for JavaScript modules that work everywhere.
-// https://github.com/umdjs/umd/blob/master/amdWebGlobal.js
-
-;(function (root, factory) {
-    // Browser globals
-    root.classes = root.classes || {};
-
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define([
-                'jquery',
-                'mustache',
-                'oblio/utils/DeviceDetect',
-                'oblio/classes/MenuPaginator',
-                'greensock/TweenLite.min',
-                'greensock/TimelineLite.min',
-                'greensock/easing/EasePack.min',
-                'greensock/plugins/CSSPlugin.min'
-            ], function ($, Mustache) {
-            return (root.classes.Menu = factory($, Mustache));
-        });
-    } else {
-        root.classes.Menu = factory($, Mustache);
-    }
-}(window.oblio = window.oblio || {}, function ($, Mustache) {
+define([
+        'mustache',
+        'oblio/utils/DeviceDetect',
+        'oblio/classes/MenuPaginator',
+        'greensock/TweenLite.min',
+        'greensock/TimelineLite.min',
+        'greensock/easing/EasePack.min',
+        'greensock/plugins/CSSPlugin.min'
+    ], function (Mustache) {
 
     'use strict';
 
@@ -279,5 +263,9 @@
     Menu.prototype.resize = resize;
     Menu.prototype.selectMenuItem = selectMenuItem;
 
-    return Menu;
-}));
+    window.oblio = window.oblio || {};
+    oblio.classes = oblio.classes || {};
+    oblio.classes.Menu = Menu;
+
+    return oblio.classes.Menu;
+});
