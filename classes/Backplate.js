@@ -21,6 +21,10 @@ define([], function () {
     };
 
     function changeImage (bg) {
+        if (bg.img === false) {
+            return;
+        }
+
         if (this.obj) {
             this.obj.destroy();
         }
@@ -54,6 +58,10 @@ define([], function () {
     }
 
     function getRatio () {
+        if (!this.elements.backplate) {
+            return 1;
+        }
+        
         var ratio = this.elements.backplate.height / this.elements.backplate.width;
 
         return ratio;
