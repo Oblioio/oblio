@@ -148,7 +148,7 @@ define([
                                 case 'googlePlus':
                                     if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('gPlusBtn');
-                                        if (buttonsObj[btn_name] === false) {
+                                        if (node && buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -158,7 +158,7 @@ define([
                                 case 'tweet':
                                     if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('tweetBtn');
-                                        if (buttonsObj[btn_name] === false) {
+                                        if (node && buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -168,7 +168,7 @@ define([
                                 case 'facebook_like':
                                     if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('fbLike');
-                                        if (buttonsObj[btn_name] === false) {
+                                        if (node && buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
@@ -178,7 +178,7 @@ define([
                                 case 'facebook_share':
                                     if (buttonsObj[btn_name] === false) {
                                         node = document.getElementById('fbShare');
-                                        if (buttonsObj[btn_name] === false) {
+                                        if (node && buttonsObj[btn_name] === false) {
                                             node.parentNode.removeChild(node);
                                         }
                                     } else {
