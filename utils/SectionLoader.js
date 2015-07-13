@@ -347,7 +347,7 @@ define([
             }
             // create a 'styleholder' span to hold style data from the json
             newStr = (spanStyle === '') ? String(html_obj.VAL) : '<span class="styleholder" data-style="' + spanStyle + '"></span>' + String(html_obj.VAL);
-            if (html_obj.visible && html_obj.visible === false) newStr = '';
+            if (html_obj.visible && String(html_obj.visible).toLowerCase() === 'false') newStr = '';
             html_str = html_str.replace(String(html_obj.ID), newStr);
         }
 
