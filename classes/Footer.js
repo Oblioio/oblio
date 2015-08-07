@@ -115,7 +115,9 @@ define([
         if (followUsObj) {
             var followUsElem = document.getElementById('follow');
             if (followUsObj.VISIBLE === false) {
-                followUsElem.parentNode.removeChild(followUsElem);
+                if (followUsElem) {
+                    followUsElem.parentNode.removeChild(followUsElem);
+                }
             } else {
                 for ( var l = 0; l < followUsObj.links.length; l++) {
                     if (followUsObj.links[l].VISIBLE === true){
