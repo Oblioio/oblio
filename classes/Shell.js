@@ -148,6 +148,8 @@ define([
         if (oblio.app.mainMenu) {
             oblio.settings.menuWidth = oblio.app.mainMenu.resize();
         }
+        
+        if (oblio.app.Footer)oblio.app.Footer.resize();
 
         if (oblio.settings.windowDimensions.width < oblio.settings.minWidth || oblio.settings.windowDimensions.height < oblio.settings.minHeight) {
             this.elements.shell[0].style.position = 'absolute';
