@@ -440,7 +440,7 @@ define([
                 sectionOBJ.partials[template.template_name] = data;
             }
 
-            Mustache.compile(data);
+            // Mustache.compile(data);
 
             arrayExecuter.stepComplete_instant();
         });
