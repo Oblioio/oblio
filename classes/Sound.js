@@ -105,25 +105,16 @@ define([
 
     }
 
-    function addSprite (params) {
-        var sprite_path = params.path,
+
+    function addSprite (spriteId, params) {
+        var sprite_path = params.urls,
             sprite = params.sprite;
 
-        if (this.sounds[sprite_path]) {
-            console.log(sprite_path + ' already exists.');
-            return false;
-        }
-
-        this.addSound(sprite_path, {
-            urls: [sprite_path],
-            sprite: sprite
-        });
+        var audioSprite = this.addSound(spriteId, params);
 
         // add each named sound in the sprite to sounds and point them to this.sounds[sprite_path]
         for (var sound_name in sprite) {
-            if (sprite.hasOwnProperty(sound_name)) {
-                this.sounds[sound_name] = sprite_path;
-            }
+            this.sounds[sound_name] = spriteId;
         }
     }
 
