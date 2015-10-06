@@ -86,10 +86,13 @@ define([], function () {
         }
 
         /*jshint validthis:true*/
-        if(!w)w = this.container.offsetWidth;
-        if(!h)h = this.container.offsetHeight;
-        this.width = w;
-        this.height = h;
+        var rect;
+        if (!w || !h) {
+            // if width & height are not passed, use the resizeContainer, if resizeContainer is not provided, use container;
+            rect = this.elements.resizeContainer ? this.elements.resizeContainer.getBoundingClientRect(): this.elements.container.getBoundingClientRect();
+            w = rect.width;
+            h = rect.height;
+        }
 
         var imgWidth,
             imgHeight;
