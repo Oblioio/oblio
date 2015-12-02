@@ -677,7 +677,8 @@ define([
         fileError: fileError,
         checkComplete: checkComplete,
         complete: complete,
-        returnSectionOBJ: returnSectionOBJ
+        returnSectionOBJ: returnSectionOBJ,
+        arrayExecuter: arrayExecuter
     };
 
     window.oblio = window.oblio || {};
