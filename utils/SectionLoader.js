@@ -8,7 +8,7 @@ define([
         base_url = '';
 
     if (oblio.settings) {
-        base_url = oblio.settings.base_url || '';
+        base_url = oblio.settings.baseUrl || '';
     }
 
     /*
@@ -53,7 +53,7 @@ define([
                     continue;
                 }
 
-                section_obj.data.base = oblio.settings.base_url || '';
+                section_obj.data.base = oblio.settings.baseUrl || '';
 
                 this.addSection(section_name, section_obj);
             }
