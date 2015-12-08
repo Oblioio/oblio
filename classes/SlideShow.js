@@ -249,7 +249,7 @@ define([
     }
 
     function mouseUp (e) {
-        this.elements.wrapper.className = this.elements.wrapper.className.replace(/dragging|\s/g, '');
+        this.elements.wrapper.className = this.elements.wrapper.className.replace(/ dragging/g, '');
         this.stopDrag(e.pageX, e.pageY);
         return false;
     }
