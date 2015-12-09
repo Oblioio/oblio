@@ -506,7 +506,7 @@ define([
             if (this.animationState.currSlideX === 0) {
                 this.animationState.otherSlide = null;
                 this.state.animating = false;
-                onTransitionComplete.call(this);
+                this.onTransitionComplete(this);
             } else {
                 this.animationState.currSlideX = 0;
                 this.animationState.currVelocity = 0;
