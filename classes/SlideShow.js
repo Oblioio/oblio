@@ -24,6 +24,8 @@ define([
         this.rotation_delay = data.rotation_delay || 3000; // switch slide every 3 seconds
         this.activeSlides = [];
 
+        this.enabled = true;
+
         this.dragPosition = {};
         this.dragOffset = {};
         this.state = {};
@@ -103,6 +105,10 @@ define([
     }
 
     function startDrag (pageX, pageY) {
+        if (!this.enabled) {
+            return;
+        }
+
         if (this.dragging || this.state.animating) {
             return false;
         }
@@ -127,6 +133,10 @@ define([
     }
 
     function drag (pageX, pageY) {
+        if (!this.enabled) {
+            return;
+        }
+
         if (!this.dragging) {
             return false;
         }
@@ -175,6 +185,10 @@ define([
     }
 
     function stopDrag (pageX, pageY) {
+        if (!this.enabled) {
+            return;
+        }
+
         if (!this.dragging) {
             return false;
         }
