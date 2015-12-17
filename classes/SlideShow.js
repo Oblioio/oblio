@@ -105,9 +105,6 @@ define([
     }
 
     function startDrag (pageX, pageY) {
-        if (!this.enabled) {
-            return;
-        }
 
         if (this.dragging || this.state.animating) {
             return false;
@@ -133,9 +130,6 @@ define([
     }
 
     function drag (pageX, pageY) {
-        if (!this.enabled) {
-            return;
-        }
 
         if (!this.dragging) {
             return false;
@@ -185,9 +179,6 @@ define([
     }
 
     function stopDrag (pageX, pageY) {
-        if (!this.enabled) {
-            return;
-        }
 
         if (!this.dragging) {
             return false;
@@ -269,18 +260,30 @@ define([
     }
 
     function touchStart (e) {
+        if (!this.enabled) {
+            return;
+        }
+
         var touch = e.originalEvent.touches[0];
         this.startDrag(touch.pageX, touch.pageY);
         return false;
     }
 
     function touchMove (e) {
+        if (!this.enabled) {
+            return;
+        }
+
         var touch = e.originalEvent.touches[0];
         this.drag(touch.pageX, touch.pageY);
         return false;
     }
 
     function touchEnd (e) {
+        if (!this.enabled) {
+            return;
+        }
+        
         var touch = e.originalEvent.changedTouches[0];
         this.stopDrag(touch.pageX, touch.pageY);
         return false;
