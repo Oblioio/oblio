@@ -106,7 +106,7 @@ define([
 
     function startDrag (pageX, pageY) {
 
-        if (this.dragging || this.state.animating) {
+        if (this.dragging || this.state.animating || !this.enabled) {
             return false;
         }
 
@@ -131,7 +131,7 @@ define([
 
     function drag (pageX, pageY) {
 
-        if (!this.dragging) {
+        if (!this.dragging || !this.enabled) {
             return false;
         }
 
@@ -180,7 +180,7 @@ define([
 
     function stopDrag (pageX, pageY) {
 
-        if (!this.dragging) {
+        if (!this.dragging || !this.enabled) {
             return false;
         }
 
