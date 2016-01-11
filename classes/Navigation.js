@@ -112,6 +112,11 @@ define([
                 if( window.innerHeight !== screen.height) {
                     history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
                 }
+            } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
+                // pushState breaks fullscreen in chrome, so check if fullscreen first
+                if( window.innerHeight !== screen.height) {
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                }
             } else {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {

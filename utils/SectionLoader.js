@@ -258,7 +258,7 @@ define([
         if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
         //load html and scrape for images
-        $.get(sectionOBJ.htmlPath, function(data){
+        $.get(base_url + sectionOBJ.htmlPath, function(data){
             that.htmlLoaded(sectionOBJ, data);
         });
     }
