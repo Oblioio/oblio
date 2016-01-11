@@ -34,8 +34,16 @@ define([
         var base = document.getElementsByTagName('base')[0],
             url_arr,
             path_arr;
+
         if (base) {
             url_arr = base.href.split('/');
+            url_arr.pop();
+            oblio.settings.basePath = url_arr.join('/') + '/';
+            path_arr = window.location.href.replace(oblio.settings.basePath, '').split('/');
+            this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
+            this.currentSubsection = path_arr[1];
+        } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
+            url_arr = oblio.settings.baseUrl.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
             path_arr = window.location.href.replace(oblio.settings.basePath, '').split('/');
