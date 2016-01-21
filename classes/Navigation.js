@@ -103,7 +103,7 @@ define([
 
             // if base element exists, make sure we're using that for our pushstate stuff
             var base = document.getElementsByTagName('base')[0];
-            if (base) {
+            if (base && oblio.settings.htaccess !== false) {
                 var url_arr = base.href.split('/');
                 url_arr.pop();
                 oblio.settings.basePath = url_arr.join('/') + '/';
@@ -112,7 +112,7 @@ define([
                 if( window.innerHeight !== screen.height) {
                     history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
                 }
-            } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
+            } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
                     history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
