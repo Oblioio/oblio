@@ -36,7 +36,7 @@ define([], function () {
             h: bg.h,
             v: bg.v,
             ratio: this._getRatio(),
-            mode: 'cover'
+            mode: bg.mode || 'cover'
         };
 
         var node = this.elements.inner;
@@ -109,7 +109,7 @@ define([], function () {
             w: imgWidth,
             h: imgHeight
         },
-        bg1Ratio = Math.max(w/imgDimensions.w, h/imgDimensions.h),
+        bg1Ratio = this.settings.mode === 'contain' ? Math.max(w/imgDimensions.w, h/imgDimensions.h) : Math.max(w/imgDimensions.w, h/imgDimensions.h),
         bg1AdjustedWidth = (imgDimensions.w*bg1Ratio),
         bg1AdjustedHeight = (imgDimensions.h*bg1Ratio),
 
