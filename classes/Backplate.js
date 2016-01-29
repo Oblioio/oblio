@@ -109,7 +109,7 @@ define([], function () {
             w: imgWidth,
             h: imgHeight
         },
-        bg1Ratio = this.settings.mode === 'contain' ? Math.max(w/imgDimensions.w, h/imgDimensions.h) : Math.min(w/imgDimensions.w, h/imgDimensions.h),
+        bg1Ratio = this.settings.mode === 'contain' ? Math.min(w/imgDimensions.w, h/imgDimensions.h) : Math.max(w/imgDimensions.w, h/imgDimensions.h),
         bg1AdjustedWidth = (imgDimensions.w*bg1Ratio),
         bg1AdjustedHeight = (imgDimensions.h*bg1Ratio),
 
