@@ -510,7 +510,7 @@ define([
     
     function miscLoadFile(fileObj){
         if(this.verbose)console.log('SectionLoader | xhr load: '+fileObj.url);
-        var fileURL = fileObj.url;
+        var fileURL = base_url + fileObj.url;
 
         fileObj.perc = 0;
         fileObj.done = false;
@@ -531,8 +531,11 @@ define([
             }.bind(this),
             type: 'GET',
             url: fileURL,
-            success: function(){  
-                          
+            success: function(data){  
+                
+                this.miscFiles = this.miscFiles || {};
+                this.miscFiles[fileObj.url] = data;
+
                 fileObj.done = true;
                 sectionLoaderState.miscLoaded++;
                 sectionLoader.checkComplete();
@@ -649,6 +652,10 @@ define([
         return sectionOBJ;
     }
 
+    function getSectionLoaderState () {
+        return sectionLoaderState;
+    }
+
     var sectionLoader = {
         verbose: false,
         loadJSON: loadJSON,
@@ -678,6 +685,8 @@ define([
         checkComplete: checkComplete,
         complete: complete,
         returnSectionOBJ: returnSectionOBJ,
+        getSectionLoaderState: getSectionLoaderState,
+        loadImage: loadImage,
         arrayExecuter: arrayExecuter
     };
 
