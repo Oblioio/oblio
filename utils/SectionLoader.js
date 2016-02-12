@@ -687,6 +687,7 @@ define([
         returnSectionOBJ: returnSectionOBJ,
         getSectionLoaderState: getSectionLoaderState,
         loadImage: loadImage,
+        miscLoadFile: miscLoadFile,
         arrayExecuter: arrayExecuter
     };
 
