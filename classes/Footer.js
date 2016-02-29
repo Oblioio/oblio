@@ -265,7 +265,7 @@ define([
 
         twttr.ready(function (twttr) {
             twttr.events.bind('click', function () {
-                videos_pause();
+                // videos_pause();
             });
         });
     }
