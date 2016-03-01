@@ -32,7 +32,9 @@ define([
 
         this.elements = {
             sectionWrapper: document.getElementById(this.name)
-        }
+        };
+
+        this.elements.sectionWrapper.className = this.elements.sectionWrapper.className + ' biosection';
 
         // add slugify helper function to data to be used to add ids to bios in the biosTemplate
         data.slugify = function () {
