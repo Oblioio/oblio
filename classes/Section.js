@@ -16,13 +16,6 @@ define([
         function init (callback) {
         }
 
-        function placeHTML (wrapperId) {
-            var wrapper = document.getElementById(wrapperId),
-                html = oblio.utils.SectionLoader.returnSectionOBJ(wrapperId).htmlData;
-
-            wrapper.innerHTML = html;
-        }
-
         function resize (w, h) {
             if (this.backplate) {
                 this.backplate.resize();
@@ -84,7 +77,6 @@ define([
         Section.prototype.touchEndHandler = touchEnd;
         Section.prototype.touchMoveHandler = touchMove;
         Section.prototype.mousewheelHandler = mousewheelHandler;
-        Section.prototype.placeHTML = placeHTML;
 
         window.oblio = window.oblio || {};
         oblio.classes = oblio.classes || {};
