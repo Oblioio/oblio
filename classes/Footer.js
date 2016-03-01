@@ -50,18 +50,16 @@ define([
             mpaaRequirementsJSON = data.MPAA_requirements,
             mpaaRequirementsElement = $("#MPAA_requirements");
 
-        if (!mpaaRequirementsJSON.VISIBLE || mpaaRequirementsJSON.VISIBLE === 'false') {
-            return;
+        if (mpaaRequirementsElement) {
+            oblio.settings.mpaaShown = true;
+            TweenLite.to(mpaaRequirementsElement, 1, {css:{bottom: 0}, ease:Power4.easeInOut});
+            // TweenLite.to($("#bottomRight"), 1, {css:{bottom: -200}, ease:Power4.easeInOut});
+
+            var that = this;
+            window.setTimeout(function () {
+                that.hideMPAARequirements();
+            }, 6000);
         }
-
-        oblio.settings.mpaaShown = true;
-        TweenLite.to(mpaaRequirementsElement, 1, {css:{bottom: 0}, ease:Power4.easeInOut});
-        // TweenLite.to($("#bottomRight"), 1, {css:{bottom: -200}, ease:Power4.easeInOut});
-
-        var that = this;
-        window.setTimeout(function () {
-            that.hideMPAARequirements();
-        }, 6000);
 
     }
 
@@ -134,75 +132,14 @@ define([
 
     function initShare () {
 
-            //share buttons
-            var data = oblio.app.dataSrc.sections.main.data,
-                shareObj = data.footerShare,
-                buttonsObj = shareObj.show_buttons,
-                node;
-
-            if (shareObj) {
-                if(shareObj.VISIBLE === false){
-                    $('#share').css('display', 'none');
-                } else {
-                    for (var btn_name in buttonsObj) {
-                        if (buttonsObj.hasOwnProperty(btn_name)) {
-                            switch (btn_name) {
-                                case 'googlePlus':
-                                    if (buttonsObj[btn_name] === false) {
-                                        node = document.getElementById('gPlusBtn');
-                                        if (node && buttonsObj[btn_name] === false) {
-                                            node.parentNode.removeChild(node);
-                                        }
-                                    } else {
-                                        googlePlusScript();
-                                    }
-                                break;
-                                case 'tweet':
-                                    if (buttonsObj[btn_name] === false) {
-                                        node = document.getElementById('tweetBtn');
-                                        if (node && buttonsObj[btn_name] === false) {
-                                            node.parentNode.removeChild(node);
-                                        }
-                                    } else {
-                                        twitterScript();
-                                    }
-                                break;
-                                case 'facebook_like':
-                                    if (buttonsObj[btn_name] === false) {
-                                        node = document.getElementById('fbLike');
-                                        if (node && buttonsObj[btn_name] === false) {
-                                            node.parentNode.removeChild(node);
-                                        }
-                                    } else {
-                                        facebookScript();
-                                    }
-                                break;
-                                case 'facebook_share':
-                                    if (buttonsObj[btn_name] === false) {
-                                        node = document.getElementById('fbShare');
-                                        if (node && buttonsObj[btn_name] === false) {
-                                            node.parentNode.removeChild(node);
-                                        }
-                                    } else {
-                                        facebookScript();
-                                    }
-                                break;
-                                default:
-                            }
-                        }
-                    }
-                }
-            }
+        googlePlusScript();
+        twitterScript();
+        facebookScript();
 
         //Share on facebook
         $('#share-facebook').on('click', function(e) {
-
             window.open('http://www.facebook.com/share.php?u='+encodeURIComponent($(this).attr('href')), '_blank');
-            // $('#sound_button').removeClass('sound-on');
-            // oblio.functions.pauseSound();
-
             e.preventDefault();
-            //return false;
         });
 
         //shareShelf

@@ -1,4 +1,7 @@
-define(function () {
+define([
+        'mustache'
+    ],
+    function (Mustache) {
 
         var myName,
             that,
@@ -11,6 +14,27 @@ define(function () {
         }
 
         function init (callback) {
+        }
+
+        function placeHTML (wrapperId) {
+            var wrapper = document.getElementById(wrapperId);
+
+            var content = oblio.app.dataSrc.sections[wrapperId].data;
+
+                content.slugify = function () {
+                    return function (text, render) {
+                        return render(text)
+                            .toLowerCase()
+                            .replace(/[^\w ]+/g,'')
+                            .replace(/ +/g,'_')
+                            ;
+                    };
+                };
+
+            var template = oblio.utils.SectionLoader.returnSectionOBJ(wrapperId).template,
+                html = Mustache.render(template, content);
+
+            wrapper.innerHTML = html;
         }
 
         function resize (w, h) {
@@ -74,6 +98,7 @@ define(function () {
         Section.prototype.touchEndHandler = touchEnd;
         Section.prototype.touchMoveHandler = touchMove;
         Section.prototype.mousewheelHandler = mousewheelHandler;
+        Section.prototype.placeHTML = placeHTML;
 
         window.oblio = window.oblio || {};
         oblio.classes = oblio.classes || {};

@@ -25,15 +25,11 @@ define([
             el: document.getElementById(data.menuID),
             wrapper: document.getElementById(data.wrapperID),
             paginatorEl: document.getElementById(data.paginatorElID)
-        }
+        };
 
         this.menuList = data.menuList;
         this.menuStyle = data.menuStyle;
-
-        if (data.menuList) {
-            this.buildMenu();
-        }
-    }
+    };
 
     function init (current_section) {
         if(this.verbose)console.log('Main Menu | '+this.menuID+' | init');
@@ -49,112 +45,6 @@ define([
 
         this.resize();
 
-    }
-
-    function buildMenu () {
-        if(this.verbose)console.log('Main Menu | '+this.menuID+' | buildMenu');
-
-        switch (this.menuStyle) {
-            case 'vertical':
-                buildVerticalMenu.call(this, this.menuList);
-                break;
-            case 'horizontal':
-                this.menuStyle = 'horizontal';
-                buildHorizontalMenu.call(this, this.menuList);
-                break;
-            default:
-                buildVerticalMenu.call(this, this.menuList);
-        }
-
-    }
-
-    function buildVerticalMenu (menuList) {
-
-        for (var i = 0; i < menuList.length; i++)
-        {
-            var menuItem = menuList[i];
-            if (String(menuItem.visible).toLowerCase() == 'false' || menuItem.comingSoon == 'true')
-                continue;
-
-            var btnData = {},
-                popUp = false;
-
-            menuItem.className = 'mainMenuBtn';
-
-            // btnData.dataType = menuItem.type;
-            if (menuItem.type === 'external') {
-                menuItem.target = '_blank';
-            }else if (menuItem.type === "popup") {
-                popUp = true;
-                menuItem.rel = menuItem.link+","+menuItem.dimensions[0]+","+menuItem.dimensions[1];
-            }
-
-            // btnData.dataSection = menuItem.link;
-            // btnData.href = menuItem.link;
-
-            // btnData.fontSize = menuItem["font-size"];
-
-            // btnData.label = menuItem.label;
-            for (var j = 0; j < oblio.app.dataSrc.sections.main.html.length; j++) {
-                if (oblio.app.dataSrc.sections.main.html[j].ID === menuItem.label) {
-                    menuItem.label = oblio.app.dataSrc.sections.main.html[j].VAL;
-                }
-            };
-            // btn.innerHTML = $.grep(oblio.app.dataSrc.sections.main.html, function(e) { return e.ID == menuItem.label; })[0].VAL;
-
-            var btn = $(Mustache.render(this.template, menuItem));
-            if(popUp)btn.click(this.openPopUp);
-
-            var li = document.createElement('li');
-            li.appendChild(btn.get()[0]);
-            this.elements.el.appendChild(li);
-        }
-    }
-
-    function buildHorizontalMenu (menuList) {
-        this.elements.wrapper.className = 'horizontal paginatorWrapper ' + this.elements.wrapper.className;
-
-        this.elements.el.className = 'centeredMenu';
-
-        this.elements.paginatorEl.className = 'paginatorMasker';
-
-        var firstBtn = true;
-
-        for(var i = 0; i < menuList.length; i++){
-            if(menuList[i].visible === false)continue;
-            if(!firstBtn){
-                // var newDot = document.createElement('li');
-                // newDot.className = "menu_dot";
-                // menuElem.appendChild(newDot);
-            } else {firstBtn = false;};
-            
-            var newMenuEntry = document.createElement('li');
-            var newMenuLink = document.createElement('a');
-            newMenuLink.innerHTML = menuList[i].label;
-            newMenuLink.setAttribute('data-type', menuList[i].type);
-            if (menuList[i].type === 'external') {
-                newMenuLink.setAttribute('target', '_blank');
-            }
-            newMenuLink.setAttribute('data-section', menuList[i].link);
-            newMenuLink.setAttribute('href', menuList[i].link);
-            newMenuLink.style.fontSize = menuList[i]["font-size"];
-            if(menuList[i].type === "external"){
-                newMenuLink.target = "_blank";
-            } else if(menuList[i].type === "popup") {
-                newMenuLink.rel = menuList[i].link+","+menuList[i].dimensions[0]+","+menuList[i].dimensions[1];
-                $(newMenuLink).click(this.openPopUp);
-            }
-            
-            newMenuEntry.appendChild(newMenuLink);
-            this.elements.el.appendChild(newMenuEntry);
-        }
-
-        var that = this;
-        window.setTimeout(function () {
-            that.menuPaginator = new oblio.classes.MenuPaginator({
-                wrapper: that.elements.wrapper
-            });
-        }, 50);        
     }
 
     function selectMenuItem (section_name, animate) {
@@ -259,7 +149,6 @@ define([
     Menu.prototype.openPopUp = openPopUp;
     Menu.prototype.hide = hide;
     Menu.prototype.show = show;
-    Menu.prototype.buildMenu = buildMenu;
     Menu.prototype.resize = resize;
     Menu.prototype.selectMenuItem = selectMenuItem;
 

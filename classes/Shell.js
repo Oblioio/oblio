@@ -1,10 +1,11 @@
 define([
+        'mustache',
         'oblio/utils/DeviceDetect',
         'oblio/classes/Menu',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function () {
+    ], function (Mustache) {
 
     'use strict';
 
@@ -19,12 +20,32 @@ define([
         console.log('Shell Init');
         var sectionOBJ = oblio.utils.SectionLoader.returnSectionOBJ('main');
 
-        // add html to page
-        $('#shell').append($(sectionOBJ.htmlData));
+        placeHTML.call(this);
 
         window.requestAnimationFrame(function(){
             this.ready(callbackFn);
         }.bind(this));
+    }
+
+    function placeHTML () {
+        var wrapper = document.getElementById('shell');
+
+        var content = oblio.app.dataSrc.sections.main.data;
+
+            content.slugify = function () {
+                return function (text, render) {
+                    return render(text)
+                        .toLowerCase()
+                        .replace(/[^\w ]+/g,'')
+                        .replace(/ +/g,'_')
+                        ;
+                };
+            };
+
+        var template = oblio.utils.SectionLoader.returnSectionOBJ('main').template,
+            html = Mustache.render(template, content);
+
+        wrapper.innerHTML = html;
     }
 
     function ready(callbackFn){
