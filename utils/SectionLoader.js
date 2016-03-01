@@ -1,7 +1,8 @@
 define([
+        'mustache',
         'oblio/utils/DeviceDetect',
         'oblio/utils/ArrayExecuter'
-    ], function () {
+    ], function (Mustache) {
 
     var arrayExecuter = new oblio.utils.ArrayExecuter(),
         DeviceDetect = oblio.utils.DeviceDetect,
@@ -278,7 +279,7 @@ define([
             var newStr;
             var currSpanStyle;
             var currObj;
-            
+
             //handle the shared 'html' category 
             if (sectionLoader.localizationJSON.sections.shared && sectionLoader.localizationJSON.sections.shared.html) {
                 htmlObjs = sectionLoader.localizationJSON.sections.shared.html;
@@ -435,7 +436,18 @@ define([
         //load mustache templates
         $.get(base_url + template_path, function(data){
             if (typeof template === 'string') {
+
                 sectionOBJ.template = data;
+                sectionOBJ.htmlData = Mustache.render(sectionOBJ.template, sectionOBJ.data);
+
+                // preload images from html
+                var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
+                var results;
+
+                while ((results = img_pattern.exec(sectionOBJ.htmlData)) !== null)
+                {
+                    addImage.call(this, results[1]);
+                }
             } else {
                 sectionOBJ.partials[template.template_name] = data;
             }
@@ -443,7 +455,7 @@ define([
             // Mustache.compile(data);
 
             arrayExecuter.stepComplete_instant();
-        });
+        }.bind(this));
     }
 
     function loadFiles (){

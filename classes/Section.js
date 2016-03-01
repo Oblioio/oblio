@@ -17,22 +17,8 @@ define([
         }
 
         function placeHTML (wrapperId) {
-            var wrapper = document.getElementById(wrapperId);
-
-            var content = oblio.app.dataSrc.sections[wrapperId].data;
-
-                content.slugify = function () {
-                    return function (text, render) {
-                        return render(text)
-                            .toLowerCase()
-                            .replace(/[^\w ]+/g,'')
-                            .replace(/ +/g,'_')
-                            ;
-                    };
-                };
-
-            var template = oblio.utils.SectionLoader.returnSectionOBJ(wrapperId).template,
-                html = Mustache.render(template, content);
+            var wrapper = document.getElementById(wrapperId),
+                html = oblio.utils.SectionLoader.returnSectionOBJ(wrapperId).htmlData;
 
             wrapper.innerHTML = html;
         }
