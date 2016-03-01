@@ -27,7 +27,7 @@ define([
         console.log('init ' + myName);
         that = this;
 
-        this.placeHTML(myName.toLowerCase());
+        this.placeHTML(this.name.toLowerCase());
         data = oblio.app.dataSrc.sections[this.name].data;
 
         this.elements = {
