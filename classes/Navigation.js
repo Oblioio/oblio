@@ -133,6 +133,7 @@ define([
     }
 
     function onPopState (event) {
+        if (!event.state) return;
         this.changeSection(event.state.currentSection, event.state.currentSubSection, null, true);
     }
 
