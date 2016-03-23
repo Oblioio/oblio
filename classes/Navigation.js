@@ -133,7 +133,9 @@ define([
     }
 
     function onPopState (event) {
-        this.changeSection(event.state.currentSection, event.state.currentSubSection, null, true);
+        if (event.state) {
+            this.changeSection(event.state.currentSection, event.state.currentSubSection, null, true);    
+        }
     }
 
     function assembleChangeFunction (completeFn) {
