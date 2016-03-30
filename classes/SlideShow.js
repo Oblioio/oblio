@@ -150,7 +150,7 @@ define([
         this.dragPosition.velocity = this.dragPosition.x - this.dragPosition.lastX;
         this.dragPosition.lastX = this.dragPosition.x;
 
-        positionSlides([
+        this.positionSlides([
             {
                 slide: currSlide,
                 targetLeft: targetLeft
@@ -379,7 +379,7 @@ define([
             activate.call(this, this.state.current_index);
             // this.slides[this.state.current_index].elements.outer.style.display = 'block';
 
-            positionSlides([
+            this.positionSlides([
                 {
                     slide: this.slides[this.state.current_index],
                     targetLeft: 0
@@ -501,7 +501,7 @@ define([
                             targetLeft: this.animationState.otherSlideX
                         });
         }
-        positionSlides(slides);
+        this.positionSlides(slides);
 
         if (direction === -1 && this.animationState.currSlideX > 1 || direction === 1 && this.animationState.currSlideX < -1) {
             window.requestAnimationFrame(animate.bind(this));
@@ -780,6 +780,7 @@ define([
     SlideShow.prototype.startDrag = startDrag;
     SlideShow.prototype.drag = drag;
     SlideShow.prototype.stopDrag = stopDrag;
+    SlideShow.prototype.positionSlides = positionSlides;
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};
