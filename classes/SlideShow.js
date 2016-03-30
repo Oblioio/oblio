@@ -89,7 +89,7 @@ define([
             _window = $(window);
 
         if (this.slides.length > 1) {
-            _paginator_container.on('click', 'a', clickHandler.bind(this));
+            _paginator_container.on('click', 'a', this.clickHandler.bind(this));
 
             _wrapper.on('mousedown', mouseDown.bind(this));
             _wrapper.on('mousemove', mouseMove.bind(this));
@@ -760,6 +760,7 @@ define([
     SlideShow.prototype.buildSlideshow = buildSlideshow;
     SlideShow.prototype.reset = reset;
     SlideShow.prototype.keyHandler = keyHandler;
+    SlideShow.prototype.clickHandler = clickHandler;
     SlideShow.prototype.next = next;
     SlideShow.prototype.previous = previous;
     SlideShow.prototype.goToId = goToId;
