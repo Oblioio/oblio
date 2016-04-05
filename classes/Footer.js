@@ -7,8 +7,7 @@ define([
 
     'use strict';
 
-    var shareShelfWidth,
-        data;
+    var data;
 
     var Footer = function () {
     };
@@ -136,21 +135,6 @@ define([
         twitterScript();
         facebookScript();
 
-        //Share on facebook
-        $('#share-facebook').on('click', function(e) {
-            window.open('http://www.facebook.com/share.php?u='+encodeURIComponent($(this).attr('href')), '_blank');
-            e.preventDefault();
-        });
-
-        //shareShelf
-        $('#sharelabel').on('click', this.toggleShare.bind(this));
-
-        // $('#shareShelf').css('width', 'auto');
-        $('#shareShelf').css('top', oblio.settings.footerHeight+'px');
-        $('#shareShelfContents').css('width', 'auto');
-
-        shareShelfWidth = $('#shareShelfContents').width()+10;
-        $('#shareShelfContents').css('width', shareShelfWidth+'px');
     }
 
     function toggleShare(e){
