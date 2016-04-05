@@ -32,10 +32,6 @@ define([
             list_container.innerHTML = list;
         }
 
-        //Credits button
-        $('#credits-button').on('click', this.toggleCredits.bind(this));
-        if(document.getElementById('creditsbox-close'))$('#creditsbox-close').on('click', toggleCredits);
-
         this.initFollow(data);
         this.initShare();
 
