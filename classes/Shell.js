@@ -53,7 +53,7 @@ define([
         this.initialized = true;
 
 
-        oblio.app.Footer.init(document.getElementById('footer'));
+        oblio.app.Footer.init();
 
         if (oblio.app.navigation.currentSection !== 'videos') {
             oblio.app.Footer.show();
@@ -63,6 +63,23 @@ define([
         this.resize();
 
         callbackFn();
+    }
+
+    function setLayout () {
+        var w = oblio.settings.windowDimensions.width,
+            h = oblio.settings.windowDimensions.height;
+
+        if (w <= 414 && h >= w) {
+            oblio.settings.layout = 'narrow';
+            return;
+        }
+
+        if (h <= 414 && w >= h) {
+            oblio.settings.layout = 'short';
+            return;
+        }
+
+        oblio.settings.layout = 'desktop';
     }
 
     function setupMenu(){
@@ -111,7 +128,9 @@ define([
         oblio.settings.windowDimensions = {
             width: this.elements.window.width(),
             height: this.elements.window.height()
-        }
+        };
+
+        setLayout();
 
         w = Math.max(oblio.settings.minWidth, oblio.settings.windowDimensions.width),
         h = Math.max(oblio.settings.minHeight, oblio.settings.windowDimensions.height);
@@ -181,6 +200,7 @@ define([
     }
 
     Shell.prototype.init = init;
+    Shell.prototype.setLayout = setLayout;
     Shell.prototype.ready = ready;
     Shell.prototype.setupMenu = setupMenu;
     Shell.prototype.resize = resize;

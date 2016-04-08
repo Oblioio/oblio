@@ -12,10 +12,10 @@ define([
     var Footer = function () {
     };
 
-    function init (el) {
+    function init (callback) {
 
         this.elements = {
-            el: el
+            el: document.getElementById('footer')
         };
 
         var clickEvent = Modernizr.touch ? 'touchstart' : 'click';
@@ -43,9 +43,12 @@ define([
         }.bind(this), true);
 
         var functionArr =  [
-            { fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] },
-            { fn: callback, vars: null }
+            { fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] }
         ];
+
+        if (callback) {
+            functionArr.push({ fn: callback, vars: null });
+        }
 
         arrayExecuter.execute(functionArr);
 
