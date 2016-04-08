@@ -52,12 +52,7 @@ define([
         console.log('Shell ready');
         this.initialized = true;
 
-
-        oblio.app.Footer.init();
-
-        if (oblio.app.navigation.currentSection !== 'videos') {
-            oblio.app.Footer.show();
-        }
+        oblio.app.Footer.init(oblio.app.Footer.show.bind(oblio.app.Footer));
 
         this.setupMenu();
         this.resize();
