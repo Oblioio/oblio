@@ -1,41 +1,53 @@
 define([
-        'mustache',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function (Mustache) {
+    ], function () {
 
     'use strict';
 
     var data;
+    var arrayExecuter = new oblio.utils.ArrayExecuter();
 
     var Footer = function () {
     };
 
     function init (el) {
-        data = oblio.app.dataSrc.sections.main.data;
-
-        var linkList_template = '{{#links}}{{#VISIBLE}}<li><a class="footer-btn" {{#font-size}}style="font-size:{{font-size}}"{{/font-size}} href="{{URL}}" target="_blank" >{{LABEL}}</a></li>{{/VISIBLE}}{{/links}}';
-        Mustache.parse(linkList_template);
 
         this.elements = {
             el: el
         };
 
-        var linkLists = data.footerLinks || [],
-            list_container,
-            list;
+        var clickEvent = Modernizr.touch ? 'touchstart' : 'click';
+        this.elements.el.addEventListener(clickEvent, function (e) {
+            var target = Modernizr.touch ? e.touches[0].target : e.target;
 
-        for (var i = 0; i < linkLists.length; i++) {
-            list = Mustache.render(linkList_template, {links:linkLists[i].links});
-            list_container = document.getElementById(linkLists[i].id);
-            list_container.innerHTML = list;
-        }
+            if (target.getAttribute('target') !== '_blank') e.preventDefault();
 
-        this.initFollow(data);
-        this.initShare();
+            switch (target.id) {
+                case 'credits-button':
+                    this.toggleCredits(e);
+                    break;
+                case 'sharelabel':
+                    this.toggleShare(e);
+                    break;
+                case 'creditsbox-close':
+                    this.toggleCredits(e);
+                    break;
+                case 'share-facebook':
+                    window.open('http://www.facebook.com/share.php?u='+encodeURIComponent($(this).attr('href')), '_blank');
+                    break;
+                default:
+            }
 
-        if(this.init_extend)this.init_extend(data);
+        }.bind(this), true);
+
+        var functionArr =  [
+            { fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] },
+            { fn: callback, vars: null }
+        ];
+
+        arrayExecuter.execute(functionArr);
 
     }
 
@@ -63,115 +75,20 @@ define([
         TweenLite.to(mpaaRequirementsElement, 1, {css:{bottom: -200}, ease:Power4.easeInOut});
     }
 
-    function toggleCredits(e) {
+    function initShare (callback) {
 
-        var credits = document.getElementById('credits'),
-            creditsButton = document.getElementById('credits-button'),
-            credits_height = $(credits).outerHeight();
+        var functionArr =  [
+            { fn: googlePlusScript, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] },
+            { fn: twitterScript, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] },
+            { fn: facebookScript, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] },
+            { fn: callback, vars: null }
+        ];
 
-        if (creditsButton.className.match('active') !== null || e === 'close') {
-
-            creditsButton.className = creditsButton.className.replace('active', '');
-
-            TweenLite.to(credits, 0.5, {bottom: -credits_height + 'px', ease:Power4.easeInOut, onUpdate: function () {
-                creditsButton.style.top = Math.min(0, (Math.abs(parseInt(credits.style.bottom)) - (credits_height - 30))) + 'px';
-            }, onComplete: function () {
-                creditsButton.style.zIndex = 1;
-                credits.style.zIndex = 0;
-            }});
-        } else {
-
-            creditsButton.className = creditsButton.className + ' active';
-            creditsButton.style.zIndex = 10;
-            credits.style.zIndex = 9;
-
-            TweenLite.to(credits, 0.5, {bottom:'0px', ease:Power4.easeInOut, onUpdate: function () {
-                creditsButton.style.top = Math.min(0, (Math.abs(parseInt(credits.style.bottom)) - (credits_height - 30))) + 'px';
-            }});
-
-            if (document.getElementById('sharelabel').className.match('active')) {
-                this.toggleShare();
-            }
-        }
-
-        if (e) {
-            // e.preventDefault();
-            return false;
-        }
-    }
-
-    function initFollow(data){
-
-        //addIcons to Follow Us Menu
-        var followUsObj = data.footerFollowUs;
-
-        if (followUsObj) {
-            var followUsElem = document.getElementById('follow');
-            if (followUsObj.VISIBLE === false) {
-                if (followUsElem) {
-                    followUsElem.parentNode.removeChild(followUsElem);
-                }
-            } else {
-                for ( var l = 0; l < followUsObj.links.length; l++) {
-                    if (followUsObj.links[l].VISIBLE === true){
-                        var followUsA = document.createElement('a');
-                        followUsA.className = 'icon-' + followUsObj.links[l].CLASS + ' social-icon';
-                        followUsA.target = '_blank';
-                        followUsA.href = followUsObj.links[l].URL;
-                        followUsElem.appendChild(followUsA);
-                    }
-                }
-            }
-        }
-    }
-
-    function initShare () {
-
-        googlePlusScript();
-        twitterScript();
-        facebookScript();
+        arrayExecuter.execute(functionArr);
 
     }
 
-    function toggleShare(e){
-
-        var shareShelf = $('#shareShelf'),
-            sharelabel = document.getElementById('sharelabel'),
-            shareShelfContents = $('#shareShelfContents'),
-            shelf_height = shareShelf.outerHeight();
-
-        if (shareShelf[0].className.match('active') !== null || e === 'close') {
-            shareShelf[0].className = shareShelf[0].className.replace('active', '');
-            sharelabel.className = sharelabel.className.replace('active', '');
-            TweenLite.to(shareShelf, 0.5, {top: oblio.settings.footerHeight + 'px', ease:Power4.easeInOut});
-            TweenLite.to(sharelabel, 0.5, {top:'0px', ease:Power4.easeInOut, onComplete: function () {
-                shareShelf[0].style.zIndex = 0;
-                sharelabel.style.zIndex = 1;
-                document.getElementById('share').style.zIndex = 0;
-            }});
-        } else {
-            shareShelf[0].className = shareShelf[0].className + ' active';
-            sharelabel.className = sharelabel.className + ' active';
-
-            shareShelf[0].style.zIndex = 10;
-            sharelabel.style.zIndex = 11;
-            document.getElementById('share').style.zIndex = 9;
-
-            TweenLite.to(shareShelf, 0.5, {top:-(shelf_height - oblio.settings.footerHeight) + 'px', ease:Power4.easeInOut});
-            TweenLite.to(sharelabel, 0.5, {top:-(shelf_height - oblio.settings.footerHeight) + 'px', ease:Power4.easeInOut});
-
-            if (document.getElementById('credits-button').className.match('active')) {
-                this.toggleCredits();
-            }
-        }
-
-        if (e) {
-            // e.preventDefault();
-            return false;
-        }
-    }
-
-    function twitterScript () {
+    function twitterScript (callback) {
 
         window.twttr = (function (d,s,id) {
             var t, js, fjs = d.getElementsByTagName(s)[0];
@@ -180,14 +97,19 @@ define([
             return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
         }(document, "script", "twitter-wjs"));
 
-        twttr.ready(function (twttr) {
-            twttr.events.bind('click', function () {
-                // videos_pause();
+        if (window.twttr) {
+            twttr.ready(function (twttr) {
+                // callback();
+                twttr.events.bind('click', function () {
+                    // videos_pause();
+                });
             });
-        });
+        }
+        
+        window.setTimeout(callback, 100);
     }
 
-    function facebookScript () {
+    function facebookScript (callback) {
 
         var initFB = function () {
             FB.init({
@@ -195,7 +117,10 @@ define([
                 xfbml      : true,  // parse social plugins on this page
                 version    : 'v2.1' // use version 2.1
             });
+            // window.setTimeout(callback, 500);
         };
+
+        window.setTimeout(callback, 500);
 
         if (window.FB) {
             initFB();
@@ -212,7 +137,8 @@ define([
         }
     }
 
-    function googlePlusScript () {
+    function googlePlusScript (callback) {
+
         var gPlusOne,
             container = document.getElementById('gPlusBtn');
 
@@ -226,7 +152,95 @@ define([
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
             po.src = 'https://apis.google.com/js/plusone.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+
+            window.setTimeout(callback, 100);
         }
+    }
+
+    function toggleShare(e){
+
+        var shareShelf = document.getElementById('shareShelf'),
+            sharelabel = document.getElementById('sharelabel'),
+            shelf_height = shareShelf.offsetHeight,
+            footer_height = this.elements.el.offsetHeight;
+
+        if (sharelabel.className.match('active') !== null || e === 'close') {
+
+            sharelabel.className = sharelabel.className.replace('active', '');
+
+            TweenLite.set('#mainContent', {pointerEvents: 'auto'});
+            TweenLite.to('#mainContent', 0.5, {y: '0px', autoAlpha: 1, ease:Power4.easeInOut});
+            TweenLite.to(sharelabel, 0.5, {y: '0px', ease:Power4.easeInOut});
+            TweenLite.to(shareShelf, 0.5, {y: shelf_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+                shareShelf.style.zIndex = 0;
+                sharelabel.style.zIndex = 1;
+                TweenLite.set(sharelabel, {z:'0px'});
+                if (this.restartMain) {
+                    oblio.app.main.play();
+                }
+            }.bind(this)});
+
+        } else {
+            oblio.app.main.pause();
+
+            sharelabel.className = sharelabel.className + ' active';
+
+            sharelabel.style.zIndex = 10;
+            shareShelf.style.zIndex = 9;
+            TweenLite.set(sharelabel, {z:'1px'});
+
+            TweenLite.set('#mainContent', {pointerEvents: 'none'});
+            TweenLite.to('#mainContent', 0.5, {y: -(shelf_height - (footer_height - 10)) + 'px', autoAlpha: 0.25, ease:Power4.easeInOut});
+            TweenLite.to(sharelabel, 0.5, {y: -(shelf_height - (footer_height - 10)) + 'px', ease:Power4.easeInOut});
+            TweenLite.to(shareShelf, 0.5, {y: '0px', ease:Power4.easeInOut});
+
+            if (document.getElementById('credits-button').className.match('active')) {
+                this.toggleCredits();
+            }
+        }
+
+    }
+
+    function toggleCredits(e) {
+
+        var credits = document.getElementById('credits'),
+            creditsButton = document.getElementById('credits-button'),
+            credits_height = credits.offsetHeight,
+            footer_height = this.elements.el.offsetHeight;
+
+        if (creditsButton.className.match('active') !== null || e === 'close') {
+
+            creditsButton.className = creditsButton.className.replace('active', '');
+
+            TweenLite.set('#mainContent', {pointerEvents: 'auto'});
+            TweenLite.to('#mainContent', 0.5, {y: '0px', autoAlpha: 1, ease:Power4.easeInOut});
+            TweenLite.to(creditsButton, 0.5, {y: '0px', ease:Power4.easeInOut});
+            TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+                creditsButton.style.zIndex = 1;
+                credits.style.zIndex = 0;
+                TweenLite.set(creditsButton, {z:'0px'});
+                if (this.restartMain) {
+                    oblio.app.main.play();
+                }
+            }.bind(this)});
+        } else {
+            oblio.app.main.pause();
+
+            creditsButton.className = creditsButton.className + ' active';
+            creditsButton.style.zIndex = 10;
+            credits.style.zIndex = 9;
+            TweenLite.set(creditsButton, {z:'1px'});
+
+            TweenLite.set('#mainContent', {pointerEvents: 'none'});
+            TweenLite.to('#mainContent', 0.5, {y: -(credits_height - footer_height) + 'px', autoAlpha: 0.25, ease:Power4.easeInOut});
+            TweenLite.to(creditsButton, 0.5, {y: -(credits_height - footer_height) + 'px', ease:Power4.easeInOut});
+            TweenLite.to(credits, 0.5, {y: '0px', ease:Power4.easeInOut});
+
+            if (document.getElementById('sharelabel').className.match('active')) {
+                this.toggleShare();
+            }
+        }
+
     }
 
     function resize (w, h) {
@@ -239,17 +253,20 @@ define([
     }
 
     function hide () {
-        TweenLite.to(this.elements.el, 0.25, {bottom: -oblio.settings.footerHeight + 'px', ease:Power2.easeInOut, onComplete: function () {
+        TweenLite.to(this.elements.el, 0.25, {y: this.elements.el.offsetHeight + 'px', ease:Power2.easeInOut, onComplete: function () {
             // that.elements.el.style.display = 'none';
         }});
     }
 
     function show () {
         // this.elements.el.style.display = 'block';
-        TweenLite.to(this.elements.el, 0.25, {bottom: '0px', ease:Power2.easeInOut});
+        TweenLite.to(this.elements.el, 0.25, {y: '0px', ease:Power2.easeInOut});
+
+        if (oblio.settings.mpaaShown === false) {
+            setTimeout(oblio.app.Footer.showMPAARequirements.bind(oblio.app.Footer), 1000);
+        }
     }
 
-    Footer.prototype.initFollow = initFollow;
     Footer.prototype.initShare = initShare;
     Footer.prototype.toggleShare = toggleShare;
     Footer.prototype.toggleCredits = toggleCredits;
