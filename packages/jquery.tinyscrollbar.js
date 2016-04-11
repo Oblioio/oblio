@@ -93,8 +93,19 @@
         {
             var sCssSize = sSize.toLowerCase();
 
-            oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
-            oContent.obj.css( sDirection, -iScroll );
+            var thumbobj = {
+                    z: '1px'
+                };
+            thumbobj[sDirection] = (iScroll / oScrollbar.ratio) + 'px';
+            TweenLite.set(oThumb.obj, thumbobj);
+            // oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
+
+            var contentobj = {
+                    z: '1px'
+                };
+            contentobj[sDirection] = -iScroll + 'px';
+            TweenLite.set(oContent.obj, contentobj);
+            // oContent.obj.css( sDirection, -iScroll );
             iMouse.start = oThumb.obj.offset()[ sDirection ];
 
             oScrollbar.obj.css( sCssSize, oTrack[ options.axis ] );
@@ -186,8 +197,19 @@
                 iScroll -= iDelta * options.wheel;
                 iScroll = Math.min( ( oContent[ options.axis ] - oViewport[ options.axis ] ), Math.max( 0, iScroll ));
 
-                oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
-                oContent.obj.css( sDirection, -iScroll );
+                var thumbobj = {
+                    z: '1px'
+                };
+                thumbobj[sDirection] = (iScroll / oScrollbar.ratio) + 'px';
+                TweenLite.set(oThumb.obj, thumbobj);
+                // oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
+
+                var contentobj = {
+                    z: '1px'
+                };
+                contentobj[sDirection] = -iScroll + 'px';
+                TweenLite.set(oContent.obj, contentobj);
+                // oContent.obj.css( sDirection, -iScroll );
 
                 if( options.lockscroll || ( iScroll !== ( oContent[ options.axis ] - oViewport[ options.axis ] ) && iScroll !== 0 ) )
                 {
@@ -211,8 +233,21 @@
                 }
 
                 iScroll = iPosition.now * oScrollbar.ratio;
-                oContent.obj.css( sDirection, -iScroll );
-                oThumb.obj.css( sDirection, iPosition.now );
+
+                var thumbobj = {
+                    z: '1px'
+                };
+                thumbobj[sDirection] = (iPosition.now) + 'px';
+                TweenLite.set(oThumb.obj, thumbobj);
+                // oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
+
+                var contentobj = {
+                    z: '1px'
+                };
+                contentobj[sDirection] = -iScroll + 'px';
+                TweenLite.set(oContent.obj, contentobj);
+                // oContent.obj.css( sDirection, -iScroll );
+
             }
         }
         
