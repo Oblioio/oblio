@@ -54,7 +54,7 @@
         ,   oTrack      = { obj: $( '.track', oScrollbar.obj ) }
         ,   oThumb      = { obj: $( '.thumb', oScrollbar.obj ) }
         ,   sAxis       = options.axis === 'x'
-        ,   sDirection  = sAxis ? 'left' : 'top'
+        ,   sDirection  = sAxis ? 'x' : 'y'
         ,   sSize       = sAxis ? 'Width' : 'Height'
         ,   iScroll     = 0
         ,   iPosition   = { start: 0, now: 0 }
