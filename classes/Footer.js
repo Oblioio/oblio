@@ -164,6 +164,7 @@ define([
 
         var shareShelf = document.getElementById('shareShelf'),
             sharelabel = document.getElementById('sharelabel'),
+            sharelabelPadding = 6,
             shelf_height = shareShelf.offsetHeight,
             footer_height = this.elements.el.offsetHeight;
 
@@ -173,8 +174,9 @@ define([
 
             TweenLite.set('#mainContent', {pointerEvents: 'auto'});
             TweenLite.to('#mainContent', 0.5, {y: '0px', autoAlpha: 1, ease:Power4.easeInOut});
-            TweenLite.to(sharelabel, 0.5, {y: '0px', ease:Power4.easeInOut});
-            TweenLite.to(shareShelf, 0.5, {y: shelf_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+            TweenLite.to(shareShelf, 0.5, {y: shelf_height + 'px', ease:Power4.easeInOut, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+                TweenLite.set(sharelabel, {y: Math.min(0, (tween.target._gsTransform.y - shelf_height) + (footer_height - sharelabel.offsetTop + sharelabelPadding)) + 'px'});
+            }, onComplete: function () {
                 shareShelf.style.zIndex = 0;
                 sharelabel.style.zIndex = 1;
                 TweenLite.set(sharelabel, {z:'0px'});
@@ -194,8 +196,9 @@ define([
 
             TweenLite.set('#mainContent', {pointerEvents: 'none'});
             TweenLite.to('#mainContent', 0.5, {y: -(shelf_height - (footer_height - 10)) + 'px', autoAlpha: 0.25, ease:Power4.easeInOut});
-            TweenLite.to(sharelabel, 0.5, {y: -(shelf_height - (footer_height - 10)) + 'px', ease:Power4.easeInOut});
-            TweenLite.to(shareShelf, 0.5, {y: '0px', ease:Power4.easeInOut});
+            TweenLite.to(shareShelf, 0.5, {y: '0px', ease:Power4.easeInOut, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+                TweenLite.set(sharelabel, {y: Math.min(0, (tween.target._gsTransform.y - shelf_height) + (footer_height - sharelabel.offsetTop + sharelabelPadding)) + 'px'});
+            }});
 
             if (document.getElementById('credits-button').className.match('active')) {
                 this.toggleCredits();
@@ -208,6 +211,7 @@ define([
 
         var credits = document.getElementById('credits'),
             creditsButton = document.getElementById('credits-button'),
+            creditslabelPadding = 6,
             credits_height = credits.offsetHeight,
             footer_height = this.elements.el.offsetHeight;
 
@@ -217,8 +221,9 @@ define([
 
             TweenLite.set('#mainContent', {pointerEvents: 'auto'});
             TweenLite.to('#mainContent', 0.5, {y: '0px', autoAlpha: 1, ease:Power4.easeInOut});
-            TweenLite.to(creditsButton, 0.5, {y: '0px', ease:Power4.easeInOut});
-            TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+            TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+                TweenLite.set(creditsButton, {y: Math.min(0, (tween.target._gsTransform.y - credits_height) + (footer_height - creditsButton.offsetTop + creditslabelPadding)) + 'px'});
+            }, onComplete: function () {
                 creditsButton.style.zIndex = 1;
                 credits.style.zIndex = 0;
                 TweenLite.set(creditsButton, {z:'0px'});
@@ -236,8 +241,9 @@ define([
 
             TweenLite.set('#mainContent', {pointerEvents: 'none'});
             TweenLite.to('#mainContent', 0.5, {y: -(credits_height - footer_height) + 'px', autoAlpha: 0.25, ease:Power4.easeInOut});
-            TweenLite.to(creditsButton, 0.5, {y: -(credits_height - footer_height) + 'px', ease:Power4.easeInOut});
-            TweenLite.to(credits, 0.5, {y: '0px', ease:Power4.easeInOut});
+            TweenLite.to(credits, 0.5, {y: '0px', ease:Power4.easeInOut, onUpdateParams: ['{self}'], onUpdate: function (tween) {
+                TweenLite.set(creditsButton, {y: Math.min(0, (tween.target._gsTransform.y - credits_height) + (footer_height - creditsButton.offsetTop + creditslabelPadding)) + 'px'});
+            }});
 
             if (document.getElementById('sharelabel').className.match('active')) {
                 this.toggleShare();
@@ -273,7 +279,6 @@ define([
     Footer.prototype.initShare = initShare;
     Footer.prototype.toggleShare = toggleShare;
     Footer.prototype.toggleCredits = toggleCredits;
-    // Footer.prototype.attachSocialScripts = attachSocialScripts;
 
     Footer.prototype.closeMenus = closeMenus;
     Footer.prototype.init = init;
@@ -284,22 +289,6 @@ define([
     Footer.prototype.resize = resize;
     Footer.prototype.showMPAARequirements = showMPAARequirements;
     Footer.prototype.hideMPAARequirements = hideMPAARequirements;
-
-    // function initFB () {
-    //     FB.init({
-    //         appId: '',
-    //         xfbml      : true,  // parse social plugins on this page
-    //         version    : 'v2.1' // use version 2.1
-    //     });
-    // }
-
-    // (function(d, s, id) {
-    //   var js, fjs = d.getElementsByTagName(s)[0];
-    //   if (d.getElementById(id)) return;
-    //   js = d.createElement(s); js.id = id;
-    //   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-    //   fjs.parentNode.insertBefore(js, fjs);
-    // }(document, 'script', 'facebook-jssdk'));
 
     window.oblio = window.oblio || {};
     oblio.classes = oblio.classes || {};
