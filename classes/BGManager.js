@@ -170,12 +170,13 @@ define([
 
         if(!imgObj.img) {
             imgObj.img = new Image();
-            imgObj.img.alt = "Background";
+            imgObj.img.alt = 'Background';
 
-            $(imgObj.img).bind('load readystatechange', function(){
+            imgObj.img.addEventListener('load', function () {
                 imgObj.loaded = true;
                 if(callbackFn)callbackFn();
-            }.bind(this));
+            });
+
             imgObj.img.src = imgObj.url;
         }
     }
