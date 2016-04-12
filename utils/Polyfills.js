@@ -1,5 +1,22 @@
 define([], function () {
 
+    // Add support down to IE9 for Element.matches()
+    var docEl = document.documentElement,
+        matches =   docEl.matches || 
+                    docEl.webkitMatchesSelector || 
+                    docEl.mozMatchesSelector || 
+                    docEl.msMatchesSelector || 
+                    docEl.oMatchesSelector || 
+                    function (selector) {
+                        var matches = (this.document || this.ownerDocument).querySelectorAll(selector),
+                            i = matches.length;
+                        while (--i >= 0 && matches.item(i) !== this) {}
+                        return i > -1;
+                    };
+
+    Element.prototype.matches = matches;
+    
+
     // Adapted from ES5-shim https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js
     // es5.github.com/#x15.3.4.5
 
