@@ -8,7 +8,7 @@ define([], function () {
         this.id = "DefaultLoader";
 
         this.elem = createElem();
-        $('body').append($(this.elem));
+        document.body.appendChild(this.elem);
 
         this.progressBar = createBar();
         this.elem.appendChild(this.progressBar);

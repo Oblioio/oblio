@@ -23,7 +23,7 @@ oblio.utils.parseTwitterDate = (function () {
         var a = navigator.userAgent;
         return {
             ie: a.match(/MSIE\s([^;]*)/)
-        }
+        };
     }();
 
     return function (tdate) {
@@ -44,7 +44,7 @@ oblio.utils.parseTwitterDate = (function () {
         if (diff <= 777600) {return "1 week ago";}
         if (diff <= 31536000) {return  system_date.getDate() + ' ' + months[system_date.getMonth()];}
         return system_date.getDate() + ' ' + months[system_date.getMonth()] + ' ' + system_date.getFullYear();
-    }
+    };
 
 }());
 

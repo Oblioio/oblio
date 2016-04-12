@@ -7,7 +7,8 @@ define([
     'use strict';
 /*jshint validthis:true */
     var Navigation = function (sectionContainerID) {
-        this.shell = sectionContainerID || 'shell';
+        this.shellID = sectionContainerID || 'shell';
+        this.shell = document.getElementById(this.shellID);
         this.verbose = false;
         this.currentSection = '';
         this.previous_section = '';
@@ -31,7 +32,7 @@ define([
     };
 
     function parseDeepLink(){
-        var base = document.getElementsByTagName('base')[0],
+        var base = document.querySelector('base'),
             url_arr,
             path_arr,
             curr_url = window.location.href.split('?')[0]; // drop query string
@@ -257,12 +258,10 @@ define([
     // adding htmlData to DOM
     function section_add(sectionID, callbackFn){
         if(this.verbose)console.log('Navigation | section_add: '+sectionID);
-        var shell = (oblio.sections[sectionID] && oblio.sections[sectionID].shell)?oblio.sections[sectionID].shell:"#"+this.shell;
-
+        this.shell = this.shell || document.getElementById(this.shellID);
         if(oblio.sections[sectionID] && !oblio.sections[sectionID].added){
             oblio.sections[sectionID].added = true;
-            oblio.sections[sectionID].htmlElem = $(oblio.utils.SectionLoader.returnSectionOBJ(sectionID).htmlData);
-            $(shell).append(oblio.sections[sectionID].htmlElem);
+            this.shell.insertAdjacentHTML('beforeend', oblio.utils.SectionLoader.returnSectionOBJ(sectionID).htmlData);
         }
 
         callbackFn();
@@ -349,7 +348,6 @@ define([
             callbackFn();
             return;
         }
-        var shell = (oblio.sections[sectionID] && oblio.sections[sectionID].shell)?oblio.sections[sectionID].shell:"#"+this.shell;
 
         if (oblio.sections[sectionID].destroy) {
             oblio.sections[sectionID].destroy();
@@ -358,8 +356,7 @@ define([
 
         if(oblio.sections[sectionID].added){
             oblio.sections[sectionID].added = false;
-            $(oblio.sections[sectionID].htmlElem).remove();
-            oblio.sections[sectionID].htmlElem = null;
+            document.getElementById(sectionID).remove();
         }
 
         callbackFn();
@@ -398,15 +395,6 @@ define([
         if (oblio.sections[sectionID].freeze) {
             oblio.sections[sectionID].freeze();
         }
-
-        /* tween in a cover of some sort */
-
-        // TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 1}});
-
-        /* turn off the sound, and remember if it was off*/
-
-        // freezeSoundWasOn = soundIsOn;
-        // if(freezeSoundWasOn)soundToggle();
     }
 
     // un-freeze site when returning from external link
@@ -416,22 +404,10 @@ define([
         if (oblio.sections[sectionID].unfreeze) {
             oblio.sections[sectionID].unfreeze();
         }
-
-        /* if the sound was on before the freeze, turn it back on */
-        // if(freezeSoundWasOn)soundToggle();
-
-        /* tween out whatever visuals were added, then call done */
-
-        // TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 0}, onComplete:unFreezeSiteDone});
     }
 
     function unFreezeSiteDone(){
         if(this.verbose)console.log('navigation_unFreezeSiteDone');
-
-        /* turn of display of any overlays */
-
-        // $('#darkenContent').css('display', 'none');
-        // $('#freezeSite').css('display', 'none');
     }
 
 

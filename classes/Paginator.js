@@ -6,8 +6,6 @@ define([
 
     var Paginator = function (data) {
 
-        var that = this;
-
         this.maxThumbs = data.maxThumbs || false;
         this.thumbs = data.thumbs || false;
         this.rotate = data.rotate || false;
@@ -30,7 +28,7 @@ define([
             thumb_min_width: 150, // thumb min width in pixels
             prev_next_button_width: 80, // amount of space taken up by prev/next buttons in pixels
             thumb_ratio: 0.7 // ratio of the thumbnail height/width
-        }
+        };
 
         this.elements.count.className = 'count';
         this.elements.el.className = 'paginator';
@@ -49,12 +47,17 @@ define([
             this._buildThumbs();
         }
 
-        $(this.elements.el).on('click', 'a', clickHandler.bind(this));
+        this.elements.el.addEventListener('click', clickHandler.bind(this));
 
-    }
+    };
 
     function clickHandler (e) {
-        var clicked = e.currentTarget;
+
+        if (!e.target.matches('a')) return;
+
+        e.preventDefault();
+
+        var clicked = e.target;
 
         if (clicked.getAttribute('data-type') === 'external') {
             return;
@@ -94,8 +97,6 @@ define([
             }
         }
 
-        // e.preventDefault();
-        return false;
     }
 
     function buildThumbs () {
@@ -145,7 +146,7 @@ define([
         this.elements.thumb_list.innerHTML = thumbs_html;
         this.elements.thumb_wrapper.appendChild(this.elements.thumb_list);
         this.elements.el.appendChild(this.elements.thumb_wrapper);
-        this.elements.thumbs = $(this.elements.thumb_list).find('.thumb'); //this.elements.thumb_list.getElementsByClassName('thumb');
+        this.elements.thumbs = this.elements.thumb_list.getElementsByClassName('thumb'); //this.elements.thumb_list.getElementsByClassName('thumb');
 
         this.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
         window.setTimeout(this._resizeThumbHolder.bind(this), 10); // not sure why this needs to be in a settimeout, but if it's not, the features are positioned partially off the screen to the right
@@ -159,8 +160,7 @@ define([
     }
 
     function prevThumbs () {
-        var lpos = Math.min(0, this.elements.thumb_list.offsetLeft + this.elements.thumb_wrapper.offsetWidth),
-            that = this;
+        var lpos = Math.min(0, this.elements.thumb_list.offsetLeft + this.elements.thumb_wrapper.offsetWidth);
 
         this.elements.next.className = 'next_page';
 
@@ -176,19 +176,18 @@ define([
         }
 
         TweenLite.to(this.elements.thumb_list, 0.5, {left:lpos + 'px', ease:Power3.easeInOut, onComplete: function () {
-            if (that.rotate) {
-                if (that.timer) {
-                    window.clearInterval(that.timer);
+            if (this.rotate) {
+                if (this.timer) {
+                    window.clearInterval(this.timer);
                 }
-                that.timer = window.setInterval(that._nextThumbs.bind(that), that.rotation_delay);
+                this.timer = window.setInterval(this._nextThumbs.bind(this), this.rotation_delay);
             }
-        }});
+        }.bind(this)});
     }
 
     function nextThumbs (click) {
 
-        var lpos = Math.max(this.elements.thumb_wrapper.offsetWidth - this.thumbWidth * this.thumbs.length, this.elements.thumb_list.offsetLeft - this.elements.thumb_wrapper.offsetWidth),
-            that = this;
+        var lpos = Math.max(this.elements.thumb_wrapper.offsetWidth - this.thumbWidth * this.thumbs.length, this.elements.thumb_list.offsetLeft - this.elements.thumb_wrapper.offsetWidth);
 
         this.elements.prev.className = 'prev_page';
 
@@ -208,13 +207,13 @@ define([
         }
 
         TweenLite.to(this.elements.thumb_list, 0.5, {left:lpos + 'px', ease:Power3.easeInOut, onComplete: function () {
-            if (that.rotate) {
-                if (that.timer) {
-                    window.clearInterval(that.timer);
+            if (this.rotate) {
+                if (this.timer) {
+                    window.clearInterval(this.timer);
                 }
-                that.timer = window.setInterval(that._nextThumbs.bind(that), that.rotation_delay);
+                this.timer = window.setInterval(this._nextThumbs.bind(this), this.rotation_delay);
             }
-        }});
+        }.bind(this)});
     }
 
     function update (current, total) {

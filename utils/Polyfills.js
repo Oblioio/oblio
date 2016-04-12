@@ -1,5 +1,14 @@
 define([], function () {
 
+    // Add support form ChildNode.remove()
+    if (!('remove' in Element.prototype)) {
+        Element.prototype.remove = function() {
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+        };
+    }
+
     // Add support down to IE9 for Element.matches()
     var docEl = document.documentElement,
         matches =   docEl.matches || 
@@ -15,7 +24,7 @@ define([], function () {
                     };
 
     Element.prototype.matches = matches;
-    
+
 
     // Adapted from ES5-shim https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js
     // es5.github.com/#x15.3.4.5

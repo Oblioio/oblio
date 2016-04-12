@@ -9,6 +9,7 @@ define([
     ], function (Mustache) {
 
     'use strict';
+    /*jshint validthis: true */
 
     var isMobile = oblio.utils.DeviceDetect.isMobile;
     var that;
@@ -37,9 +38,8 @@ define([
         this.isHidden = false;
 
         this.elements.listItems = this.elements.el.getElementsByTagName('li');
-        this.elements.selected = $('#menu a[data-section="' + current_section + '"]').addClass('selected')
 
-        this.selectMenuItem(this.elements.selected.data('section'), false);
+        this.selectMenuItem(current_section);
 
         this.hide(true);
 
@@ -47,28 +47,19 @@ define([
 
     }
 
-    function selectMenuItem (section_name, animate) {
+    function selectMenuItem (section_name) {
         if(this.verbose)console.log('Main Menu | '+this.menuID+' | selectMenuItem: '+section_name);
 
-        var selected = $(this.elements.el).find('a[data-section="' + section_name + '"]');
+        var selected = this.elements.el.querySelector('a[data-section="' + section_name + '"]');
 
-        if (selected.length === 0) {
-            return;
+        if (!selected) return;
+
+        if (this.elements.selected) {
+            this.elements.selected.className = this.elements.selected.className.replace(/\s?selected/ig, '');
         }
 
-        if (this.elements.selected[0]) {
-            this.elements.selected[0].className = '';
-        }
-
-        animate = true;
-
-        if (isMobile) {
-            // $('#mainNav').removeClass('open');
-        }
-
-        this.elements.selectedID = section_name;
+        selected.className = selected.className + ' selected';
         this.elements.selected = selected;
-        this.elements.selected[0].className = 'selected';
 
     }
 

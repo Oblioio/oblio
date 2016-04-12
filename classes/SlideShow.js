@@ -45,8 +45,8 @@ define([
         };
 
         this.slideDimensions = {
-            w: $(this.elements.resizeContainer).width(),
-            h: $(this.elements.resizeContainer).height()
+            w: this.elements.resizeContainer.offsetWidth,
+            h: this.elements.resizeContainer.offsetHeight
         };
 
         var prev_btn = document.getElementsByClassName('prev_slide');
@@ -84,22 +84,19 @@ define([
     };
 
     function addEventHandlers () {
-        var _wrapper = $(this.elements.wrapper),
-            _paginator_container = $(this.elements.paginator_container),
-            _window = $(window);
 
         if (this.slides.length > 1) {
-            _paginator_container.on('click', 'a', this.clickHandler.bind(this));
+            this.elements.paginator_container.addEventListener('click', this.clickHandler.bind(this));
 
-            _wrapper.on('mousedown', mouseDown.bind(this));
-            _wrapper.on('mousemove', mouseMove.bind(this));
-            _window.on('mouseup', mouseUp.bind(this));
+            this.elements.wrapper.addEventListener('mousedown', mouseDown.bind(this));
+            this.elements.wrapper.addEventListener('mousemove', mouseMove.bind(this));
+            window.addEventListener('mouseup', mouseUp.bind(this));
 
-            _wrapper.on('touchstart', touchStart.bind(this));
-            _wrapper.on('touchmove', touchMove.bind(this));
-            _wrapper.on('touchend', touchEnd.bind(this));
+            this.elements.wrapper.addEventListener('touchstart', touchStart.bind(this));
+            this.elements.wrapper.addEventListener('touchmove', touchMove.bind(this));
+            this.elements.wrapper.addEventListener('touchend', touchEnd.bind(this));
         } else {
-            _wrapper.addClass('disabled');
+            this.elements.wrapper.className = this.elements.wrapper.className + ' disabled';
         }
 
     }
@@ -244,49 +241,49 @@ define([
         if (!this.dragging) {
             this.elements.wrapper.className = this.elements.wrapper.className + ' dragging';
         }
+        e.preventDefault();
         this.startDrag(e.pageX, e.pageY);
-        return false;
     }
 
     function mouseMove (e) {
+        e.preventDefault();
         this.drag(e.pageX, e.pageY);
-        return false;
     }
 
     function mouseUp (e) {
+        e.preventDefault();
         this.elements.wrapper.className = this.elements.wrapper.className.replace(/ dragging/g, '');
         this.stopDrag(e.pageX, e.pageY);
-        return false;
     }
 
     function touchStart (e) {
         if (!this.enabled) {
             return;
         }
+        e.preventDefault();
 
-        var touch = e.originalEvent.touches[0];
+        var touch = e.touches[0];
         this.startDrag(touch.pageX, touch.pageY);
-        return false;
     }
 
     function touchMove (e) {
         if (!this.enabled) {
             return;
         }
+        e.preventDefault();
 
-        var touch = e.originalEvent.touches[0];
+        var touch = e.touches[0];
         this.drag(touch.pageX, touch.pageY);
-        return false;
     }
 
     function touchEnd (e) {
         if (!this.enabled) {
             return;
         }
+        e.preventDefault();
         
-        var touch = e.originalEvent.changedTouches[0];
+        var touch = e.changedTouches[0];
         this.stopDrag(touch.pageX, touch.pageY);
-        return false;
     }
 
     function bgImgReady () {
@@ -371,7 +368,7 @@ define([
             this.elements.wrapper.appendChild(this.elements.close_btn);
 
 
-            $(this.elements.close_btn).on('click', this.close);
+            this.elements.close_btn.addEventListener('click', this.close, false);
         }
 
         if (this.slides.length > 0) {
@@ -658,12 +655,15 @@ define([
     }
 
     function clickHandler (e) {
-        var clicked = e.currentTarget;
+        var clicked = e.target;
+        if (!clicked.matches('a')) return;
+
+        e.preventDefault();
 
         switch (clicked.className) {
         case 'prev_slide': // left arrow
             if (this.state.animating) {
-                return false;
+                return;
             }
             this.dragPosition.x = 0;
             this.dragOffset.x = 0;
@@ -672,10 +672,9 @@ define([
             activate.call(this, this.state.previous_index);
             
             this.previous();
-            return false;
         case 'next_slide': // right arrow
             if (this.state.animating) {
-                return false;
+                return;
             }
             this.dragPosition.x = 0;
             this.dragOffset.x = 0;
@@ -683,7 +682,6 @@ define([
             this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
             activate.call(this, this.state.next_index);
             this.next();
-            return false;
         default:
             // nothin'
         }

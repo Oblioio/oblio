@@ -1,7 +1,7 @@
 define([
         'howler',
-        'greensock/TweenLite.min',
-        'oblio/utils/PageVisibility'
+        'greensock/TweenLite.min'
+        // 'oblio/utils/PageVisibility' // this adds support for IE 9 and below page visibility event to pause sound on tab change and requires jquery
     ], function () {
 
     'use strict';
@@ -155,19 +155,33 @@ define([
         id = id || 'soundBars';
         this.btn = document.getElementById(id);
         this.btn.className = this.btn.className.replace(' off', '') + ' on';
-        $(this.btn).on('click', toggleSound.bind(this));
+        this.btn.addEventListener('click', toggleSound.bind(this), false);
 
-        $(window).on('onPageVisibilityChange', function (e, status) {
-            switch (status) {
-                case 'hidden':
-                    muteAll.apply(this);
-                    break;
-                case 'visible':
-                    unmuteAll.apply(this);
-                    break;
-                default:
+        // Set the name of the hidden property and the change event for visibility
+        var hidden, visibilityChange; 
+        if (typeof document.hidden !== 'undefined') { // Opera 12.10 and Firefox 18 and later support 
+            hidden = 'hidden';
+            visibilityChange = 'visibilitychange';
+        } else if (typeof document.mozHidden !== 'undefined') {
+            hidden = 'mozHidden';
+            visibilityChange = 'mozvisibilitychange';
+        } else if (typeof document.msHidden !== 'undefined') {
+            hidden = 'msHidden';
+            visibilityChange = 'msvisibilitychange';
+        } else if (typeof document.webkitHidden !== 'undefined') {
+            hidden = 'webkitHidden';
+            visibilityChange = 'webkitvisibilitychange';
+        }
+
+        window.addEventListener(visibilityChange, function (e) {
+            if (e.target.hidden === true) {
+                muteAll.apply(this);
+            } else if (e.target.hidden === false) {
+                unmuteAll.apply(this);
+            } else {
+                console.log('unknown page visibility status');
             }
-        }.bind(this));
+        }.bind(this), false);
     }
 
     function toggleSound (e) {

@@ -11,5 +11,5 @@ oblio.utils.inherit = (function () {
         child.prototype = new proxy();
         child.prototype._super = parent;
         child.prototype.constructor = child;
-    }
+    };
 }());
