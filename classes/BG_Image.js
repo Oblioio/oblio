@@ -17,7 +17,7 @@ define([
         this.el.style.position = 'absolute';
         this.el.alt = 'Background';
 
-        $(this.el).on('load', function () {
+        this.el.addEventListener('load', function () {
             this.onReady();
         }.bind(this));
 

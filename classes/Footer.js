@@ -35,7 +35,7 @@ define([
                     this.toggleCredits(e);
                     break;
                 case 'share-facebook':
-                    window.open('http://www.facebook.com/share.php?u='+encodeURIComponent($(this).attr('href')), '_blank');
+                    window.open('http://www.facebook.com/share.php?u=' + encodeURIComponent(target.getAttribute('href'), '_blank');
                     break;
                 default:
             }
@@ -58,24 +58,22 @@ define([
 
         var data = oblio.app.dataSrc.sections.main.data,
             mpaaRequirementsJSON = data.MPAA_requirements,
-            mpaaRequirementsElement = $("#MPAA_requirements");
+            mpaaRequirementsElement = document.getElementById('MPAA_requirements');
 
         if (mpaaRequirementsElement) {
             oblio.settings.mpaaShown = true;
-            TweenLite.to(mpaaRequirementsElement, 1, {css:{bottom: 0}, ease:Power4.easeInOut});
-            // TweenLite.to($("#bottomRight"), 1, {css:{bottom: -200}, ease:Power4.easeInOut});
+            TweenLite.to(mpaaRequirementsElement, 1, {y: '0px', ease: Power4.easeInOut});
 
-            var that = this;
             window.setTimeout(function () {
-                that.hideMPAARequirements();
-            }, 6000);
+                this.hideMPAARequirements();
+            }.bind(this), 6000);
         }
 
     }
 
     function hideMPAARequirements(){
-        var mpaaRequirementsElement = $("#MPAA_requirements");
-        TweenLite.to(mpaaRequirementsElement, 1, {css:{bottom: -200}, ease:Power4.easeInOut});
+        var mpaaRequirementsElement = document.getElementById('MPAA_requirements');
+        TweenLite.to(mpaaRequirementsElement, 1, {y: mpaaRequirementsElement.offsetHeight + 'px', ease:Power4.easeInOut});
     }
 
     function initShare (callback) {

@@ -13,19 +13,18 @@ define([
     }
 
     EventHandlers.prototype.init = function(data) {
-        var _window = $(window),
-            _document = $(document);
 
-        _document.on('keydown', keyHandler);
-        _window.on('scroll', scrollHandler);
+        document.addEventListener('keydown', keyHandler, false);
+        window.addEventListener('scroll', scrollHandler, false);
+
         window.addWheelListener(document, mousewheelHandler);
 
         if (Modernizr.touch) {
-            _document.on('touchstart', touchStartHandler);
-            _document.on('touchmove', touchMoveHandler);
-            _document.on('touchend', touchEndHandler);
+            document.addEventListener('touchstart', touchStartHandler, false);
+            document.addEventListener('touchmove', touchMoveHandler, false);
+            document.addEventListener('touchend', touchEndHandler, false);
         } else {
-            _window.on('mousemove', mousemoveHandler);
+            window.addEventListener('mousemove', mousemoveHandler, false);
         }
 
         //window.onorientationchange = handleResize;

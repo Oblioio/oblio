@@ -50,10 +50,8 @@ define([], function () {
         this.onScreen = true;
 
         if (!this.loaded) {
-            // this.elements.wrapper.className += ' loading';
-            // this.elements.wrapper.style.display = 'none';
-
-            $(this.elements.backplate).addClass('loading').on('load', this._onImageLoaded.bind(this));
+            this.elements.backplate.className = this.elements.backplate.className + ' loading';
+            this.elements.backplate.addEventListener('load', this._onImageLoaded.bind(this));
         }
     }
 

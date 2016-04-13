@@ -1,3 +1,9 @@
+/**
+ * LEGACY
+ * This provides Page Visibility API support for IE 9 and below
+ * we are using it to pause audio automatically when changing tabs
+ * requires jquery 
+ */
 define([], function () {
     (function() {
       var hidden = "hidden";

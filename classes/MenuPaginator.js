@@ -10,43 +10,57 @@ define([
 
         this.elements = {
             wrapper: params.wrapper,
-            masker: $(params.wrapper).find('.paginatorMasker'),
-            list: $(params.wrapper).find('ul'),
-            prev: $('<p class="prev"></p>').appendTo(params.wrapper), // for some reason, there was a huge delay when I used an anchor tag instead of a p
-            next: $('<p class="next"></p>').appendTo(params.wrapper)
+            masker: params.wrapper.querySelector('.paginatorMasker'),
+            list: params.wrapper.querySelector('ul'),
+            prev: document.createElement('p'),
+            next: document.createElement('p')
         };
+        this.elements.prev.className = 'prev';
+        this.elements.next.className = 'next';
+        this.elements.wrapper.appendChild(this.elements.prev);
+        this.elements.wrapper.appendChild(this.elements.next);
 
-        this.elements.list.children('li').each(function () {
-            if (this.style.display !== 'none') {
-                listWidth += $(this).outerWidth(true) + 1;
-            }
-        });
+        // get width of element including margins
+        function outerWidth (el) {
+            var width = el.offsetWidth,
+                style = getComputedStyle(el);
+
+            width += parseInt(style.marginLeft) + parseInt(style.marginRight);
+            return width;
+        }
+
+        var list_items = this.elements.list.getElementsByTagName('li');
+        for (var i = list_items.length - 1; i >= 0; i--) {
+            listWidth += outerWidth(list_items[i]) + 1;
+        }
 
         this.listWidth = listWidth;
 
-        this.elements.list[0].style.width = listWidth + 'px';
+        this.elements.list.style.width = listWidth + 'px';
 
-        $(this.elements.wrapper).on('click', '.prev, .next',function (e) {
+        this.elements.wrapper.addEventListener('click', function (e) {
             e.preventDefault();
 
-            switch (this.className) {
-                case 'prev on':
-                    that.previous();
-                    break;
-                case 'next on':
-                    that.next();
-                    break;
-                default:
-                    // trace('why is this not prev or next?');
-                    // trace(this);
+            var el = e.target;
+            if (el.matches('.prev, .next')) {
+                switch (el.className) {
+                    case 'prev on':
+                        this.previous();
+                        break;
+                    case 'next on':
+                        this.next();
+                        break;
+                    default:
+                }
             }
-        });
+
+        }.bind(this));
 
         this.paginated = false;
         this.currentPage = 1;
         this.numPages = 1;
         this.resize();
-    }
+    };
 
     MenuPaginator.prototype = {
         /**
@@ -56,8 +70,8 @@ define([
 
             if (this.paginated === false) {
                 this.currentPage = 1;
-                this.elements.prev[0].className = 'prev off';
-                this.elements.next[0].className = 'next on';
+                this.elements.prev.className = 'prev off';
+                this.elements.next.className = 'next on';
                 this.paginated = true;
             }
         },
@@ -68,9 +82,9 @@ define([
 
             if (this.paginated === true) {
                 this.currentPage = 1;
-                this.elements.prev[0].className = 'prev off';
-                this.elements.next[0].className = 'next off';
-                this.elements.list[0].style.left = '0px';
+                this.elements.prev.className = 'prev off';
+                this.elements.next.className = 'next off';
+                this.elements.list.style.left = '0px';
                 this.paginated = false;
             }
         },
@@ -85,23 +99,23 @@ define([
                 this.currentPage += 1;
 
                 if (this.currentPage === this.numPages) {
-                    this.elements.next[0].className = 'next off';
-                    newleft = (this.elements.masker.width() - this.listWidth) + 'px';
+                    this.elements.next.className = 'next off';
+                    newleft = (this.elements.masker.offsetWidth - this.listWidth) + 'px';
 
                     TweenLite.to(this.elements.list, 1, {left:newleft, ease:Power4.easeInOut});
                 } else {
-                    change = -(this.elements.masker.width() - this.listWidth) - (this.elements.masker.width()*(this.currentPage - 1));
+                    change = -(this.elements.masker.offsetWidth - this.listWidth) - (this.elements.masker.offsetWidth*(this.currentPage - 1));
                     
                     if (change < 100) {
                         this.next();
                         return;
                     }
-                    newleft = -(this.elements.masker.width()*(this.currentPage - 1)) + 'px';
-                    TweenLite.to(this.elements.list, 1, {left:newleft, ease:Power4.easeInOut});
+                    newleft = -(this.elements.masker.offsetWidth * (this.currentPage - 1)) + 'px';
+                    TweenLite.to(this.elements.list, 1, {left: newleft, ease: Power4.easeInOut});
                 }
             }
 
-            this.elements.prev[0].className = 'prev on';
+            this.elements.prev.className = 'prev on';
         },
         /**
         * Previous page
@@ -113,29 +127,29 @@ define([
                 this.currentPage -= 1;
 
                 if (this.currentPage === 1) {
-                    this.elements.prev[0].className = 'prev off';
+                    this.elements.prev.className = 'prev off';
                     TweenLite.to(this.elements.list, 1, {left:'0px', ease:Power4.easeInOut});
                 } else {
 
-                    change = (-parseInt(this.elements.list[0].style.left)) - (this.elements.masker.width()*(this.currentPage - 1));
+                    change = -this.elements.list.offsetLeft - (this.elements.masker.offsetWidth * (this.currentPage - 1));
                     
                     if (change < 100) {
                         this.previous();
                         return;
                     }
-                    newleft = -(this.elements.masker.width()*(this.currentPage - 1)) + 'px';
-                    TweenLite.to(this.elements.list, 1, {left:newleft, ease:Power4.easeInOut});
+                    newleft = -(this.elements.masker.offsetWidth * (this.currentPage - 1)) + 'px';
+                    TweenLite.to(this.elements.list, 1, {left: newleft, ease:Power4.easeInOut});
                 }
             }
-            this.elements.next[0].className = 'next on';
+            this.elements.next.className = 'next on';
 
         },
         /**
         * called on browser resize
         */
         resize: function () {
-            var w = this.elements.masker.width(),
-                curpos = -parseInt(this.elements.list[0].style.left) + this.elements.masker.width();
+            var w = this.elements.masker.offsetWidth,
+                curpos = -this.elements.list.offsetLeft + this.elements.masker.offsetWidth;
 
             // subtract 100 because of #homeMenu padding
             if (w < this.listWidth) {
@@ -143,12 +157,12 @@ define([
 
                 if (!isNaN(curpos)) {
                     if (this.listWidth > curpos) {
-                        this.currentPage = parseInt(this.elements.list[0].style.left) === 0 ? 1 : (Math.ceil(-parseInt(this.elements.list[0].style.left)/this.elements.masker.width()) + 1);
-                        this.elements.next[0].className = 'next on';
+                        this.currentPage = this.elements.list.offsetLeft === 0 ? 1 : (Math.ceil(-this.elements.list.offsetLeft/this.elements.masker.offsetWidth) + 1);
+                        this.elements.next.className = 'next on';
                     } else {
-                        this.elements.next[0].className = 'next off';
+                        this.elements.next.className = 'next off';
                         this.currentPage = this.numPages;
-                        this.elements.list[0].style.left = -(this.listWidth - this.elements.masker.width()) + 'px';
+                        this.elements.list.style.left = -(this.listWidth - this.elements.masker.offsetWidth) + 'px';
                     }
                 }
 

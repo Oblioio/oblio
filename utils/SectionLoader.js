@@ -20,21 +20,47 @@ define([
 
     function loadJSON(url, completeFn){
 
-        $.ajax({
-            dataType: "text",
-            url: url,
-            success: function(data){
+        var xhr = new XMLHttpRequest();
 
-                //this strips out line returns so that multiline strings in the JSON will parse correctly
-                data = data.replace(/(\r\n|\n|\r)/gm,"");
-                data = data.replace(/\t/g, '');
-                oblio.app.dataSrc = this.localizationJSON = $.parseJSON(String(data));
+        xhr.addEventListener('readystatechange', function (e) {
 
-                this.setupSections.call(this);
+            switch (e.target.readyState) {
+                case 0: // UNSENT
+                    // console.log('UNSENT', e.target.status, e.target.response);
+                    break;
+                case 1: // OPENED
+                    // console.log('OPENED', e.target.status, e.target.response);
+                    break;
+                case 2: // HEADERS_RECEIVED
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    break;
+                case 3: // LOADING
+                    // console.log('LOADING', e.target.status, e.target.response);
+                    break;
+                case 4: // DONE
+                    if (e.target.status === 200) {
+                        var data = e.target.response;
 
-                if(completeFn)completeFn();
-            }.bind(this)
-        });
+                        //this strips out line returns so that multiline strings in the JSON will parse correctly
+                        data = data.replace(/(\r\n|\n|\r)/gm,"");
+                        data = data.replace(/\t/g, '');
+                        oblio.app.dataSrc = this.localizationJSON = JSON.parse(String(data));
+
+                        this.setupSections.call(this);
+
+                        if (completeFn) completeFn();
+                    }
+                    break;
+                default:
+            }
+        }.bind(this));
+
+        xhr.open(
+            'GET',
+            url
+        );
+
+        xhr.send();
 
     }
 
@@ -254,14 +280,43 @@ define([
     }
 
     function loadHTML (sectionOBJ) {
-        var that = this;
 
         if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
-        //load html and scrape for images
-        $.get(base_url + sectionOBJ.htmlPath, function(data){
-            that.htmlLoaded(sectionOBJ, data);
-        });
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('readystatechange', function (e) {
+
+            switch (e.target.readyState) {
+                case 0: // UNSENT
+                    // console.log('UNSENT', e.target.status, e.target.response);
+                    break;
+                case 1: // OPENED
+                    // console.log('OPENED', e.target.status, e.target.response);
+                    break;
+                case 2: // HEADERS_RECEIVED
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    break;
+                case 3: // LOADING
+                    // console.log('LOADING', e.target.status, e.target.response);
+                    break;
+                case 4: // DONE
+                    if (e.target.status === 200) {
+                        var data = e.target.response;
+
+                        this.htmlLoaded(sectionOBJ, data);
+                    }
+                    break;
+                default:
+            }
+        }.bind(this));
+
+        xhr.open(
+            'GET',
+            base_url + sectionOBJ.htmlPath
+        );
+
+        xhr.send();
     }
 
     function htmlLoaded (sectionOBJ, data) {
@@ -317,11 +372,6 @@ define([
         var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
         var results;
 
-        // load backplate from data attribute
-        if ($(sectionOBJ.htmlData).data('backplate')) {
-            addImage.call(this, $(sectionOBJ.htmlData).data('backplate'));
-        }
-
         while ((results = img_pattern.exec(sectionOBJ.htmlData)) !== null)
         {
             addImage.call(this, results[1]);
@@ -356,12 +406,42 @@ define([
     }
 
     function loadCSS (sectionOBJ) {
-        var that = this;
         if(this.verbose)console.log('SectionLoader | loadCSS: '+sectionOBJ.cssPath);
 
-        $.get(sectionOBJ.cssPath, function(data){
-            that.cssLoaded(sectionOBJ, data);
-        }, 'text');
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener('readystatechange', function (e) {
+
+            switch (e.target.readyState) {
+                case 0: // UNSENT
+                    // console.log('UNSENT', e.target.status, e.target.response);
+                    break;
+                case 1: // OPENED
+                    // console.log('OPENED', e.target.status, e.target.response);
+                    break;
+                case 2: // HEADERS_RECEIVED
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    break;
+                case 3: // LOADING
+                    // console.log('LOADING', e.target.status, e.target.response);
+                    break;
+                case 4: // DONE
+                    if (e.target.status === 200) {
+                        var data = e.target.response;
+
+                        this.cssLoaded(sectionOBJ, data);
+                    }
+                    break;
+                default:
+            }
+        }.bind(this));
+
+        xhr.open(
+            'GET',
+            sectionOBJ.cssPath
+        );
+
+        xhr.send();
 
     }
 
@@ -430,30 +510,61 @@ define([
     }
 
     function loadTemplate(sectionOBJ, template) {
-        var that = this,
-            template_path = typeof template === 'string' ? template : template.template_path;
+        var template_path = typeof template === 'string' ? template : template.template_path;
 
-        //load mustache templates
-        $.get(base_url + template_path, function(data){
-            if (typeof template === 'string') {
+        if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
-                sectionOBJ.template = data;
-                sectionOBJ.htmlData = Mustache.render(sectionOBJ.template, sectionOBJ.data);
+        var xhr = new XMLHttpRequest();
 
-                // preload images from html
-                var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
-                var results;
+        xhr.addEventListener('readystatechange', function (e) {
 
-                while ((results = img_pattern.exec(sectionOBJ.htmlData)) !== null)
-                {
-                    addImage.call(this, results[1]);
-                }
-            } else {
-                sectionOBJ.partials[template.template_name] = data;
+            switch (e.target.readyState) {
+                case 0: // UNSENT
+                    // console.log('UNSENT', e.target.status, e.target.response);
+                    break;
+                case 1: // OPENED
+                    // console.log('OPENED', e.target.status, e.target.response);
+                    break;
+                case 2: // HEADERS_RECEIVED
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    break;
+                case 3: // LOADING
+                    // console.log('LOADING', e.target.status, e.target.response);
+                    break;
+                case 4: // DONE
+                    if (e.target.status === 200) {
+                        var data = e.target.response;
+
+                        if (typeof template === 'string') {
+
+                            sectionOBJ.template = data;
+                            sectionOBJ.htmlData = Mustache.render(sectionOBJ.template, sectionOBJ.data);
+
+                            // preload images from html
+                            var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
+                            var results;
+
+                            while ((results = img_pattern.exec(sectionOBJ.htmlData)) !== null)
+                            {
+                                addImage.call(this, results[1]);
+                            }
+                        } else {
+                            sectionOBJ.partials[template.template_name] = data;
+                        }
+
+                        arrayExecuter.stepComplete_instant();
+                    }
+                    break;
+                default:
             }
-
-            arrayExecuter.stepComplete_instant();
         }.bind(this));
+
+        xhr.open(
+            'GET',
+            base_url + template_path
+        );
+
+        xhr.send();
     }
 
     function loadFiles (){
@@ -464,7 +575,7 @@ define([
             newImage,
             that = this;
 
-        if ((numImages+numMisc) < 1) {
+        if ((numImages + numMisc) < 1) {
             this.complete();
             if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
                 oblio.settings.prepreloader.goOut();
@@ -501,18 +612,20 @@ define([
         
         newImage = new Image();
         newImage.alt = String(fileObj.index);
-        $(newImage).load(function(){
+        newImage.addEventListener('load', function () {
             if(this.verbose)console.log('SectionLoader | image Loaded: '+fileObj.url);
-            
+
             fileObj.done = true;
             sectionLoaderState.imagesLoaded++;
             sectionLoader.checkComplete();
-            
-        }.bind(this)).error('error', this.fileError);
+        }.bind(this));
+
+        newImage.addEventListener('error', this.fileError);
+
         newImage.src = base_url + fileURL;
     }
     
-    function addMisc(fileURL){
+    function addMisc (fileURL) {
         if (!this.isDuplicate(fileURL)) {
             sectionLoaderState.miscToLoad.push({url:fileURL});
         }
@@ -520,48 +633,62 @@ define([
     
     function miscLoadFile(fileObj){
         if(this.verbose)console.log('SectionLoader | xhr load: '+fileObj.url);
+
         var fileURL = base_url + fileObj.url;
 
         fileObj.perc = 0;
         fileObj.done = false;
         fileObj.size = this.getFileSize(fileURL);
         
-        $.ajax({
-            
-            xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.addEventListener("progress", function(evt){
-                    if (evt.lengthComputable) {
-                        fileObj.perc = evt.loaded / evt.total;
-                    } else {
-                        fileObj.perc = 0;
-                    }    
-                }.bind(this), false);
-                return xhr;            
-            }.bind(this),
-            type: 'GET',
-            url: fileURL,
-            success: function(data){  
-                
-                this.miscFiles = this.miscFiles || {};
-                this.miscFiles[fileObj.url] = data;
+        var xhr = new XMLHttpRequest();
 
-                fileObj.done = true;
-                sectionLoaderState.miscLoaded++;
-                sectionLoader.checkComplete();
-                
-            }.bind(this)
-        });
+        xhr.addEventListener('readystatechange', function (e) {
+
+            switch (e.target.readyState) {
+                case 0: // UNSENT
+                    // console.log('UNSENT', e.target.status, e.target.response);
+                    break;
+                case 1: // OPENED
+                    // console.log('OPENED', e.target.status, e.target.response);
+                    break;
+                case 2: // HEADERS_RECEIVED
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    break;
+                case 3: // LOADING
+                    // console.log('LOADING', e.target.status, e.target.response);
+                    break;
+                case 4: // DONE
+                    if (e.target.status === 200) {
+                        var data = e.target.response;
+
+                        this.miscFiles = this.miscFiles || {};
+                        this.miscFiles[fileObj.url] = data;
+
+                        fileObj.done = true;
+                        sectionLoaderState.miscLoaded++;
+                        sectionLoader.checkComplete();
+                    }
+                    break;
+                default:
+            }
+        }.bind(this));
+
+        xhr.open(
+            'GET',
+            fileURL
+        );
+
+        xhr.send();
         
     }
     
-    function setFileSize(url, size){
+    function setFileSize (url, size) {
         this.filesizes.push({url:url, size:size});
     }
     
-    function getFileSize(url){
-        for(var f=0; f<this.filesizes.length; f++){
-            if(url == this.filesizes[f].url){
+    function getFileSize (url) {
+        for (var f = 0; f < this.filesizes.length; f++) {
+            if (url == this.filesizes[f].url) {
                 return this.filesizes[f].size;
             }
         }
@@ -591,10 +718,7 @@ define([
     }
 
     function fileError (e) {
-        if (this.verbose) {
-            console.log('SectionLoader | fileError');
-            console.log(e);
-        }
+        console.error('SectionLoader | fileError', e.path[0].src, 'not found');
     }
 
     function checkComplete(){
@@ -624,7 +748,7 @@ define([
 
                 if (sectionLoader.localizationJSON && sectionLoader.localizationJSON.sections && sectionLoader.localizationJSON.sections[sectionID] && sectionLoader.localizationJSON.sections[sectionID].css) {
                     //write modified CSS directly into HTML header
-                    $('<style type="text/css">' + sectionOBJ.cssData + '</style>').appendTo('head');
+                    document.head.insertAdjacentHTML('beforeend', '<style type="text/css">' + sectionOBJ.cssData + '</style>');
                 } else {
                     //attached link to original CSS file
                     var fileref = document.createElement('link');

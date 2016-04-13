@@ -61,8 +61,8 @@ define([
 
         this.buildBioSection(data);
 
-        this.elements.scrollable = $('#' + this.name + ' .scrollable');
-        this.elements.viewport = $('#' + this.name + ' .viewport');
+        this.elements.scrollable = this.elements.sectionWrapper.getElementsByClassName('scrollable');
+        this.elements.viewport = this.elements.sectionWrapper.getElementsByClassName('viewport');
 
         onHideComplete.apply(this);
 
