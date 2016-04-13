@@ -35,7 +35,7 @@ define([
                     this.toggleCredits(e);
                     break;
                 case 'share-facebook':
-                    window.open('http://www.facebook.com/share.php?u=' + encodeURIComponent(target.getAttribute('href'), '_blank');
+                    window.open('http://www.facebook.com/share.php?u=' + encodeURIComponent(target.getAttribute('href'), '_blank'));
                     break;
                 default:
             }
