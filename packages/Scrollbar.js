@@ -1,4 +1,7 @@
 define([], function () {
+
+    var transformPrefixed = Modernizr.prefixed('transform');
+
     function Scrollbar ( root, options )
         {
 
@@ -56,23 +59,30 @@ define([], function () {
         var sCssSize = this.sSize.toLowerCase();
 
         var thumbobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
 
         thumbobj[this.sDirection] = (this.iScroll / this.oScrollbar.ratio) + 'px';
-        TweenLite.set(this.oThumb.obj, thumbobj);
+        this.oThumb.obj.style[transformPrefixed] = 'translate3d(' + thumbobj.x + ', ' + thumbobj.y + ', ' + thumbobj.z + ')';
         // oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
 
         var contentobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
+
         contentobj[this.sDirection] = -this.iScroll + 'px';
-        TweenLite.set(this.oContent.obj, contentobj);
+        this.oContent.obj.style[transformPrefixed] = 'translate3d(' + contentobj.x + ', ' + contentobj.y + ', ' + contentobj.z + ')';
         this.iMouse.start = this.oThumb.obj['offset' + this.sDirection];
 
-        this.oScrollbar.obj.style[sCssSize] = this.oTrack[ this.options.axis ];
-        this.oTrack.obj.style[sCssSize] = this.oTrack[ this.options.axis ];
-        this.oThumb.obj.style[sCssSize] = this.oThumb[ this.options.axis ];
+        this.oScrollbar.obj.style[sCssSize] = this.oTrack[ this.options.axis ] + 'px';
+        this.oTrack.obj.style[sCssSize] = this.oTrack[ this.options.axis ] + 'px';
+        this.oThumb.obj.style[sCssSize] = this.oThumb[ this.options.axis ] + 'px';
+
+        console.log(sCssSize, this.options.axis, this.oThumb[this.options.axis], this.oTrack[ this.options.axis ]);
     }
 
     function setEvents () {
@@ -142,18 +152,20 @@ define([], function () {
             this.iScroll = Math.min( ( this.oContent[ this.options.axis ] - this.oViewport[ this.options.axis ] ), Math.max( 0, this.iScroll ));
 
             var thumbobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
-            thumbobj[this.sDirection] = (this.iScroll / this.oScrollbar.ratio) + 'px';
-            TweenLite.set(this.oThumb.obj, thumbobj);
-            // oThumb.obj.css( sDirection, iScroll / oScrollbar.ratio );
+            thumbobj[this.sDirection] = (this.iScroll / this.oScrollbar.ratio).toFixed() + 'px';
+            this.oThumb.obj.style[transformPrefixed] = 'translate3d(' + thumbobj.x + ', ' + thumbobj.y + ', ' + thumbobj.z + ')';
 
             var contentobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
             contentobj[this.sDirection] = -this.iScroll + 'px';
-            TweenLite.set(this.oContent.obj, contentobj);
-            // oContent.obj.css( sDirection, -iScroll );
+            this.oContent.obj.style[transformPrefixed] = 'translate3d(' + contentobj.x + ', ' + contentobj.y + ', ' + contentobj.z + ')';
 
             if ( this.options.lockscroll || ( this.iScroll !== ( this.oContent[ this.options.axis ] - this.oViewport[ this.options.axis ] ) && this.iScroll !== 0 ) ) {
                 oEvent.preventDefault();
@@ -172,16 +184,20 @@ define([], function () {
             this.iScroll = this.iPosition.now * this.oScrollbar.ratio;
 
             var thumbobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
             thumbobj[this.sDirection] = (this.iPosition.now) + 'px';
-            TweenLite.set(this.oThumb.obj, thumbobj);
+            this.oThumb.obj.style[transformPrefixed] = 'translate3d(' + thumbobj.x + ', ' + thumbobj.y + ', ' + thumbobj.z + ')';
 
             var contentobj = {
+                x: '0px',
+                y: '0px',
                 z: '1px'
             };
             contentobj[this.sDirection] = -this.iScroll + 'px';
-            TweenLite.set(this.oContent.obj, contentobj);
+            this.oContent.obj.style[transformPrefixed] = 'translate3d(' + contentobj.x + ', ' + contentobj.y + ', ' + contentobj.z + ')';
         }
     }
 
