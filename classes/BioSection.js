@@ -1,15 +1,15 @@
 define([
+        'oblio/packages/Scrollbar',
         'mustache',
         'text!oblio/templates/BioSectionTemplate.mustache',
         'oblio/utils/Inherit',
         'oblio/utils/DeviceDetect',
         'oblio/classes/Navigation',
-        'oblio/packages/jquery.tinyscrollbar',
         'oblio/classes/Section',
         'greensock/TweenLite.min',
         'greensock/easing/EasePack.min',
         'greensock/plugins/CSSPlugin.min'
-    ], function (Mustache, biosTemplate) {
+    ], function (Scrollbar, Mustache, biosTemplate) {
 
     var myName = "BioSection",
         that,
@@ -21,7 +21,8 @@ define([
         this.section_scroll = false;
         this.initialized = false;
         this.biosTemplate = biosTemplate;
-    }
+        this.scrollbars = [];
+    };
 
     function init (callback) {
         console.log('init ' + myName);
@@ -43,8 +44,8 @@ define([
                     .replace(/[^\w ]+/g,'')
                     .replace(/ +/g,'_')
                     ;
-            }
-        }
+            };
+        };
 
         // add toUppercase helper to change actor names to uppercase for bio heads
         data.toUppercase = function () {
@@ -52,8 +53,8 @@ define([
                 return render(text)
                     .toUpperCase()
                     ;
-            }
-        }
+            };
+        };
 
         data.section = this.name;
 
@@ -61,10 +62,16 @@ define([
 
         this.buildBioSection(data);
 
-        this.elements.scrollable = this.elements.sectionWrapper.getElementsByClassName('scrollable');
-        this.elements.viewport = this.elements.sectionWrapper.getElementsByClassName('viewport');
+        this.elements.scrollables = this.elements.sectionWrapper.getElementsByClassName('scrollable');
+        this.elements.viewports = this.elements.sectionWrapper.getElementsByClassName('viewport');
 
         onHideComplete.apply(this);
+
+        for (var i = this.elements.scrollables.length - 1; i >= 0; i--) {
+            this.scrollbars.push(new Scrollbar(this.elements.scrollables[i], {
+                invertscroll: oblio.utils.DeviceDetect.isMobile
+            }));
+        }
 
         if (callback) {
             callback();
@@ -92,15 +99,15 @@ define([
 
         this.elements.bios = this.elements.sectionWrapper.getElementsByClassName('bio');
 
-        $(this.elements.list).find('li').first().addClass('active');
+        this.elements.list.children[0].classList.add('active');
 
         this.bios.currId = this.elements.bios[0].id;
 
         for (var i = this.elements.bios.length - 1; i >= 0; i--) {
             this.bios[this.elements.bios[i].id] = this.elements.bios[i];
-        };
+        }
 
-        $(this.elements.list).on('click', 'a', this.handleListClick.bind(this));
+        this.elements.list.addEventListener('click', this.handleListClick.bind(this));
 
         var css = '',
             head = document.head || document.getElementsByTagName('head')[0],
@@ -129,13 +136,20 @@ define([
     }
 
     function handleListClick (e) {
-        var clicked = e.currentTarget,
+        if (!e.target.matches('a')) return;
+
+        e.preventDefault();
+
+        var clicked = e.target,
             id = clicked.href.split('#')[1];
 
         console.log('ID', id, this.bios.currId, this);
 
-        $(this.elements.list).find('.active').removeClass('active');
-        clicked.parentNode.className = 'active';
+        var actives = this.elements.list.getElementsByClassName('active');
+        for (var i = actives.length - 1; i >= 0; i--) {
+            actives[i].classList.remove('active');
+        }
+        clicked.parentNode.classList.add('active');
 
         if (this.bios.currId) {
             if (id === this.bios.currId) {
@@ -181,11 +195,9 @@ define([
 
         this.elements.sectionWrapper.style.display = 'block';
 
-        if(!this.section_scroll){
-            this.section_scroll = true;
-            this.elements.scrollable.tinyscrollbar({invertscroll: oblio.utils.DeviceDetect.isMobile});
+        for (var i = this.scrollbars.length - 1; i >= 0; i--) {
+            this.scrollbars[i].update();
         }
-        this.elements.scrollable.tinyscrollbar_update();
 
         this.resize();
 
@@ -220,12 +232,14 @@ define([
 
         this.elements[this.name + 'Wrapper'].style.top = wrapperTop + 'px';
 
-        this.elements.viewport.height(viewportHeight + 'px');
-        if (this.section_scroll) {
-            this.elements.scrollable.tinyscrollbar_update();
+        for (var i = this.elements.viewports.length - 1; i >= 0; i--) {
+            this.elements.viewports[i].style.height = viewportHeight + 'px';
         }
 
-        console.log(this.curr_bg);
+        for (var i = this.scrollbars.length - 1; i >= 0; i--) {
+            this.scrollbars[i].update();
+        }
+
     }
 
     // inherit from base class Section
