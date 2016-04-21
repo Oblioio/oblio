@@ -1,7 +1,5 @@
 define([
-        'howler',
-        'greensock/TweenLite.min'
-        // 'oblio/utils/PageVisibility' // this adds support for IE 9 and below page visibility event to pause sound on tab change and requires jquery
+        'howler'
     ], function () {
 
     'use strict';
