@@ -5,7 +5,7 @@ define([
         'oblio/utils/Inherit',
         'oblio/utils/DeviceDetect',
         'oblio/classes/Navigation',
-        'oblio/classes/Section'TweenMax
+        'oblio/classes/Section'
     ], function (Scrollbar, Mustache, biosTemplate) {
 
     var myName = "BioSection",

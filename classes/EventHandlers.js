@@ -1,6 +1,6 @@
 define([
         'oblio/utils/DeviceDetect',
-        'oblio/classes/Menu'TweenMax
+        'oblio/classes/Menu'
     ], function () {
 
     'use strict';

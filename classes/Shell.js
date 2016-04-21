@@ -1,7 +1,7 @@
 define([
         'mustache',
         'oblio/utils/DeviceDetect',
-        'oblio/classes/Menu'TweenMax
+        'oblio/classes/Menu'
     ], function (Mustache) {
 
     'use strict';
