@@ -1,5 +1,4 @@
 define([
-        'greensock/TweenLite.min',
         'oblio/utils/SectionLoader'
     ], function () {
 

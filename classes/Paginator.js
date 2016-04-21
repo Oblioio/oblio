@@ -1,8 +1,4 @@
-define([
-        'greensock/TweenLite.min',
-        'greensock/easing/EasePack.min',
-        'greensock/plugins/CSSPlugin.min'
-    ], function () {
+define([], function () {
 
     var Paginator = function (data) {
 

@@ -5,10 +5,7 @@ define([
         'oblio/utils/Inherit',
         'oblio/utils/DeviceDetect',
         'oblio/classes/Navigation',
-        'oblio/classes/Section',
-        'greensock/TweenLite.min',
-        'greensock/easing/EasePack.min',
-        'greensock/plugins/CSSPlugin.min'
+        'oblio/classes/Section'TweenMax
     ], function (Scrollbar, Mustache, biosTemplate) {
 
     var myName = "BioSection",

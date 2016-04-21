@@ -1,10 +1,7 @@
 define([
         'mustache',
         'oblio/utils/DeviceDetect',
-        'oblio/classes/Menu',
-        'greensock/TweenLite.min',
-        'greensock/easing/EasePack.min',
-        'greensock/plugins/CSSPlugin.min'
+        'oblio/classes/Menu'TweenMax
     ], function (Mustache) {
 
     'use strict';

@@ -1,9 +1,6 @@
 define([
         'oblio/classes/Backplate',
-        'oblio/utils/DeviceDetect',
-        'greensock/TweenLite.min',
-        'greensock/easing/EasePack.min',
-        'greensock/plugins/CSSPlugin.min'
+        'oblio/utils/DeviceDetect'
     ], function (Backplate) {
 
     'use strict';
