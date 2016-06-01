@@ -26,20 +26,20 @@ define([
 
             switch (e.target.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.response);
+                    // console.log('UNSENT', e.target.status, e.target.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.response);
+                    // console.log('OPENED', e.target.status, e.target.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.response);
+                    // console.log('LOADING', e.target.status, e.target.responseText);
                     break;
                 case 4: // DONE
                     if (e.target.status === 200) {
-                        var data = e.target.response;
+                        var data = e.target.responseText;
 
                         //this strips out line returns so that multiline strings in the JSON will parse correctly
                         data = data.replace(/(\r\n|\n|\r)/gm,"");
@@ -289,20 +289,20 @@ define([
 
             switch (e.target.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.response);
+                    // console.log('UNSENT', e.target.status, e.target.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.response);
+                    // console.log('OPENED', e.target.status, e.target.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.response);
+                    // console.log('LOADING', e.target.status, e.target.responseText);
                     break;
                 case 4: // DONE
                     if (e.target.status === 200) {
-                        var data = e.target.response;
+                        var data = e.target.responseText;
 
                         this.htmlLoaded(sectionOBJ, data);
                     }
@@ -414,20 +414,20 @@ define([
 
             switch (e.target.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.response);
+                    // console.log('UNSENT', e.target.status, e.target.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.response);
+                    // console.log('OPENED', e.target.status, e.target.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.response);
+                    // console.log('LOADING', e.target.status, e.target.responseText);
                     break;
                 case 4: // DONE
                     if (e.target.status === 200) {
-                        var data = e.target.response;
+                        var data = e.target.responseText;
 
                         this.cssLoaded(sectionOBJ, data);
                     }
@@ -520,20 +520,20 @@ define([
 
             switch (e.target.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.response);
+                    // console.log('UNSENT', e.target.status, e.target.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.response);
+                    // console.log('OPENED', e.target.status, e.target.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.response);
+                    // console.log('LOADING', e.target.status, e.target.responseText);
                     break;
                 case 4: // DONE
                     if (e.target.status === 200) {
-                        var data = e.target.response;
+                        var data = e.target.responseText;
 
                         if (typeof template === 'string') {
 
@@ -646,20 +646,20 @@ define([
 
             switch (e.target.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.response);
+                    // console.log('UNSENT', e.target.status, e.target.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.response);
+                    // console.log('OPENED', e.target.status, e.target.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.response);
+                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.response);
+                    // console.log('LOADING', e.target.status, e.target.responseText);
                     break;
                 case 4: // DONE
                     if (e.target.status === 200) {
-                        var data = e.target.response;
+                        var data = e.target.responseText;
 
                         this.miscFiles = this.miscFiles || {};
                         this.miscFiles[fileObj.url] = data;
