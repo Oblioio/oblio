@@ -40,7 +40,7 @@ define([], function () {
 
         var functionArr =  [];
 
-        if (document.getElementById('share')) {
+        if (document.getElementById('shareShelf')) {
             functionArr.push({ fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] });
         }
 
@@ -109,12 +109,12 @@ define([], function () {
     }
 
     function facebookScript (callback) {
-
+        var appID = oblio.settings.FBAppID || '';
         var initFB = function () {
             FB.init({
-                appId: '',
+                appId: appID,
                 xfbml      : true,  // parse social plugins on this page
-                version    : 'v2.1' // use version 2.1
+                version    : 'v2.6' // use version 2.1
             });
             // window.setTimeout(callback, 500);
         };
@@ -124,13 +124,13 @@ define([], function () {
         if (window.FB) {
             initFB();
         } else {
-            (function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
 
             window.fbAsyncInit = initFB;
         }
