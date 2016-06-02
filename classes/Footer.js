@@ -38,9 +38,11 @@ define([], function () {
 
         }.bind(this), true);
 
-        var functionArr =  [
-            { fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] }
-        ];
+        var functionArr =  [];
+
+        if (document.getElementById('share')) {
+            functionArr.push({ fn: initShare, scope: this, vars: [arrayExecuter.stepComplete.bind(arrayExecuter)] });
+        }
 
         if (callback) {
             functionArr.push({ fn: callback, vars: null });
