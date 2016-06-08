@@ -153,6 +153,10 @@ define([], function () {
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 
             window.setTimeout(callback, 100);
+        } else {
+            if (callback) {
+                callback();
+            }
         }
     }
 
