@@ -142,14 +142,15 @@ define([], function () {
             container = document.getElementById('gPlusBtn');
 
         if (container) {
-            gPlusOne = document.createElement('g:plusone');
-            gPlusOne.setAttribute("size", "medium");
+            gPlusOne = document.createElement('div');
+            gPlusOne.className = 'g-plusone';
+            gPlusOne.setAttribute("size", "small");
             gPlusOne.setAttribute("annotation", "none");
             gPlusOne.setAttribute("href", oblio.settings.base_url);
             container.appendChild(gPlusOne);
 
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/plusone.js';
+            po.src = 'https://apis.google.com/js/platform.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 
             window.setTimeout(callback, 100);
@@ -158,6 +159,7 @@ define([], function () {
                 callback();
             }
         }
+
     }
 
     function toggleShare(e){
