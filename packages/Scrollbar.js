@@ -32,6 +32,9 @@ define([], function () {
 
             this.update();
             setEvents.call(this);
+
+            this.drag = drag.bind(this);
+            this.end = end.bind(this);
         }
 
     function init () {
@@ -88,7 +91,7 @@ define([], function () {
     function setEvents () {
         if ( ! this.touchEvents ) {
             this.oThumb.obj.addEventListener( 'mousedown', start.bind(this), false );
-            this.oTrack.obj.addEventListener( 'mouseup', drag.bind(this), false );
+            document.addEventListener( 'mouseup', end.bind(this), false );
         } else {
             this.oViewport.obj.addEventListener('touchstart', function (e) {   
                 this.options.invertscroll = true;
@@ -127,9 +130,9 @@ define([], function () {
         
         if( !this.touchEvents )
         {
-            document.addEventListener( 'mousemove', drag.bind(this), false );
-            document.addEventListener( 'mouseup', end.bind(this), false );
-            this.oThumb.obj.addEventListener( 'mouseup', end.bind(this), false );
+            document.addEventListener( 'mousemove', this.drag, false );
+            document.addEventListener( 'mouseup', this.end, false );
+            this.oThumb.obj.addEventListener( 'mouseup', this.end, false );
         }
         else
         {
@@ -203,9 +206,9 @@ define([], function () {
 
     function end () {
         document.body.classList.remove('noSelect');
-        document.removeEventListener( 'mousemove', drag.bind(this) );
-        document.removeEventListener( 'mouseup', end.bind(this) );
-        this.oThumb.obj.removeEventListener( 'mouseup', end.bind(this) );
+        document.removeEventListener( 'mousemove', this.drag, false );
+        document.removeEventListener( 'mouseup', this.end, false );
+        this.oThumb.obj.removeEventListener( 'mouseup', this.end, false );
         // document.removeEventListener('touchmove');
         // document.removeEventListener('touchend');
     }
