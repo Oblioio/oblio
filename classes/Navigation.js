@@ -69,6 +69,9 @@ define([
             console.log('Navigation | changeSection: ' + sectionID + ' | ' + subSectionID);
         }
 
+        var hash = window.location.hash;
+        if (sectionID.match(/^#/)) sectionID = 'home';
+
         // if the user clicked the back or forward button while section is changing, tack the change on to arrayExecuter
         if (!this.active) {
             if (pop) {
@@ -112,17 +115,17 @@ define([
 
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
                 }
             } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
                 }
             } else {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
                 }
             }
         }
