@@ -827,7 +827,7 @@ define([
 
     window.oblio = window.oblio || {};
     oblio.utils = oblio.utils || {};
-    oblio.utils.SectionLoader = sectionLoader;
+    oblio.utils.SectionLoader = oblio.utils.SectionLoader || sectionLoader;
 
     return oblio.utils.SectionLoader;
 
