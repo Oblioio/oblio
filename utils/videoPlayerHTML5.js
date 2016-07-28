@@ -31,8 +31,7 @@ define(function () {
 		this.onComplete = undefined;
 		this.onPlaying = undefined;
 		this.onPaused = undefined;
-		this.onBuffering = undefined;
-				
+
 		for (var par in parameters) {
 			this[par] = parameters[par];
 		}
@@ -74,26 +73,71 @@ define(function () {
 		this.player.autoplay = this.autoplay;
 		this.player.loop = this.loop;
 		this.player.src = this.videoSrc;
+
+		addListeners.call(this);
+
 		this.div.appendChild(this.player);
 	}
 	
+	function addListeners () {
+		var events = [
+			'abort',
+			'canplay',
+			'canplaythrough',
+			'durationchange',
+			'emptied',
+			// 'encrypted',
+			'ended',
+			'error',
+			'interruptbegin',
+			'interruptend',
+			'loadeddata',
+			'loadedmetadata',
+			'loadstart',
+			// 'mozaudioavailable',
+			'pause',
+			'play',
+			'playing',
+			'progress',
+			// 'ratechange',
+			// 'seeked',
+			// 'seeking',
+			// 'stalled',
+			// 'suspend',
+			'timeupdate',
+			// 'volumechange',
+			// 'waiting'
+		];
+
+		for (var i = 0; i < events.length; i++) {
+			this.player.addEventListener(events[i], stateChange.bind(this));
+		}
+
+	}
+
 	function stateChange(e){
-		switch(e.data){
+		console.log('STATECHANGE', e);
+		switch(e.type){
 			case 'loadedmetadata':
 				if(this.onLoadedMetadata)this.onLoadedMetadata();
 				break;
 			case 'ended':
 				if(this.onComplete)this.onComplete();
 				break;
+			case 'canplaythrough':
+				if(this.onCanPlayThrough)this.onCanPlayThrough();
+				break;
 			case 'playing':
 				if(this.onPlaying)this.onPlaying();
+				break;
+			case 'timeupdate':
+				if(this.onTimeUpdate)this.onTimeUpdate();
 				break;
 			case 'pause':
 				if(this.onPaused)this.onPaused();
 				break;
-			case 'buffering':
-				if(this.onBuffering)this.onBuffering();
-				break;			
+			default: 
+				console.log('STATE', e);		
 		}
 	}	
 	
