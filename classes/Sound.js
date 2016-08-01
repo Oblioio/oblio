@@ -154,6 +154,7 @@ define([
         this.btn = document.getElementById(id);
         this.btn.className = this.btn.className.replace(' off', '') + ' on';
         this.btn.addEventListener('click', toggleSound.bind(this), false);
+        this.btn.addEventListener('touchstart', toggleSound.bind(this) , false);
 
         // Set the name of the hidden property and the change event for visibility
         var hidden, visibilityChange; 
