@@ -20,26 +20,23 @@ define([
 
     function loadJSON(url, completeFn){
 
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('readystatechange', function (e) {
-
-            switch (e.target.readyState) {
+        window.getAjax(url, function (e) {
+            switch (e.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.responseText);
+                    // console.log('UNSENT', e.status, e.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.responseText);
+                    // console.log('OPENED', e.status, e.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
+                    // console.log('HEADERS_RECEIVED', e.status, e.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.responseText);
+                    // console.log('LOADING', e.status, e.responseText);
                     break;
                 case 4: // DONE
-                    if (e.target.status === 200) {
-                        var data = e.target.responseText;
+                    if (e.status === 200) {
+                        var data = e.responseText;
 
                         //this strips out line returns so that multiline strings in the JSON will parse correctly
                         data = data.replace(/(\r\n|\n|\r)/gm,"");
@@ -54,13 +51,6 @@ define([
                 default:
             }
         }.bind(this));
-
-        xhr.open(
-            'GET',
-            url
-        );
-
-        xhr.send();
 
     }
 
@@ -283,26 +273,23 @@ define([
 
         if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('readystatechange', function (e) {
-
-            switch (e.target.readyState) {
+        window.getAjax(base_url + sectionOBJ.htmlPath, function (e) {
+            switch (e.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.responseText);
+                    // console.log('UNSENT', e.status, e.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.responseText);
+                    // console.log('OPENED', e.status, e.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
+                    // console.log('HEADERS_RECEIVED', e.status, e.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.responseText);
+                    // console.log('LOADING', e.status, e.responseText);
                     break;
                 case 4: // DONE
-                    if (e.target.status === 200) {
-                        var data = e.target.responseText;
+                    if (e.status === 200) {
+                        var data = e.responseText;
 
                         this.htmlLoaded(sectionOBJ, data);
                     }
@@ -311,12 +298,6 @@ define([
             }
         }.bind(this));
 
-        xhr.open(
-            'GET',
-            base_url + sectionOBJ.htmlPath
-        );
-
-        xhr.send();
     }
 
     function htmlLoaded (sectionOBJ, data) {
@@ -408,26 +389,23 @@ define([
     function loadCSS (sectionOBJ) {
         if(this.verbose)console.log('SectionLoader | loadCSS: '+sectionOBJ.cssPath);
 
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('readystatechange', function (e) {
-
-            switch (e.target.readyState) {
+        window.getAjax(url, function (e) {
+            switch (e.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.responseText);
+                    // console.log('UNSENT', e.status, e.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.responseText);
+                    // console.log('OPENED', e.status, e.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
+                    // console.log('HEADERS_RECEIVED', e.status, e.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.responseText);
+                    // console.log('LOADING', e.status, e.responseText);
                     break;
                 case 4: // DONE
-                    if (e.target.status === 200) {
-                        var data = e.target.responseText;
+                    if (e.status === 200) {
+                        var data = e.responseText;
 
                         this.cssLoaded(sectionOBJ, data);
                     }
@@ -435,13 +413,6 @@ define([
                 default:
             }
         }.bind(this));
-
-        xhr.open(
-            'GET',
-            sectionOBJ.cssPath
-        );
-
-        xhr.send();
 
     }
 
@@ -514,26 +485,23 @@ define([
 
         if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
-        var xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('readystatechange', function (e) {
-
-            switch (e.target.readyState) {
+        window.getAjax(base_url + template_path, function (e) {
+            switch (e.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.responseText);
+                    // console.log('UNSENT', e.status, e.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.responseText);
+                    // console.log('OPENED', e.status, e.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
+                    // console.log('HEADERS_RECEIVED', e.status, e.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.responseText);
+                    // console.log('LOADING', e.status, e.responseText);
                     break;
                 case 4: // DONE
-                    if (e.target.status === 200) {
-                        var data = e.target.responseText;
+                    if (e.status === 200) {
+                        var data = e.responseText;
 
                         if (typeof template === 'string') {
 
@@ -558,13 +526,6 @@ define([
                 default:
             }
         }.bind(this));
-
-        xhr.open(
-            'GET',
-            base_url + template_path
-        );
-
-        xhr.send();
     }
 
     function loadFiles (){
@@ -640,26 +601,24 @@ define([
         fileObj.done = false;
         fileObj.size = this.getFileSize(fileURL);
         
-        var xhr = new XMLHttpRequest();
+        window.getAjax(base_url + template_path, function (e) {
 
-        xhr.addEventListener('readystatechange', function (e) {
-
-            switch (e.target.readyState) {
+            switch (e.readyState) {
                 case 0: // UNSENT
-                    // console.log('UNSENT', e.target.status, e.target.responseText);
+                    // console.log('UNSENT', e.status, e.responseText);
                     break;
                 case 1: // OPENED
-                    // console.log('OPENED', e.target.status, e.target.responseText);
+                    // console.log('OPENED', e.status, e.responseText);
                     break;
                 case 2: // HEADERS_RECEIVED
-                    // console.log('HEADERS_RECEIVED', e.target.status, e.target.responseText);
+                    // console.log('HEADERS_RECEIVED', e.status, e.responseText);
                     break;
                 case 3: // LOADING
-                    // console.log('LOADING', e.target.status, e.target.responseText);
+                    // console.log('LOADING', e.status, e.responseText);
                     break;
                 case 4: // DONE
-                    if (e.target.status === 200) {
-                        var data = e.target.responseText;
+                    if (e.status === 200) {
+                        var data = e.responseText;
 
                         this.miscFiles = this.miscFiles || {};
                         this.miscFiles[fileObj.url] = data;
@@ -671,14 +630,8 @@ define([
                     break;
                 default:
             }
+
         }.bind(this));
-
-        xhr.open(
-            'GET',
-            fileURL
-        );
-
-        xhr.send();
         
     }
     
