@@ -116,7 +116,7 @@ define(function () {
 	}
 
 	function stateChange(e){
-		console.log('STATECHANGE', e);
+
 		switch(e.type){
 			case 'loadedmetadata':
 				if(this.onLoadedMetadata)this.onLoadedMetadata();
@@ -137,7 +137,7 @@ define(function () {
 				if(this.onPaused)this.onPaused();
 				break;
 			default: 
-				console.log('STATE', e);		
+				// console.log('STATE', e);		
 		}
 	}	
 	
