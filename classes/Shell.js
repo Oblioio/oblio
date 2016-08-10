@@ -50,7 +50,10 @@ define([
 
         oblio.app.Footer.init(oblio.app.Footer.show.bind(oblio.app.Footer));
 
-        this.setupMenu();
+        if (oblio.app.dataSrc.sections.main.data.menu) {
+            this.setupMenu();
+        }
+
         this.resize();
 
         callbackFn();
