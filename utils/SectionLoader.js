@@ -601,7 +601,7 @@ define([
         fileObj.done = false;
         fileObj.size = this.getFileSize(fileURL);
         
-        window.getAjax(base_url + template_path, function (e) {
+        window.getAjax(base_url + fileURL, function (e) {
 
             switch (e.readyState) {
                 case 0: // UNSENT
