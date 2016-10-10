@@ -58,7 +58,7 @@ define([
                 TweenLite.to(loaderUIObjects[curr_loaderID].elem, 0.5, {autoAlpha: 1, onComplete: isIn.bind(this)});
                 track.apply(this);
             } else {
-                isIn();
+                isIn.call(this);
             }
         }
 
