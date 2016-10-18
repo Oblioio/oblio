@@ -7,14 +7,22 @@ define([
     'use strict';
 /*jshint validthis:true */
     var Navigation = function (sectionContainerID) {
-        this.shell = sectionContainerID || 'shell';
+        this.shellID = sectionContainerID || 'shell';
+        this.shell = document.getElementById(this.shellID);
         this.verbose = false;
         this.currentSection = '';
         this.previous_section = '';
         this.forceChange = false;
         this.loadlist = [];
         this.arrayExecuter = new oblio.utils.ArrayExecuter(this, 'navigation');
-        this.stepComplete = this.arrayExecuter.stepComplete.bind(this.arrayExecuter);
+        this.stepComplete = function(instant){
+            if(instant){
+                this.arrayExecuter.stepComplete_instant();
+            } else {
+                this.arrayExecuter.stepComplete();
+            }
+        }.bind(this);
+        
         this.active = true;
 
         this.changeOrder = [
@@ -31,22 +39,23 @@ define([
     };
 
     function parseDeepLink(){
-        var base = document.getElementsByTagName('base')[0],
+        var base = document.querySelector('base'),
             url_arr,
-            path_arr;
+            path_arr,
+            curr_url = window.location.href.split('?')[0]; // drop query string
 
         if (base) {
             url_arr = base.href.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
-            path_arr = window.location.href.replace(oblio.settings.basePath, '').split('/');
+            path_arr = curr_url.replace(oblio.settings.basePath, '').split('/');
             this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
             this.currentSubsection = path_arr[1];
         } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
             url_arr = oblio.settings.baseUrl.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
-            path_arr = window.location.href.replace(oblio.settings.basePath, '').split('/');
+            path_arr = curr_url.replace(oblio.settings.basePath, '').split('/');
             this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
             this.currentSubsection = path_arr[1];
         } else {
@@ -66,6 +75,9 @@ define([
         if (this.verbose) {
             console.log('Navigation | changeSection: ' + sectionID + ' | ' + subSectionID);
         }
+
+        var hash = window.location.hash;
+        if (sectionID.match(/^#/)) sectionID = 'home';
 
         // if the user clicked the back or forward button while section is changing, tack the change on to arrayExecuter
         if (!this.active) {
@@ -110,17 +122,17 @@ define([
 
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
                 }
             } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
                 }
             } else {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
                 }
             }
         }
@@ -256,12 +268,10 @@ define([
     // adding htmlData to DOM
     function section_add(sectionID, callbackFn){
         if(this.verbose)console.log('Navigation | section_add: '+sectionID);
-        var shell = (oblio.sections[sectionID] && oblio.sections[sectionID].shell)?oblio.sections[sectionID].shell:"#"+this.shell;
-
+        this.shell = this.shell || document.getElementById(this.shellID);
         if(oblio.sections[sectionID] && !oblio.sections[sectionID].added){
             oblio.sections[sectionID].added = true;
-            oblio.sections[sectionID].htmlElem = $(oblio.utils.SectionLoader.returnSectionOBJ(sectionID).htmlData);
-            $(shell).append(oblio.sections[sectionID].htmlElem);
+            this.shell.insertAdjacentHTML('beforeend', oblio.utils.SectionLoader.returnSectionOBJ(sectionID).htmlData);
         }
 
         callbackFn();
@@ -283,7 +293,7 @@ define([
         }
 
         // only called if section init function wasn't called
-        callbackFn();
+        callbackFn(true);
     }
 
     function section_startup(sectionID, callbackFn){
@@ -300,7 +310,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -310,7 +320,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].show) {
             oblio.sections[sectionID].show(callbackFn);
         } else{
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -326,7 +336,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn();
+            callbackFn(true);
         }
 
     }
@@ -337,7 +347,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].shutdown) {
             oblio.sections[sectionID].shutdown(callbackFn);
         } else {
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -345,10 +355,9 @@ define([
     function section_remove(sectionID, callbackFn){
         if(this.verbose)console.log('Navigation | section_remove '+sectionID);
         if(!oblio.sections[sectionID]){
-            callbackFn();
+            callbackFn(true);
             return;
         }
-        var shell = (oblio.sections[sectionID] && oblio.sections[sectionID].shell)?oblio.sections[sectionID].shell:"#"+this.shell;
 
         if (oblio.sections[sectionID].destroy) {
             oblio.sections[sectionID].destroy();
@@ -357,8 +366,7 @@ define([
 
         if(oblio.sections[sectionID].added){
             oblio.sections[sectionID].added = false;
-            $(oblio.sections[sectionID].htmlElem).remove();
-            oblio.sections[sectionID].htmlElem = null;
+            document.getElementById(sectionID).remove();
         }
 
         callbackFn();
@@ -397,15 +405,6 @@ define([
         if (oblio.sections[sectionID].freeze) {
             oblio.sections[sectionID].freeze();
         }
-
-        /* tween in a cover of some sort */
-
-        // TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 1}});
-
-        /* turn off the sound, and remember if it was off*/
-
-        // freezeSoundWasOn = soundIsOn;
-        // if(freezeSoundWasOn)soundToggle();
     }
 
     // un-freeze site when returning from external link
@@ -415,22 +414,10 @@ define([
         if (oblio.sections[sectionID].unfreeze) {
             oblio.sections[sectionID].unfreeze();
         }
-
-        /* if the sound was on before the freeze, turn it back on */
-        // if(freezeSoundWasOn)soundToggle();
-
-        /* tween out whatever visuals were added, then call done */
-
-        // TweenLite.to($('#freezeSite'), 0.5, {css: {opacity: 0}, onComplete:unFreezeSiteDone});
     }
 
     function unFreezeSiteDone(){
         if(this.verbose)console.log('navigation_unFreezeSiteDone');
-
-        /* turn of display of any overlays */
-
-        // $('#darkenContent').css('display', 'none');
-        // $('#freezeSite').css('display', 'none');
     }
 
 
