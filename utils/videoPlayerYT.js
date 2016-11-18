@@ -3,13 +3,16 @@ define([], function () {
     function videoPlayerYT(div, parameters){
 
         this.div = typeof div === 'string' ? document.getElementById(div) : div;       
-        this.autoplay = 0;
-        this.color = 'white';
-        this.showinfo = 0;
-        this.controls = 1;
-        this.videoSrc = undefined;
-        this.isReady = false;
-        this.isMobile = false;
+        this.autoplay = parameters.autoplay || 0;
+        this.color = parameters.color || 'red';
+        this.showinfo = parameters.showinfo || 1;
+        this.controls = parameters.controls || 1;
+        this.videoSrc = parameters.videoSrc || undefined;
+        this.isReady = parameters.isReady || false;
+        this.isMobile = parameters.isMobile || false;
+        this.relatedVideos = parameters.relatedVideos || 0;
+        this.modestbranding = parameters.modestbranding || 1;
+        this.relatedVideos = parameters.relatedVideos || 0;
 
         if (parameters.tracking === true) {
             // stuff for sending tracking events to ga
@@ -107,12 +110,13 @@ define([], function () {
             videoId: this.videoSrc,
             playerVars: { 
                 'autoplay': this.autoplay,
-                'enablejsapi': 1,
-                'color': this.color,
-                'showinfo': this.showinfo,
+                'enablejsapi': this.enablejsapi,
+                'color': this.color, // this is red or white -- turning it to white disables modestbranding:1
+                'showinfo': this.showinfo, // this.showinfo,
                 'controls': this.controls,
                 'wmode': 'transparent', // fixes z-index problem in ie8
-                'rel': 0 // hide end screen of related videos
+                'rel': this.relatedVideos, // hide end screen of related videos,
+                'modestbranding': this.modestbranding
             },
             events: {
                 'onStateChange': ytStateChange.bind(this),
