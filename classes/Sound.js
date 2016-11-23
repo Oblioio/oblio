@@ -172,7 +172,7 @@ define([
             visibilityChange = 'webkitvisibilitychange';
         }
 
-        window.addEventListener(visibilityChange, function (e) {
+        document.addEventListener(visibilityChange, function (e) {
             if (e.target.hidden === true) {
                 muteAll.apply(this);
             } else if (e.target.hidden === false) {
