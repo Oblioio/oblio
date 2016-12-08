@@ -15,7 +15,14 @@ define([
         this.forceChange = false;
         this.loadlist = [];
         this.arrayExecuter = new oblio.utils.ArrayExecuter(this, 'navigation');
-        this.stepComplete = this.arrayExecuter.stepComplete.bind(this.arrayExecuter);
+        this.stepComplete = function(instant){
+            if(instant){
+                this.arrayExecuter.stepComplete_instant();
+            } else {
+                this.arrayExecuter.stepComplete();
+            }
+        }.bind(this);
+        
         this.active = true;
 
         this.changeOrder = [
@@ -286,7 +293,7 @@ define([
         }
 
         // only called if section init function wasn't called
-        callbackFn();
+        callbackFn(true);
     }
 
     function section_startup(sectionID, callbackFn){
@@ -303,7 +310,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -313,7 +320,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].show) {
             oblio.sections[sectionID].show(callbackFn);
         } else{
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -329,7 +336,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn();
+            callbackFn(true);
         }
 
     }
@@ -340,7 +347,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].shutdown) {
             oblio.sections[sectionID].shutdown(callbackFn);
         } else {
-            callbackFn();
+            callbackFn(true);
         }
     }
 
@@ -348,7 +355,7 @@ define([
     function section_remove(sectionID, callbackFn){
         if(this.verbose)console.log('Navigation | section_remove '+sectionID);
         if(!oblio.sections[sectionID]){
-            callbackFn();
+            callbackFn(true);
             return;
         }
 
