@@ -1,6 +1,19 @@
 {
   "name": "Oblio Utils",
-  "version": "0.0.0",
-  "dependencies": {},
-  "devDependencies": {}
+  "version": "0.0.1",
+  "release": "",
+  "description": "Utilities",
+  "author": "Scott Agrimson",
+  "homepage": "http://oblio.io",
+  "license": "MIT",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Oblioio/Oblio.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
 }
