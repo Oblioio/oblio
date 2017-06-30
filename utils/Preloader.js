@@ -1,5 +1,5 @@
 define([
-        'oblio/utils/SectionLoader'
+        'OblioUtils/utils/SectionLoader'
     ], function () {
 
     var sectionLoader = oblio.utils.SectionLoader,
@@ -37,7 +37,7 @@ define([
     }
             
     function bringIn() {
-        console.log('preloader bringIn');
+        console.log('preloader bringIn', curr_loaderID);
 
         if(!curr_loaderID)return;
 
@@ -65,7 +65,7 @@ define([
     }
 
     function isIn(){
-        console.log('preloader isIn');
+        console.log('preloader isIn', curr_loaderID);
 
         startTracking.apply(this);
     }
@@ -103,7 +103,7 @@ define([
             }
 
             if(curr_loaderID && loaderUIObjects[curr_loaderID].updateLabel !== undefined){
-                //custom label fill                
+                //custom label fill
                 loaderUIObjects[curr_loaderID].updateText(perc);
             } else if (curr_loaderID && loaderUIObjects[curr_loaderID].loaderText !== undefined){
                 //default label fill                
@@ -143,7 +143,7 @@ define([
             
     function isOut(callback){
         console.log('Preloader isOut');
-        
+        loaderUIObjects[curr_loaderID].elem.style.display = 'none';
         if (complete_callback) {
             complete_callback();
         }

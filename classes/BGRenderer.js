@@ -1,6 +1,6 @@
 define([
-        'oblio/classes/Backplate',
-        'oblio/utils/DeviceDetect'
+        'OblioUtils/classes/Backplate',
+        'OblioUtils/utils/DeviceDetect'
     ], function (Backplate) {
 
     'use strict';

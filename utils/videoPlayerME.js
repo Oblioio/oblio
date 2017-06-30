@@ -25,13 +25,14 @@
 		this.isAndroid = false;
 		this.isiPad = false;
 
-		if (Modernizr.video.h264 === "probably") {
-			this.extension = '.mp4';
-		} else if (Modernizr.video.webm === "probably") {
-			this.extension = '.webm';
-		} else {
-			this.extension = '.mp4';
-		}
+		// if (Modernizr.video.h264 === "probably") {
+		// 	this.extension = '.mp4';
+		// } else if (Modernizr.video.webm === "probably") {
+		// 	this.extension = '.webm';
+		// } else {
+		// 	this.extension = '.mp4';
+		// }
+		this.extension = '.mp4';
 
 		//assign a unique id to the player
 		this.playerID = "player_"+(new Date().getTime())+Math.round(Math.random()*999);

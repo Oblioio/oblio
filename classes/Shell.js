@@ -1,7 +1,7 @@
 define([
         'mustache',
-        'oblio/utils/DeviceDetect',
-        'oblio/classes/Menu'
+        'OblioUtils/utils/DeviceDetect',
+        'OblioUtils/classes/Menu'
     ], function (Mustache) {
 
     'use strict';
@@ -48,15 +48,15 @@ define([
         console.log('Shell ready');
         this.initialized = true;
 
-        oblio.app.Footer.init(oblio.app.Footer.show.bind(oblio.app.Footer));
+        oblio.app.Footer.init(function () {
+            oblio.app.Footer.show(callbackFn);
+        });
 
         if (oblio.app.dataSrc.sections.main.data.menu) {
             this.setupMenu();
         }
 
         this.resize();
-
-        callbackFn();
     }
 
     function setLayout () {
@@ -185,11 +185,11 @@ define([
         
         if (oblio.app.Footer)oblio.app.Footer.resize();
 
-        if (oblio.settings.windowDimensions.width < oblio.settings.minWidth || oblio.settings.windowDimensions.height < oblio.settings.minHeight) {
-            this.elements.shell.style.position = 'absolute';
-        } else {
-            this.elements.shell.style.position = 'fixed';
-        }
+        // if (oblio.settings.windowDimensions.width < oblio.settings.minWidth || oblio.settings.windowDimensions.height < oblio.settings.minHeight) {
+        //     this.elements.shell.style.position = 'absolute';
+        // } else {
+        //     this.elements.shell.style.position = 'fixed';
+        // }
 
     }
 

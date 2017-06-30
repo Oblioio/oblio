@@ -79,8 +79,8 @@ define([], function () {
     
     function detectMobile(){        
         var ua = navigator.userAgent.toLowerCase();
-        isAndroid = ua.indexOf("android") > -1;
-        isiPad = navigator.userAgent.match(/iPad/i) !== null;
+        var isAndroid = ua.indexOf("android") > -1;
+        var isiPad = navigator.userAgent.match(/iPad/i) !== null;
         var p = navigator.platform.toLowerCase();
         if( isAndroid || isiPad || p === 'ipad' || p === 'iphone' || p === 'ipod' || p === 'android' || p === 'palm' || p === 'windows phone' || p === 'blackberry'){
             this.isMobile = true;

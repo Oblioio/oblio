@@ -1,7 +1,7 @@
 define([
-        'oblio/classes/BG',
-        'oblio/utils/videoPlayerYT',
-        'oblio/utils/videoPlayerHTML5'
+        'OblioUtils/classes/BG',
+        'OblioUtils/utils/videoPlayerYT',
+        'OblioUtils/utils/videoPlayerHTML5'
     ], function (BG, VideoPlayerYT, VideoPlayerHTML5) {
 
     'use strict';

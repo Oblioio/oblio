@@ -1,7 +1,7 @@
 define([
-        'oblio/classes/BG_Image',
-        'oblio/classes/BG_Video',
-        'oblio/utils/DeviceDetect'
+        'OblioUtils/classes/BG_Image',
+        'OblioUtils/classes/BG_Video',
+        'OblioUtils/utils/DeviceDetect'
     ], function (BG_Image, BG_Video) {
 
     'use strict';
@@ -37,6 +37,7 @@ define([
         for (var imageName in this.images){
             this.images[imageName].img = null;
             if (this.images[imageName].type === 'image') {
+                this.images[imageName].url = oblio.settings.assetsUrl + this.images[imageName].url;
                 oblio.utils.SectionLoader.addSection('background_' + imageName, {
                     files: {
                         images: [this.images[imageName].url]
@@ -82,6 +83,7 @@ define([
 
     function getBg (sectionId, sectionLoaderId, keepPriority) {
         /*jshint validthis:true*/
+
         if(this.verbose)console.log("BGManager | getBg: "+sectionId);
         if(!this.initialized)this.init();
 

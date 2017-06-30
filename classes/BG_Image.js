@@ -1,5 +1,5 @@
 define([
-        'oblio/classes/BG'
+        'OblioUtils/classes/BG'
     ], function (BG) {
 
     'use strict';

@@ -1,6 +1,6 @@
 define([], function () {
 
-    var transformPrefixed = Modernizr.prefixed('transform');
+    var transformPrefixed = 'transform'; // Modernizr.prefixed('transform');
 
     function Scrollbar ( root, options )
         {

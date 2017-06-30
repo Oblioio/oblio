@@ -6,6 +6,17 @@ define([
     /*jshint validthis:true*/
     var that;
 
+    // Test via a getter in the options object to see if the passive property is accessed
+    var supportsPassive = false;
+    try {
+      var opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+          supportsPassive = true;
+        }
+      });
+      window.addEventListener("test", null, opts);
+    } catch (e) {}
+
     var Sound = function (sound) {
         console.log('Sound');
         this.sounds = {};
@@ -154,7 +165,7 @@ define([
         this.btn = document.getElementById(id);
         this.btn.className = this.btn.className.replace(' off', '') + ' on';
         this.btn.addEventListener('click', toggleSound.bind(this), false);
-        this.btn.addEventListener('touchstart', toggleSound.bind(this) , false);
+        this.btn.addEventListener('touchstart', toggleSound.bind(this) , supportsPassive ? { passive: true } : false);
 
         // Set the name of the hidden property and the change event for visibility
         var hidden, visibilityChange; 

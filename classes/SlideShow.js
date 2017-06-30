@@ -1,12 +1,10 @@
 define([
-        'oblio/classes/BG_Image',
-        'oblio/classes/BG_Video',
-        'oblio/classes/Backplate'
+        'OblioUtils/classes/BG_Image',
+        'OblioUtils/classes/BG_Video',
+        'OblioUtils/classes/Backplate'
     ], function (BG_Image, BG_Video, Backplate) {
 
-    var cantransform3d = Modernizr.csstransforms3d,
-        transformPrefixed = cantransform3d ? Modernizr.prefixed('transform') : '',
-        isMobile,
+    var isMobile,
         useFallbackImage,
         slide_ids = {};
 

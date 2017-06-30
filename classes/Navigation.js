@@ -1,11 +1,16 @@
-define([
-        'oblio/utils/SectionLoader',
-        'oblio/utils/ArrayExecuter',
-        'oblio/classes/Menu'
-    ], function () {
+import { ArrayExecuter } from '../../../app/js/oblio/utils/ArrayExecuter.js';
+import 'OblioUtils/utils/SectionLoader';
+import 'OblioUtils/classes/Menu';
+
+// define([
+//         'oblio/utils/SectionLoader',
+//         'oblio/utils/ArrayExecuter',
+//         'oblio/classes/Menu'
+//     ], function () {
 
     'use strict';
 /*jshint validthis:true */
+
     var Navigation = function (sectionContainerID) {
         this.shellID = sectionContainerID || 'shell';
         this.shell = document.getElementById(this.shellID);
@@ -14,15 +19,7 @@ define([
         this.previous_section = '';
         this.forceChange = false;
         this.loadlist = [];
-        this.arrayExecuter = new oblio.utils.ArrayExecuter(this, 'navigation');
-        this.stepComplete = function(instant){
-            if(instant){
-                this.arrayExecuter.stepComplete_instant();
-            } else {
-                this.arrayExecuter.stepComplete();
-            }
-        }.bind(this);
-        
+        this.arrayExecuter = ArrayExecuter(null, 'Navigation');
         this.active = true;
 
         this.changeOrder = [
@@ -39,23 +36,17 @@ define([
     };
 
     function parseDeepLink(){
+        console.log('PARSE');
         var base = document.querySelector('base'),
             url_arr,
             path_arr,
             curr_url = window.location.href.split('?')[0]; // drop query string
 
-        if (base) {
-            url_arr = base.href.split('/');
-            url_arr.pop();
-            oblio.settings.basePath = url_arr.join('/') + '/';
-            path_arr = curr_url.replace(oblio.settings.basePath, '').split('/');
-            this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
-            this.currentSubsection = path_arr[1];
-        } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
+        if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
             url_arr = oblio.settings.baseUrl.split('/');
             url_arr.pop();
             oblio.settings.basePath = url_arr.join('/') + '/';
-            path_arr = curr_url.replace(oblio.settings.basePath, '').split('/');
+            path_arr = curr_url.replace(oblio.settings.baseUrl, '').split('/');
             this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
             this.currentSubsection = path_arr[1];
         } else {
@@ -68,9 +59,13 @@ define([
                 this.currentSection = 'home';
             }
         }
+
     }
 
-    function changeSection(sectionID, subSectionID, completeFn, pop){
+    // function changeSection(sectionID, subSectionID, completeFn, pop){
+    function changeSection(sectionID, subSectionID, completeFn){
+
+        var pop = false;
 
         if (this.verbose) {
             console.log('Navigation | changeSection: ' + sectionID + ' | ' + subSectionID);
@@ -150,37 +145,38 @@ define([
     }
 
     function assembleChangeFunction (completeFn) {
-        var function_arr = [{fn: this.disable, vars: [this.stepComplete]}];
+
+        var function_arr = [{fn: this.disable, vars: null}];
         
         for (var i = 0; i < this.changeOrder.length; i++) {
             switch (this.changeOrder[i]) {
                 case 'load':
-                    function_arr.push({fn: this.load, vars: [this.stepComplete]});
+                    function_arr.push({fn: this.load, scope: this, vars: null});
                     break;
                 case 'section_add_next':
-                    function_arr.push({fn: this.section_add, vars: [this.currentSection, this.stepComplete]});
+                    function_arr.push({fn: this.section_add, scope: this, vars: [this.currentSection]});
                     break;
                 case 'section_init_next':
-                    function_arr.push({fn: this.section_init, vars: [this.currentSection, this.stepComplete]});
+                    function_arr.push({fn: this.section_init, scope: this, vars: [this.currentSection]});
                     break;
                 case 'section_startup_next':
-                    function_arr.push({fn: this.section_startup, vars: [this.currentSection, this.stepComplete]});
+                    function_arr.push({fn: this.section_startup, scope: this, vars: [this.currentSection]});
                     break;
                 case 'section_show_next':
-                    function_arr.push({fn: this.section_show, vars: [this.currentSection, this.stepComplete]});
+                    function_arr.push({fn: this.section_show, scope: this, vars: [this.currentSection]});
                     break;
                 case 'section_hide_prev':
-                    function_arr.push({fn: this.section_hide, vars: [this.previous_section, this.stepComplete]});
+                    function_arr.push({fn: this.section_hide, scope: this, vars: [this.previous_section]});
                     break;
                 case 'section_shutdown_prev':
-                    function_arr.push({fn: this.section_shutdown, vars: [this.previous_section, this.stepComplete]});
+                    function_arr.push({fn: this.section_shutdown, scope: this, vars: [this.previous_section]});
                     break;
                 case 'section_remove_prev':
-                    function_arr.push({fn: this.section_remove, vars: [this.previous_section, this.stepComplete]});
+                    function_arr.push({fn: this.section_remove, scope: this, vars: [this.previous_section]});
                     break;
                 default:
                     if(typeof this.changeOrder[i] === 'function'){
-                        function_arr.push({fn: this.changeOrder[i], vars: [this.currentSection, this.previous_section, this.stepComplete]});
+                        function_arr.push({fn: this.changeOrder[i], scope: this, vars: [this.currentSection, this.previous_section]});
                     } else {
                         console.log('assembleChangeFunction cannot add: ' + this.changeOrder[i]);
                     }
@@ -188,7 +184,7 @@ define([
             }
         }
 
-        function_arr.push({fn: this.enable, vars: [this.stepComplete]});
+        function_arr.push({fn: this.enable, scope: this, vars: null});
         if(completeFn)function_arr.push({fn: completeFn, vars: null});
 
         return function_arr;
@@ -200,8 +196,7 @@ define([
     --------------------------------------------------------------------------------------------------------------------
     */
 
-    function loadQueue(arr){
-        var args = Array.prototype.slice.call(arguments);
+    function loadQueue(...args){
 
         for (var i = 0; i < args.length; i++) {
             if(this.verbose)console.log('Navigation | loadQueue: '+args[i]);
@@ -212,13 +207,22 @@ define([
         }
     }
 
-    function load(callbackFn, sectionsToLoad){
-        if(this.verbose)console.log('Navigation | load');
+    function load(...args){
+        if(this.verbose)console.log('Navigation | load', args);
 
-        // add any sections to the load list
-        var args = Array.prototype.slice.call(arguments);
-        args.shift();
-        if(args.length)this.loadQueue(args);
+        var reject;
+        var resolve;
+
+        // if the last 2 arguments are functions, they should be the resolve and reject functions passed by array executer
+        if (args.length > 1) {
+            if (typeof args[args.length - 2] === 'function') {
+                var reject = args.pop();
+                var resolve = args.pop();
+                // this.loadlist.push(resolve);
+            }
+        }
+
+        if (args.length) this.loadQueue(args);
 
         for (var i = 0; i < args.length; i++) {
             if (oblio.sections[sectionID].prepare) {
@@ -226,22 +230,18 @@ define([
             }
         }
 
-        // add stepComplete
-        this.loadlist.push(this.stepComplete);
-
         var function_arr =  [
             {fn: oblio.utils.SectionLoader.loadSection, scope:oblio.utils.SectionLoader, vars: this.loadlist},
-            {fn: this.load_done, vars: null},
-            {fn: callbackFn, vars: null}
+            {fn: this.load_done, scope: this, vars: [resolve]}
         ];
 
         this.arrayExecuter.execute(function_arr);
     }
 
-    function load_done(){
-        if(this.verbose)console.log('Navigation | load_done');
+    function load_done(callback){
+        console.log('Navigation | load_done', callback);
         this.loadlist = [];
-        this.stepComplete();
+        callback();
     }
 
     /*
@@ -267,6 +267,7 @@ define([
 
     // adding htmlData to DOM
     function section_add(sectionID, callbackFn){
+
         if(this.verbose)console.log('Navigation | section_add: '+sectionID);
         this.shell = this.shell || document.getElementById(this.shellID);
         if(oblio.sections[sectionID] && !oblio.sections[sectionID].added){
@@ -293,7 +294,7 @@ define([
         }
 
         // only called if section init function wasn't called
-        callbackFn(true);
+        callbackFn();
     }
 
     function section_startup(sectionID, callbackFn){
@@ -310,7 +311,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn(true);
+            callbackFn();
         }
     }
 
@@ -320,7 +321,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].show) {
             oblio.sections[sectionID].show(callbackFn);
         } else{
-            callbackFn(true);
+            callbackFn();
         }
     }
 
@@ -336,7 +337,7 @@ define([
                 callbackFn();
             }
         } else{
-            callbackFn(true);
+            callbackFn();
         }
 
     }
@@ -347,7 +348,7 @@ define([
         if (oblio.sections[sectionID] && oblio.sections[sectionID].shutdown) {
             oblio.sections[sectionID].shutdown(callbackFn);
         } else {
-            callbackFn(true);
+            callbackFn();
         }
     }
 
@@ -355,7 +356,7 @@ define([
     function section_remove(sectionID, callbackFn){
         if(this.verbose)console.log('Navigation | section_remove '+sectionID);
         if(!oblio.sections[sectionID]){
-            callbackFn(true);
+            callbackFn();
             return;
         }
 
@@ -383,7 +384,7 @@ define([
         if(this.verbose)console.log('/////// navigation_enable /////////');
         this.active = true;
         if(this.cover)this.cover.style.display = 'none';
-
+        
         if(completeFn)completeFn();
     }
 
@@ -445,5 +446,5 @@ define([
     oblio.classes = oblio.classes || {};
     oblio.classes.Navigation = Navigation;
 
-    return oblio.classes.Navigation;
-});
+    // return oblio.classes.Navigation;
+// });

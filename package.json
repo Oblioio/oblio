@@ -1,19 +1,83 @@
 {
-  "name": "OblioUtils",
-  "version": "0.0.1",
-  "release": "",
-  "description": "Utilities",
-  "author": "Scott Agrimson",
-  "homepage": "http://oblio.io",
-  "license": "MIT",
-  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Oblioio/oblio.git"
+  "_args": [
+    [
+      {
+        "raw": "Oblioio/oblio",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "Oblioio/oblio",
+        "spec": "github:oblioio/oblio",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:oblioio/oblio.git",
+          "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git",
+          "httpsUrl": "git+https://github.com/oblioio/oblio.git",
+          "gitUrl": "git://github.com/oblioio/oblio.git",
+          "shortcut": "github:oblioio/oblio",
+          "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/master/package.json"
+        }
+      },
+      "/Applications/MAMP/htdocs/es6/webpacktest"
+    ]
+  ],
+  "_from": "oblioio/oblio",
+  "_id": "OblioUtils@0.0.1",
+  "_inCache": true,
+  "_location": "/OblioUtils",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "Oblioio/oblio",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "Oblioio/oblio",
+    "spec": "github:oblioio/oblio",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:oblioio/oblio.git",
+      "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git",
+      "httpsUrl": "git+https://github.com/oblioio/oblio.git",
+      "gitUrl": "git://github.com/oblioio/oblio.git",
+      "shortcut": "github:oblioio/oblio",
+      "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/master/package.json"
+    }
   },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git://github.com/oblioio/oblio.git#25ade50b2b06489d98a4bb3a772ab28083e55fca",
+  "_shasum": "b015086094401adb45b1a4e51842eaf30fc0dbb2",
+  "_shrinkwrap": null,
+  "_spec": "Oblioio/oblio",
+  "_where": "/Applications/MAMP/htdocs/es6/webpacktest",
+  "author": {
+    "name": "Scott Agrimson"
+  },
+  "bugs": {
+    "url": "https://github.com/Oblioio/oblio/issues"
+  },
+  "dependencies": {},
+  "description": "Utilities",
+  "devDependencies": {},
+  "gitHead": "25ade50b2b06489d98a4bb3a772ab28083e55fca",
+  "homepage": "http://oblio.io",
   "keywords": [
     "javascript"
   ],
-  "devDependencies": {},
-  "dependencies": {}
+  "license": "MIT",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "name": "OblioUtils",
+  "optionalDependencies": {},
+  "readme": "oblio UTILS\n=====\n\nThis is a set of shared classes and utilities that we use in our sites. The code probably isn't useful to anyone other than us but if you're out there in cyberspace reading this, you're welcome to use anything you find here.\n",
+  "readmeFilename": "README.md",
+  "release": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oblioio/oblio.git"
+  },
+  "version": "0.0.1"
 }

@@ -1,6 +1,6 @@
 define([
-        'oblio/utils/DeviceDetect',
-        'oblio/classes/Menu'
+        'OblioUtils/utils/DeviceDetect',
+        'OblioUtils/classes/Menu'
     ], function () {
 
     'use strict';
@@ -16,13 +16,25 @@ define([
 
         window.addWheelListener(document, mousewheelHandler);
 
-        if (Modernizr.touch) {
+        var firstTouchStart = function (e) {
+            document.removeEventListener('touchstart', firstTouchStart, false);
+
             document.addEventListener('touchstart', touchStartHandler, false);
             document.addEventListener('touchmove', touchMoveHandler, false);
             document.addEventListener('touchend', touchEndHandler, false);
-        } else {
-            window.addEventListener('mousemove', mousemoveHandler, false);
+
+            window.removeEventListener('mousemove', mousemoveHandler, false);
         }
+
+        document.addEventListener('touchstart', firstTouchStart, false);
+
+        // if (Modernizr.touch) {
+        //     document.addEventListener('touchstart', touchStartHandler, false);
+        //     document.addEventListener('touchmove', touchMoveHandler, false);
+        //     document.addEventListener('touchend', touchEndHandler, false);
+        // } else {
+        //     window.addEventListener('mousemove', mousemoveHandler, false);
+        // }
 
         //window.onorientationchange = handleResize;
     }

@@ -1,7 +1,7 @@
 define([
         'mustache',
-        'oblio/utils/DeviceDetect',
-        'oblio/classes/MenuPaginator'
+        'OblioUtils/utils/DeviceDetect',
+        'OblioUtils/classes/MenuPaginator'
     ], function (Mustache) {
 
     'use strict';
