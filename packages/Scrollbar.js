@@ -45,7 +45,12 @@ define([], function () {
         this.oContent[ this.options.axis ] = this.oContent.obj[ 'scroll'+ this.sSize ];
         this.oContent.ratio = this.oViewport[ this.options.axis ] / this.oContent[ this.options.axis ];
 
-        this.oScrollbar.obj.classList.toggle( 'disable', this.oContent.ratio >= 1);
+        // this.oScrollbar.obj.classList.toggle( 'disable', this.oContent.ratio >= 1);
+        if (this.oContent.ratio >= 1) {
+            this.oScrollbar.obj.classList.add('disable');
+        } else {
+            this.oScrollbar.obj.classList.remove('disable');
+        }
 
         this.oTrack[ this.options.axis ] = this.options.size === 'auto' ? this.oViewport[ this.options.axis ] : this.options.size;
         this.oThumb[ this.options.axis ] = Math.min( this.oTrack[ this.options.axis ], Math.max( 0, ( this.options.sizethumb === 'auto' ? ( this.oTrack[ this.options.axis ] * this.oContent.ratio ) : this.options.sizethumb ) ) );

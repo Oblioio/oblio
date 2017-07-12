@@ -20,40 +20,60 @@
         }
       },
       "/Applications/MAMP/htdocs/es6/webpacktest"
+    ],
+    [
+      {
+        "raw": "OblioUtils@github:oblioio/oblio#es6",
+        "scope": null,
+        "escapedName": "OblioUtils",
+        "name": "OblioUtils",
+        "rawSpec": "github:oblioio/oblio#es6",
+        "spec": "github:oblioio/oblio#es6",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:oblioio/oblio.git#es6",
+          "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git#es6",
+          "httpsUrl": "git+https://github.com/oblioio/oblio.git#es6",
+          "gitUrl": "git://github.com/oblioio/oblio.git#es6",
+          "shortcut": "github:oblioio/oblio#es6",
+          "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/es6/package.json"
+        }
+      },
+      "/Applications/MAMP/htdocs/Annabelle/tumblr"
     ]
   ],
-  "_from": "oblioio/oblio",
+  "_from": "oblioio/oblio#es6",
   "_id": "OblioUtils@0.0.1",
   "_inCache": true,
   "_location": "/OblioUtils",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "Oblioio/oblio",
+    "raw": "OblioUtils@github:oblioio/oblio#es6",
     "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "Oblioio/oblio",
-    "spec": "github:oblioio/oblio",
+    "escapedName": "OblioUtils",
+    "name": "OblioUtils",
+    "rawSpec": "github:oblioio/oblio#es6",
+    "spec": "github:oblioio/oblio#es6",
     "type": "hosted",
     "hosted": {
       "type": "github",
-      "ssh": "git@github.com:oblioio/oblio.git",
-      "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git",
-      "httpsUrl": "git+https://github.com/oblioio/oblio.git",
-      "gitUrl": "git://github.com/oblioio/oblio.git",
-      "shortcut": "github:oblioio/oblio",
-      "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/master/package.json"
+      "ssh": "git@github.com:oblioio/oblio.git#es6",
+      "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git#es6",
+      "httpsUrl": "git+https://github.com/oblioio/oblio.git#es6",
+      "gitUrl": "git://github.com/oblioio/oblio.git#es6",
+      "shortcut": "github:oblioio/oblio#es6",
+      "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/es6/package.json"
     }
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "git://github.com/oblioio/oblio.git#25ade50b2b06489d98a4bb3a772ab28083e55fca",
-  "_shasum": "b015086094401adb45b1a4e51842eaf30fc0dbb2",
+  "_resolved": "git://github.com/oblioio/oblio.git#42cabb3fc89fba368f9b62df051158f2963b8f13",
+  "_shasum": "7a3e22f50a7a1713bfec318445097848855ba756",
   "_shrinkwrap": null,
-  "_spec": "Oblioio/oblio",
-  "_where": "/Applications/MAMP/htdocs/es6/webpacktest",
+  "_spec": "OblioUtils@github:oblioio/oblio#es6",
+  "_where": "/Applications/MAMP/htdocs/Annabelle/tumblr",
   "author": {
     "name": "Scott Agrimson"
   },

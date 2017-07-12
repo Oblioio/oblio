@@ -23,6 +23,7 @@ define(function () {
 		// } else {
 		// 	this.extension = '.mp4';
 		// }
+
 		this.extension = '.mp4';
 
 		//assign a unique id to the player

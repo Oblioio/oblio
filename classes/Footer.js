@@ -82,7 +82,7 @@ function showMPAARequirements(){
 
     if (mpaaRequirementsElement) {
         oblio.settings.mpaaShown = true;
-        TweenLite.to(mpaaRequirementsElement, 1, {y: '0px', ease: Power4.easeInOut});
+        TweenLite.fromTo(mpaaRequirementsElement, 1, {y: '0%'}, {y: '-100%', ease: Power4.easeInOut});
 
         window.setTimeout(function () {
             this.hideMPAARequirements();
@@ -93,7 +93,7 @@ function showMPAARequirements(){
 
 function hideMPAARequirements(){
     var mpaaRequirementsElement = document.getElementById('MPAA_requirements');
-    TweenLite.to(mpaaRequirementsElement, 1, {y: mpaaRequirementsElement.offsetHeight + 'px', ease:Power4.easeInOut});
+    TweenLite.to(mpaaRequirementsElement, 1, {y: '100%', ease:Power4.easeInOut});
 }
 
 function initShare (callback) {
@@ -168,7 +168,7 @@ function googlePlusScript (callback) {
         gPlusOne.className = 'g-plusone';
         gPlusOne.setAttribute("size", "small");
         gPlusOne.setAttribute("annotation", "none");
-        gPlusOne.setAttribute("href", oblio.settings.base_url);
+        gPlusOne.setAttribute("data-href", container.getAttribute('data-href'));
         container.appendChild(gPlusOne);
 
         var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
