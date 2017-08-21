@@ -247,11 +247,22 @@ function initScrape (...args) {
 
 }
 
+function getAjax (url, success) {
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState>3 && xhr.status==200) success(xhr);
+    };
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
+    return xhr;
+};
+
 function loadHTML (sectionOBJ, resolve, reject) {
 
     if(this.verbose)console.log('SectionLoader | loadHTML: '+sectionOBJ.htmlPath);
 
-    window.getAjax(sectionOBJ.htmlPath, function (e) {
+    getAjax(sectionOBJ.htmlPath, function (e) {
         switch (e.readyState) {
             case 0: // UNSENT
                 // console.log('UNSENT', e.status, e.responseText);
@@ -367,7 +378,7 @@ function getHTMLString (html_data, html_obj) {
 function loadCSS (sectionOBJ, resolve, reject) {
     if(this.verbose)console.log('SectionLoader | loadCSS: '+sectionOBJ.cssPath);
 
-    window.getAjax(url, function (e) {
+    getAjax(url, function (e) {
         switch (e.readyState) {
             case 0: // UNSENT
                 // console.log('UNSENT', e.status, e.responseText);
@@ -465,8 +476,7 @@ function loadTemplate(sectionOBJ, template, resolve, reject) {
 
     _loadFile.call(this, template_path, 'html', function (data) {
         if (typeof template === 'string') {
-
-            sectionOBJ.template = data.data;
+            sectionOBJ.template = data.data || data;
             sectionOBJ.data.assetsUrl = oblio.settings.assetsUrl;
             sectionOBJ.htmlData = Mustache.render(sectionOBJ.template, sectionOBJ.data);
 
@@ -504,7 +514,7 @@ function _loadFile (url, type, callback) {
         document.body.appendChild(script);
 
     } else {
-        window.getAjax(oblio.settings.assetsUrl + url, function (e) {
+        getAjax(oblio.settings.assetsUrl + url, function (e) {
             switch (e.readyState) {
                 case 0: // UNSENT
                     // console.log('UNSENT', e.status, e.responseText);
@@ -612,39 +622,6 @@ function miscLoadFile(fileObj){
         sectionLoaderState.miscLoaded++;
         sectionLoader.checkComplete();
     }.bind(this));
-    
-    // window.getAjax(fileURL, function (e) {
-
-    //     switch (e.readyState) {
-    //         case 0: // UNSENT
-    //             // console.log('UNSENT', e.status, e.responseText);
-    //             break;
-    //         case 1: // OPENED
-    //             // console.log('OPENED', e.status, e.responseText);
-    //             break;
-    //         case 2: // HEADERS_RECEIVED
-    //             // console.log('HEADERS_RECEIVED', e.status, e.responseText);
-    //             break;
-    //         case 3: // LOADING
-    //             // console.log('LOADING', e.status, e.responseText);
-    //             break;
-    //         case 4: // DONE
-    //             if (e.status === 200) {
-    //                 var data = e.responseText;
-
-    //                 this.miscFiles = this.miscFiles || {};
-    //                 this.miscFiles[fileObj.url] = data;
-
-    //                 fileObj.done = true;
-    //                 sectionLoaderState.miscLoaded++;
-    //                 sectionLoader.checkComplete();
-    //             }
-    //             break;
-    //         default:
-    //     }
-
-    // }.bind(this));
-    
 }
 
 function setFileSize (url, size) {

@@ -120,7 +120,7 @@ define([
         if(!h)h = this.container.offsetHeight;
         this.width = w;
         this.height = h;
-
+console.log(w, h);
         if (this.image1) {
             this.image1.resize(w, h);
         }

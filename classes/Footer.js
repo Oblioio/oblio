@@ -5,6 +5,7 @@ import { ArrayExecuter } from '../../../app/js/oblio/utils/ArrayExecuter.js';
 var data;
 var arrayExecuter = ArrayExecuter(null, 'Footer');
 var clickFn = null;
+var firstClick = true;
 
 // Test via a getter in the options object to see if the passive property is accessed
 var supportsPassive = false;
@@ -60,7 +61,7 @@ function init (callback) {
 
     clickFn = onClick.bind(this);
     // var clickEvent = Modernizr.touch ? 'touchstart' : 'click';
-    this.elements.el.addEventListener('touchstart', clickFn, supportsPassive ? { passive: true } : false);
+    this.elements.el.addEventListener('touchstart', clickFn, false);
     this.elements.el.addEventListener('click', clickFn, true);
 
     var functionArr =  [

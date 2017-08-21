@@ -36,35 +36,33 @@ import 'OblioUtils/classes/Menu';
     };
 
     function parseDeepLink(){
-        console.log('PARSE');
-        var base = document.querySelector('base'),
+        var home = oblio.settings.homeSection || 'home';
+
+        var base = oblio.settings.baseUrl,
             url_arr,
             path_arr,
             curr_url = window.location.href.split('?')[0]; // drop query string
-
         if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '') {
-            url_arr = oblio.settings.baseUrl.split('/');
-            url_arr.pop();
-            oblio.settings.basePath = url_arr.join('/') + '/';
             path_arr = curr_url.replace(oblio.settings.baseUrl, '').split('/');
-            this.currentSection = path_arr[0] !== '' ? path_arr[0] : 'home';
+            this.currentSection = path_arr[0] !== '' ? path_arr[0] : oblio.settings.homeSection;
             this.currentSubsection = path_arr[1];
         } else {
             var hash = window.location.hash;
             if (hash.match('#/')) {
                 path_arr = hash.replace('#/', '').split('/');
-                this.currentSection = path_arr.length > 0 ? path_arr[0] : 'home';
+                this.currentSection = path_arr.length > 0 ? path_arr[0] : oblio.settings.homeSection;
                 this.currentSubsection = path_arr[1];
             } else {
-                this.currentSection = 'home';
+                this.currentSection = oblio.settings.homeSection;
             }
         }
 
     }
 
     // function changeSection(sectionID, subSectionID, completeFn, pop){
-    function changeSection(sectionID, subSectionID, completeFn){
+    function changeSection(sectionID, completeFn){
 
+        var subSectionID = null;
         var pop = false;
 
         if (this.verbose) {
@@ -109,25 +107,15 @@ import 'OblioUtils/classes/Menu';
             };
 
             // if base element exists, make sure we're using that for our pushstate stuff
-            var base = document.getElementsByTagName('base')[0];
-            if (base && oblio.settings.htaccess !== false) {
-                var url_arr = base.href.split('/');
-                url_arr.pop();
-                oblio.settings.basePath = url_arr.join('/') + '/';
-
+            if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
-                }
-            } else if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
-                // pushState breaks fullscreen in chrome, so check if fullscreen first
-                if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + this.currentSection + '/' + this.currentSubsection + hash ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.baseUrl + hash : oblio.settings.baseUrl + this.currentSection + '/' + this.currentSubsection + hash ));
                 }
             } else {
                 // pushState breaks fullscreen in chrome, so check if fullscreen first
                 if( window.innerHeight !== screen.height) {
-                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.basePath + hash : oblio.settings.basePath + '#/' + this.currentSection + '/' + this.currentSubsection ));
+                    history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.baseUrl + hash : oblio.settings.baseUrl + '#/' + this.currentSection + '/' + this.currentSubsection ));
                 }
             }
         }
@@ -147,7 +135,7 @@ import 'OblioUtils/classes/Menu';
     function assembleChangeFunction (completeFn) {
 
         var function_arr = [{fn: this.disable, vars: null}];
-        
+        console.log(this.changeOrder);
         for (var i = 0; i < this.changeOrder.length; i++) {
             switch (this.changeOrder[i]) {
                 case 'load':
@@ -208,7 +196,7 @@ import 'OblioUtils/classes/Menu';
     }
 
     function load(...args){
-        if(this.verbose)console.log('Navigation | load', args);
+        // if(this.verbose)console.log('Navigation | load', args);
 
         var reject;
         var resolve;
@@ -225,8 +213,8 @@ import 'OblioUtils/classes/Menu';
         if (args.length) this.loadQueue(args);
 
         for (var i = 0; i < args.length; i++) {
-            if (oblio.sections[sectionID].prepare) {
-                oblio.sections[sectionID].prepare();
+            if (oblio.sections[this.currentSection].prepare) {
+                oblio.sections[this.currentSection].prepare();
             }
         }
 
@@ -241,7 +229,7 @@ import 'OblioUtils/classes/Menu';
     function load_done(callback){
         console.log('Navigation | load_done', callback);
         this.loadlist = [];
-        callback();
+        if (callback) callback();
     }
 
     /*
