@@ -1,143 +1,142 @@
-define([], function () {
+'use strict';
 
-    var Backplate = function (bg, loaded, resizeContainer, mode) {
+var backplate = function (bg, loaded, resizeContainer, mode) {
 
-        // set loaded to true by default because most backplates will be preloaded with the section
-        this.loaded = loaded === undefined ? true : loaded;
+    // set loaded to true by default because most backplates will be preloaded with the section
+    this.loaded = loaded === undefined ? true : loaded;
 
-        this.elements = {
-            outer: document.createElement('div'),
-            inner: document.createElement('div'),
-            resizeContainer: resizeContainer || false
-        };
-
-        this.container = this.elements.outer;
-
-        if (bg) {
-            changeImage.call(this, bg);
-        }
-
-        this.elements.outer.appendChild(this.elements.inner);
+    this.elements = {
+        outer: document.createElement('div'),
+        inner: document.createElement('div'),
+        resizeContainer: resizeContainer || false
     };
 
-    function changeImage (bg) {
-        if (bg.img === false) {
-            return;
-        }
+    this.container = this.elements.outer;
 
-        if (this.obj) {
-            this.obj.destroy();
-        }
-        
-        this.obj = bg;
-        this.elements.backplate = bg.el;
-
-        this.settings = {
-            h: bg.h,
-            v: bg.v,
-            ratio: this._getRatio(),
-            mode: bg.mode || 'cover'
-        };
-
-        var node = this.elements.inner;
-        while (node.lastChild) {
-            node.removeChild(node.lastChild);
-        }
-
-        this.elements.backplate = bg.el;
-        this.elements.inner.appendChild(this.elements.backplate);
-
-        this.onScreen = true;
-
-        if (!this.loaded) {
-            this.elements.backplate.className = this.elements.backplate.className + ' loading';
-            this.elements.backplate.addEventListener('load', this._onImageLoaded.bind(this));
-        }
+    if (bg) {
+        changeImage.call(this, bg);
     }
 
-    function getRatio () {
-        if (!this.elements.backplate) {
-            return 1;
-        }
-        
-        var ratio = this.elements.backplate.height / this.elements.backplate.width;
+    this.elements.outer.appendChild(this.elements.inner);
+};
 
-        return ratio;
+function changeImage (bg) {
+    if (bg.img === false) {
+        return;
     }
 
-    function onImageLoaded (e) {
+    if (this.obj) {
+        this.obj.destroy();
+    }
+    
+    this.obj = bg;
+    this.elements.backplate = bg.el;
 
-        // this.elements.wrapper.className = this.elements.wrapper.className.replace('loading', '');
-        
-        this.resize();
-        window.setTimeout(this.resize.bind(this), 100);
+    this.settings = {
+        h: bg.h,
+        v: bg.v,
+        ratio: this._getRatio(),
+        mode: bg.mode || 'cover'
+    };
 
-        // Only tween images that are visible and weren't preloaded, so we aren't tweening gallery images that are off screen
-        if (this.onScreen && !this.loaded) {
-            TweenLite.fromTo(this.elements.backplate, 0.5, {alpha: 0}, {alpha: 1});
-        }
+    var node = this.elements.inner;
+    while (node.lastChild) {
+        node.removeChild(node.lastChild);
     }
 
-    function resize(w, h){
-        if (!this.obj) {
-            return;
-        }
+    this.elements.backplate = bg.el;
+    this.elements.inner.appendChild(this.elements.backplate);
 
-        /*jshint validthis:true*/
-        var rect;
-        if (!w || !h) {
-            // if width & height are not passed, use the resizeContainer, if resizeContainer is not provided, use container;
-            rect = this.elements.resizeContainer ? this.elements.resizeContainer.getBoundingClientRect(): this.elements.container.getBoundingClientRect();
-            w = rect.width;
-            h = rect.height;
-        }
+    this.onScreen = true;
 
-        var imgWidth,
-            imgHeight;
+    if (!this.loaded) {
+        this.elements.backplate.className = this.elements.backplate.className + ' loading';
+        this.elements.backplate.addEventListener('load', this._onImageLoaded.bind(this));
+    }
+}
 
-        if (this.obj.dimensions) {
-            imgWidth = this.obj.dimensions.width;
-            imgHeight = this.obj.dimensions.height;
-        } else {
-            imgWidth = this.elements.backplate ? this.elements.backplate.offsetWidth : 0;
-            imgHeight = this.elements.backplate ? this.elements.backplate.offsetHeight : 0;
-        }
+function getRatio () {
+    if (!this.elements.backplate) {
+        return 1;
+    }
+    
+    var ratio = this.elements.backplate.height / this.elements.backplate.width;
 
-        var imgDimensions = {
-            w: imgWidth,
-            h: imgHeight
-        },
-        bg1Ratio = this.settings.mode === 'contain' ? Math.min(w/imgDimensions.w, h/imgDimensions.h) : Math.max(w/imgDimensions.w, h/imgDimensions.h),
-        bg1AdjustedWidth = (imgDimensions.w*bg1Ratio),
-        bg1AdjustedHeight = (imgDimensions.h*bg1Ratio),
+    return ratio;
+}
 
-        paddingW = 0,
-        paddingH = 0,
+function onImageLoaded (e) {
 
-        bgOffsetLeftMin = -paddingW/2,
-        bg1OffsetLeftMax = ((w-bg1AdjustedWidth)+(paddingW/2))-bgOffsetLeftMin,
+    // this.elements.wrapper.className = this.elements.wrapper.className.replace('loading', '');
+    
+    this.resize();
+    window.setTimeout(this.resize.bind(this), 100);
 
-        bgOffsetTopMin = -paddingH/2,
-        bg1OffsetTopMax = ((h-bg1AdjustedHeight)+(paddingH/2))-bgOffsetTopMin;
+    // Only tween images that are visible and weren't preloaded, so we aren't tweening gallery images that are off screen
+    if (this.onScreen && !this.loaded) {
+        TweenLite.fromTo(this.elements.backplate, 0.5, {alpha: 0}, {alpha: 1});
+    }
+}
 
-        if(this.elements.backplate){
-            this.elements.backplate.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.obj.v)).toFixed() + 'px';
-            this.elements.backplate.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.obj.h)).toFixed() + 'px';
-            this.elements.backplate.style.width = bg1AdjustedWidth+'px';
-            this.elements.backplate.style.height = bg1AdjustedHeight+'px';
-        }
-
+function resize(w, h){
+    if (!this.obj) {
+        return;
     }
 
-    Backplate.prototype._onImageLoaded = onImageLoaded;
-    Backplate.prototype._getRatio = getRatio;
+    /*jshint validthis:true*/
+    var rect;
+    if (!w || !h) {
+        // if width & height are not passed, use the resizeContainer, if resizeContainer is not provided, use container;
+        rect = this.elements.resizeContainer ? this.elements.resizeContainer.getBoundingClientRect(): this.container.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+    }
 
-    Backplate.prototype.resize = resize;
-    Backplate.prototype.changeImage = changeImage;
+    var imgWidth,
+        imgHeight;
 
-    window.oblio = window.oblio || {};
-    oblio.classes = oblio.classes || {};
-    oblio.classes.Backplate = Backplate;
+    if (this.obj.dimensions) {
+        imgWidth = this.obj.dimensions.width;
+        imgHeight = this.obj.dimensions.height;
+    } else {
+        imgWidth = this.elements.backplate ? this.elements.backplate.offsetWidth : 0;
+        imgHeight = this.elements.backplate ? this.elements.backplate.offsetHeight : 0;
+    }
 
-    return oblio.classes.Backplate;
-});
+    var imgDimensions = {
+        w: imgWidth,
+        h: imgHeight
+    },
+    bg1Ratio = this.settings.mode === 'contain' ? Math.min(w/imgDimensions.w, h/imgDimensions.h) : Math.max(w/imgDimensions.w, h/imgDimensions.h),
+    bg1AdjustedWidth = (imgDimensions.w*bg1Ratio),
+    bg1AdjustedHeight = (imgDimensions.h*bg1Ratio),
+
+    paddingW = 0,
+    paddingH = 0,
+
+    bgOffsetLeftMin = -paddingW/2,
+    bg1OffsetLeftMax = ((w-bg1AdjustedWidth)+(paddingW/2))-bgOffsetLeftMin,
+
+    bgOffsetTopMin = -paddingH/2,
+    bg1OffsetTopMax = ((h-bg1AdjustedHeight)+(paddingH/2))-bgOffsetTopMin;
+
+    if(this.elements.backplate){
+        this.elements.backplate.style.top = (bgOffsetTopMin+(bg1OffsetTopMax*this.obj.v)).toFixed() + 'px';
+        this.elements.backplate.style.left = (bgOffsetLeftMin+(bg1OffsetLeftMax*this.obj.h)).toFixed() + 'px';
+        this.elements.backplate.style.width = bg1AdjustedWidth+'px';
+        this.elements.backplate.style.height = bg1AdjustedHeight+'px';
+    }
+
+}
+
+backplate.prototype._onImageLoaded = onImageLoaded;
+backplate.prototype._getRatio = getRatio;
+
+backplate.prototype.resize = resize;
+backplate.prototype.changeImage = changeImage;
+
+export var Backplate = {
+    getNew: function () {
+        return new backplate();
+    }
+}

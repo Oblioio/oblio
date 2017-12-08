@@ -1,33 +1,34 @@
-define([
-        'OblioUtils/classes/BG'
-    ], function (BG) {
+import { BG } from 'OblioUtils/classes/BG';
 
-    'use strict';
+'use strict';
 
-    var BG_Image = function (imgObj, onReady) {
-        
-        for (var param in imgObj) {
-            if (imgObj.hasOwnProperty(param)) {
-                this[param] = imgObj[param];
-            }
+var bg_image = function (imgObj, onReady) {
+    
+    for (var param in imgObj) {
+        if (imgObj.hasOwnProperty(param)) {
+            this[param] = imgObj[param];
         }
-        
-        this.el = new Image();
+    }
+    
+    this.el = new Image();
 
-        this.el.style.position = 'absolute';
-        this.el.alt = 'Background';
+    this.el.style.position = 'absolute';
+    this.el.alt = 'Background';
 
-        this.el.addEventListener('load', function () {
-            this.onReady();
-        }.bind(this));
+    this.el.addEventListener('load', function () {
+        this.onReady();
+    }.bind(this));
 
-        this.el.src = imgObj.url;
+    this.el.src = imgObj.url;
 
-        BG.apply(this, [this.el, onReady]);
-    };
+    BG.apply(this, [this.el, onReady]);
+};
 
-    BG_Image.prototype = Object.create(BG.prototype);
-    BG_Image.prototype.constructor = BG_Image;
+bg_image.prototype = Object.create(BG.prototype);
+bg_image.prototype.constructor = bg_image;
 
-    return BG_Image;
-});
+export var BG_Image = {
+    getNew: function (imgObj, onReady) {
+        return new bg_image(imgObj, onReady);
+    }
+}

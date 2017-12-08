@@ -1,147 +1,148 @@
-define([
-        'mustache',
-        'OblioUtils/utils/DeviceDetect',
-        'OblioUtils/classes/MenuPaginator'
-    ], function (Mustache) {
+import Mustache from 'mustache';
+import 'OblioUtils/utils/DeviceDetect';
+import 'OblioUtils/classes/MenuPaginator';
 
-    'use strict';
-    /*jshint validthis: true */
+'use strict';
+/*jshint validthis: true */
 
-    var isMobile = oblio.utils.DeviceDetect.isMobile;
-    var that;
+var isMobile = oblio.utils.DeviceDetect.isMobile;
+var that;
 
-    var Menu = function (data) {
-        this.menuID = data.menuID || '';
-        this.verbose = false;
+var menu = function (data) {
+    this.menuID = data.menuID || '';
+    this.verbose = false;
 
-        that = this;
+    that = this;
 
-        this.template = (data.template)?data.template:'<a rel="{{{rel}}}" class="{{{className}}}" data-type="{{{type}}}" data-section="{{{link}}}" href="{{{link}}}" target="{{{target}}}" style="position: {{{position}}}; font-size: {{{font-size}}};">{{{label}}}</a>';
-
-        this.elements = {
-            el: document.getElementById(data.menuID),
-            wrapper: document.getElementById(data.wrapperID),
-            paginatorEl: document.getElementById(data.paginatorElID)
-        };
-
-        this.menuList = data.menuList;
-        this.menuStyle = data.menuStyle;
+    this.elements = {
+        el: document.getElementById(data.menuID),
+        wrapper: document.getElementById(data.wrapperID),
+        paginatorEl: document.getElementById(data.paginatorElID)
     };
 
-    function init (current_section) {
-        if(this.verbose)console.log('Main Menu | '+this.menuID+' | init');
+    this.menuList = data.menuList;
+    this.menuStyle = data.menuStyle;
+};
 
-        this.isHidden = false;
+function init (current_section) {
+    if(this.verbose)console.log('Main Menu | '+this.menuID+' | init');
 
-        this.elements.listItems = this.elements.el.getElementsByTagName('li');
+    this.isHidden = false;
 
-        this.selectMenuItem(current_section);
+    this.elements.listItems = this.elements.el.getElementsByTagName('li');
 
-        this.hide(true);
+    this.elements.wrapper.classList.add(this.menuStyle);
 
-        this.resize();
+    this.selectMenuItem(current_section);
 
+    this.hide(true);
+
+    this.resize();
+
+}
+
+function selectMenuItem (section_name) {
+    if(this.verbose)console.log('Main Menu | '+this.menuID+' | selectMenuItem: '+section_name);
+
+    var selected = this.elements.el.querySelector('a[data-section="' + section_name + '"]');
+
+    if (!selected) return;
+
+    if (this.elements.selected) {
+        this.elements.selected.className = this.elements.selected.className.replace(/\s?selected/ig, '');
     }
 
-    function selectMenuItem (section_name) {
-        if(this.verbose)console.log('Main Menu | '+this.menuID+' | selectMenuItem: '+section_name);
+    selected.className = selected.className + ' selected';
+    this.elements.selected = selected;
+}
 
-        var selected = this.elements.el.querySelector('a[data-section="' + section_name + '"]');
+function hide (instant) {
+    if(this.verbose)console.log('Main Menu | '+this.menuID+' | hide');
 
-        if (!selected) return;
-
-        if (this.elements.selected) {
-            this.elements.selected.className = this.elements.selected.className.replace(/\s?selected/ig, '');
-        }
-
-        selected.className = selected.className + ' selected';
-        this.elements.selected = selected;
-
+    if (this.isHidden === true) {
+        return;
     }
 
-    function hide (instant) {
-        if(this.verbose)console.log('Main Menu | '+this.menuID+' | hide');
+    var duration = 0.5;
 
-        if (this.isHidden === true) {
-            return;
-        }
-
-        var duration = 0.5;
-
-        if (instant) {
-            duration = 0;
-        }
-
-        this.isHidden = true;
-
-        switch (this.menuStyle) {
-            case 'horizontal':
-                TweenLite.to(this.elements.wrapper, duration, {y: -this.elements.wrapper.offsetHeight + 'px', ease: Power4.easeInOut});
-                break;
-            case 'vertical':
-                TweenLite.to(this.elements.wrapper, duration, {x: -this.elements.wrapper.offsetWidth + 'px', ease: Power4.easeInOut});
-                break;
-            default:
-                console.log('invalid menustyle');
-        }
+    if (instant) {
+        duration = 0;
     }
 
-    function openPopUp(e){
-        e.preventDefault();
-        var vSplit = String(e.target.rel).split(',');
-        window.open(vSplit[0], "_blank", "width="+vSplit[1]+", height="+vSplit[2]);
-        return false;
+    this.isHidden = true;
+
+    switch (this.menuStyle) {
+        case 'horizontal':
+            TweenLite.to(this.elements.wrapper, duration, {y: -this.elements.wrapper.offsetHeight + 'px', ease: Power4.easeInOut});
+            break;
+        case 'vertical':
+            TweenLite.to(this.elements.wrapper, duration, {x: -this.elements.wrapper.offsetWidth + 'px', ease: Power4.easeInOut});
+            break;
+        default:
+            console.log('invalid menustyle');
+    }
+}
+
+function openPopUp(e){
+    e.preventDefault();
+    var vSplit = String(e.target.rel).split(',');
+    window.open(vSplit[0], "_blank", "width="+vSplit[1]+", height="+vSplit[2]);
+    return false;
+}
+
+function getHeight () {
+    return this.menuStyle === 'horizontal' ? this.elements.el.offsetHeight : 0;
+}
+
+function show (instant) {
+    if(this.verbose)console.log('Main Menu | '+this.menuID+' | show');
+
+    if (this.isHidden === false) {
+        return;
     }
 
-    function show (instant) {
-        if(this.verbose)console.log('Main Menu | '+this.menuID+' | show');
+    var duration = 0.5;
 
-        if (this.isHidden === false) {
-            return;
-        }
-
-        var duration = 0.5;
-
-        if (instant) {
-            duration = 0;
-        }
-
-        this.isHidden = false;
-
-        document.getElementById('mainHeader').style.visibility = 'visible';
-
-        switch (this.menuStyle) {
-            case 'horizontal':
-                TweenLite.to(this.elements.wrapper, duration, {y: '0px', ease: Power4.easeInOut});
-                break;
-            case 'vertical':
-                TweenLite.to(this.elements.wrapper, duration, {x: '0px', ease: Power4.easeInOut});
-                break;
-            default:
-                console.log('invalid menustyle');
-        }
+    if (instant) {
+        duration = 0;
     }
 
-    function resize () {
-        if (this.menuPaginator) {
-            this.menuPaginator.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
-        }
+    this.isHidden = false;
 
-        if (this.elements === undefined) {
-            return;
-        }
+    document.getElementById('mainHeader').style.visibility = 'visible';
+
+    switch (this.menuStyle) {
+        case 'horizontal':
+            TweenLite.to(this.elements.wrapper, duration, {y: '0px', ease: Power4.easeInOut});
+            break;
+        case 'vertical':
+            TweenLite.to(this.elements.wrapper, duration, {x: '0px', ease: Power4.easeInOut});
+            break;
+        default:
+            console.log('invalid menustyle');
+    }
+}
+
+function resize () {
+    if (this.menuPaginator) {
+        this.menuPaginator.resize(oblio.settings.windowDimensions.width, oblio.settings.windowDimensions.height);
     }
 
-    Menu.prototype.init = init;
-    Menu.prototype.openPopUp = openPopUp;
-    Menu.prototype.hide = hide;
-    Menu.prototype.show = show;
-    Menu.prototype.resize = resize;
-    Menu.prototype.selectMenuItem = selectMenuItem;
+    if (this.elements === undefined) {
+        return;
+    }
+}
 
-    window.oblio = window.oblio || {};
-    oblio.classes = oblio.classes || {};
-    oblio.classes.Menu = Menu;
+menu.prototype.init = init;
+menu.prototype.getHeight = getHeight;
+menu.prototype.openPopUp = openPopUp;
+menu.prototype.hide = hide;
+menu.prototype.show = show;
+menu.prototype.resize = resize;
+menu.prototype.selectMenuItem = selectMenuItem;
 
-    return oblio.classes.Menu;
-});
+export var Menu = {
+    getNew: function (data) {
+        return new menu(data);
+    }
+}

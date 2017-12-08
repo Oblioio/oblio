@@ -33,14 +33,20 @@ function loadJSON(url, completeFn){
 
 function setupWidgets() {
 
-    for (var widget_name in oblio.app.dataSrc.widgets) {
-        let widget_obj = oblio.app.dataSrc.widgets[widget_name];
+    var section_name,
+        section_obj;
 
-        if (widget_obj.visible === 'false') {
+    for (var widget_name in oblio.app.dataSrc.widgets) {
+        section_obj = oblio.app.dataSrc.widgets[widget_name];
+
+        if (section_obj.visible === 'false') {
             continue;
         }
 
-        this.addSection(widget_name, widget_obj);
+        section_obj.data = section_obj.data || {};
+        section_obj.data.base = oblio.settings.assetsUrl || '';
+
+        this.addSection(widget_name, section_obj);
     }
 }
 
@@ -53,8 +59,11 @@ Section Loader
 var sectionLoaderState = {
         sections: [],
         currentlyLoadingIDs: [],
-        filesToLoad: [],
-        filesLoaded: 0,
+        templatesToLoad: [],
+        imagesToLoad: [],
+        imagesLoaded: 0,
+        miscToLoad: [],
+        miscLoaded: 0,
         loader: null,
         files: {}
     },
@@ -67,49 +76,45 @@ function addLoaderUI (loaderObj) {
 
 function addFiles (section_id, files) {
     var sectionOBJ = returnSectionOBJ(section_id);
-    sectionOBJ.files = sectionOBJ.files || [];
-
+    sectionOBJ.files = sectionOBJ.files || {};
+    // sectionOBJ.addFiles = typeof files === 'String' ? sectionOBJ.addFiles.push(files) : files;
     if (typeof files === 'string') {
-        sectionOBJ.files.push(files);
+        sectionOBJ.addFiles.push(files);
     } else {
         for (var i = files.length - 1; i >= 0; i--) {
-            sectionOBJ.files.push(files[i]);
+            sectionOBJ.addFiles.push(files[i]);
         }
     }
 }
 
+/*
+**  TODO: get rid of widgets here, 
+**  make the only thing stored in 
+**  the section objects the images, 
+**  addfiles, templatePath, and a list 
+**  of paths to required partials --- the templatePaths 
+**  of the sections widgets and widgets widgets
+*/
 function addSection (id, data) {
+    if (sectionExists(id)) throw 'SectionLoader | addSection: section id '+id+' already exists';
 
-    if (sectionExists(id)) throw 'SectionLoader | addSection: section id ' + id + ' already exists';
+    if (instance.verbose) console.log('SectionLoader | addSection: '+id);
 
-    if (instance.verbose) console.log('SectionLoader | addSection: ' + id);
-
-    data.data = data.data || {};
-    data.data.base = oblio.settings.assetsUrl || '';
-
-    let sectionObj = {
+    var files = data.files || {},
+        templatePath = files.templatePath || false,
+        widgets = data.widgets || [], 
+        images = files.images || false,
+        addFiles = files.addFiles || [];
+console.log(id, images);
+    sectionLoaderState.sections.push({
         id: id,
+        images: images,
         data: data.data,
+        templatePath: templatePath,
+        widgets: widgets,
+        addFiles: addFiles,
         loaded: false
-    }
-
-    if (data.widgets) {
-        sectionObj.widgets = data.widgets;
-    }
-
-    if (data.files) {
-        sectionObj.files = sectionObj.files || [];
-        sectionObj.files = sectionObj.files.concat(data.files);
-        console.log(sectionObj.id, sectionObj.files, data.files);
-    }
-
-    if (data.templatePath) {
-        sectionObj.templatePath = data.templatePath;
-        sectionObj.files = sectionObj.files || [];
-        sectionObj.files.push(data.templatePath);
-    }
-
-    sectionLoaderState.sections.push(sectionObj);
+    });
 }
 
 function sectionExists (id) {
@@ -169,28 +174,91 @@ function initScrape (...args) {
 
     //check is section is already loaded
     if (sectionOBJ.loaded === true) {
-        if (this.verbose) console.log('SectionLoader | this.loadSection: ' + id + ' is already loaded');
+        if(this.verbose)console.log('SectionLoader | this.loadSection: ' + id + ' is already loaded');
         reject(true);
         return;
     }
 
     sectionLoaderState.currentlyLoadingIDs.push(sectionOBJ.id);
 
-    sectionOBJ.partials = getWidgets(sectionOBJ);
+    widgets = getWidgets(sectionOBJ);
 
-    if (sectionOBJ.templatePath) sectionLoaderState.filesToLoad.push(sectionOBJ.templatePath);
-    sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.partials.map(partial => returnSectionOBJ(partial).templatePath).filter(path => path !== undefined));
-    if (sectionOBJ.files) sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.files);
+    var function_arr =  [];
+    var numWidgets = widgets.length - 1;
+    var widget = sectionOBJ;
 
-    resolve();
+    do {
+        // add any templates
+        addTemplates.call(this, widget);
 
+        //add any addFiles that may have been passed in prepareLoad()
+        addNewFiles.call(this, widget);
+
+        //add any images from the json
+        addImages.call(this, widget);
+
+        if (widget.templatePath) {
+            console.log(widget.templatePath);
+            function_arr.push({scope: this, fn: this.loadTemplate,  vars: [widget, widget.templatePath]});
+        }
+
+        for (var i = sectionLoaderState.templatesToLoad.length - 1; i >= 0; i--) {
+            console.log(sectionLoaderState.templatesToLoad[i]);
+            function_arr.push({scope: this, fn: this.loadTemplate,  vars: [widget, sectionLoaderState.templatesToLoad[i]]});
+        }
+
+        widget = widgets[numWidgets];
+        numWidgets--;
+    }
+    while (widget !== undefined);
+
+    function_arr.push({fn: resolve,   vars: null});
+
+    arrayExecuter.execute(function_arr);
+
+}
+
+function addTemplates (sectionOBJ) {
+    console.log(sectionOBJ);
+    for ( var partial in sectionOBJ.partials ) {
+        if (sectionOBJ.partials.hasOwnProperty(partial)) {
+            sectionLoaderState.templatesToLoad.push({template_name: partial, template_path: sectionOBJ.partials[partial]});
+        }
+    }
+}
+
+function addNewFiles (sectionOBJ) {
+    let numAddFiles = sectionOBJ.addFiles.length;
+
+    while (numAddFiles--){
+        let fileURL = sectionOBJ.addFiles[numAddFiles];
+
+        if(fileURL.indexOf('.gif') > 0 || fileURL.indexOf('.jpg') > 0 || fileURL.indexOf('.jpeg') > 0 || fileURL.indexOf('.png') > 0){
+            addImage.call(this, fileURL);               
+        } else {
+            addMisc.call(this, fileURL);
+        }
+    }
+}
+
+function addImages (sectionOBJ) {
+    let numImages = sectionOBJ.images.length;
+
+    while (numImages--){
+        let fileURL = sectionOBJ.images[numImages];
+
+        if(fileURL.indexOf('.gif') > 0 || fileURL.indexOf('.jpg') > 0 || fileURL.indexOf('.jpeg') > 0 || fileURL.indexOf('.png') > 0){
+            addImage.call(this, fileURL);
+        } else {
+            if(this.verbose)console.log('SectionLoader | not a supported fileType: '+fileURL);
+        }
+    }
 }
 
 // recursively get all of the object's child widgets
 function getWidgets (sectionObj) {
     var widgetNames = sectionObj.widgets,
-        widgets = [],
-        partials = [];
+        widgets = [];
 
     if (!widgetNames || widgetNames.length === 0) return [];
 
@@ -198,19 +266,12 @@ function getWidgets (sectionObj) {
     for (var i = widgetNames.length - 1; i >= 0; i--) {
         widget = sectionLoader.returnSectionOBJ(widgetNames[i]);
         if (widget) {
-            // widgets.push(widget);
-            // widgets = widgets.concat(getWidgets(widget));
-            if (partials.indexOf(widgetNames[i]) === -1) partials.push(widgetNames[i]);
-
-            let childWidgets = getWidgets(widget);
-
-            for (var j = childWidgets.length - 1; j >= 0; j--) {
-                if (partials.indexOf(childWidgets[j]) === -1) partials.push(childWidgets[j]);
-            }
+            widgets.push(widget);
+            widgets = widgets.concat(getWidgets(widget));
         }
     }
 
-    return partials;
+    return widgets;
 }
 
 function getAjax (url, success) {
@@ -241,6 +302,35 @@ function isDuplicate (fileURL){
     }
 
     return false;
+}
+
+function loadTemplate(sectionOBJ, template, resolve, reject) {
+    var template_path = typeof template === 'string' ? template : template.template_path;
+
+console.log(sectionOBJ, sectionLoaderState);
+
+    if(this.verbose)console.log('SectionLoader | loadTemplate: ', sectionOBJ.id, template_path);
+
+    _loadFile.call(this, template_path, 'html', function (data) {
+        if (typeof template === 'string') {
+            sectionOBJ.template = data.data || data;
+            sectionOBJ.data.assetsUrl = oblio.settings.assetsUrl;
+            sectionOBJ.htmlData = Mustache.render(sectionOBJ.template, sectionOBJ.data);
+
+            // preload images from html
+            var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
+            var results;
+
+            while ((results = img_pattern.exec(sectionOBJ.htmlData)) !== null)
+            {
+                addImage.call(this, results[1]);
+            }
+        } else {
+            sectionOBJ.partials[template.template_name] = data;
+        }
+
+        resolve();
+    }.bind(this));
 }
 
 function _loadFile (url, type, callback) {
@@ -293,9 +383,15 @@ function _loadFile (url, type, callback) {
 
 function loadFiles (resolve, reject){
 
+    var numImages = sectionLoaderState.imagesToLoad.length,
+        numMisc = sectionLoaderState.miscToLoad.length,
+        fileURL,
+        newImage,
+        that = this;
+
     sectionLoader.filesLoadedCallback = resolve;
 
-    if (sectionLoaderState.filesToLoad.length < 1) {
+    if ((numImages + numMisc) < 1) {
         this.complete();
         if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
             oblio.settings.prepreloader.goOut();
@@ -303,54 +399,105 @@ function loadFiles (resolve, reject){
         return;
     }
 
-    var i = sectionLoaderState.filesToLoad.length,
-        filesToLoad = sectionLoaderState.filesToLoad;
-
     if (sectionLoaderState.loader) {
         sectionLoaderState.loader.bringIn();
     }
 
-    while (i--) {
-        let url = filesToLoad[i];
+    while (numImages--) {
+        loadImage.call(this, sectionLoaderState.imagesToLoad[numImages]);
+    }
 
-        if (url.indexOf('.gif') > 0 || url.indexOf('.jpg') > 0 || url.indexOf('.jpeg') > 0 || url.indexOf('.png') > 0) {
-            loadImage.call(this, url, fileLoadComplete(url));               
-        } else {
-            _loadFile.call(this, url, 'misc', fileLoadComplete(url));
-        }
+    while(numMisc--){
+        miscLoadFile.call(this, sectionLoaderState.miscToLoad[numMisc]);
     }
 }
 
-function fileLoadComplete (url) {
-    return function (data) {
-        if (data) sectionLoaderState.files[url] = data;
-        sectionLoaderState.filesLoaded++;
-        sectionLoader.checkComplete();
+function addImage(fileURL){
+    if (!isDuplicate(fileURL)) {
+        var index = sectionLoaderState.imagesToLoad.length;
+        sectionLoaderState.imagesToLoad.push({url: fileURL, index: index});
     }
 }
 
-function loadImage(url, callback){
-    if(this.verbose)console.log('SectionLoader | load image: ' + url);
+function loadImage(fileObj){
+    if(this.verbose)console.log('SectionLoader | load image: '+fileObj.url);
+    var fileURL = fileObj.url;
+
+    fileObj.done = false;
+    fileObj.size = this.getFileSize(fileURL);
 
     var newImage = new Image();
-
+    newImage.alt = String(fileObj.index);
     newImage.addEventListener('load', function () {
-        if(this.verbose)console.log('SectionLoader | image Loaded: ' + url);
-        if (callback) callback();
+        if(this.verbose)console.log('SectionLoader | image Loaded: '+fileObj.url);
+
+        fileObj.done = true;
+        sectionLoaderState.imagesLoaded++;
+        sectionLoader.checkComplete();
     }.bind(this));
 
     newImage.addEventListener('error', this.fileError);
 
-    newImage.src = url;
+    newImage.src = fileURL;
+}
+
+function addMisc (fileURL) {
+    if (!this.isDuplicate(fileURL)) {
+        sectionLoaderState.miscToLoad.push({url:fileURL});
+    }
+}
+
+function miscLoadFile(fileObj){
+    if(this.verbose)console.log('SectionLoader | xhr load: '+fileObj.url);
+
+    var fileURL = fileObj.url;
+
+    fileObj.perc = 0;
+    fileObj.done = false;
+    fileObj.size = this.getFileSize(fileURL);
+
+    _loadFile.call(this, fileURL, 'misc', function (data) {
+        this.miscFiles = this.miscFiles || {};
+        this.miscFiles[fileObj.url] = data.data || data; // if jsonp, data is an object - otherwise, it's just a string containing the file content
+
+        fileObj.done = true;
+        sectionLoaderState.miscLoaded++;
+        sectionLoader.checkComplete();
+    }.bind(this));
+}
+
+function setFileSize (url, size) {
+    this.filesizes.push({url:url, size:size});
+}
+
+function getFileSize (url) {
+    for (var f = 0; f < this.filesizes.length; f++) {
+        if (url == this.filesizes[f].url) {
+            return this.filesizes[f].size;
+        }
+    }
+    return this.defaultSize;
 }
 
 function getPerc () {
-
-    var loaded = sectionLoaderState.filesLoaded;
-    var totalLoad = sectionLoaderState.filesToLoad.reduce(function (acc, curr) {
-        return acc++;
-    }, 0);
-
+    var loaded = 0;
+    var totalLoad = 0;
+    for (var m=0; m<sectionLoaderState.miscToLoad.length; m++) {
+        totalLoad += sectionLoaderState.miscToLoad[m].size;
+        if(sectionLoaderState.miscToLoad[m].done){
+            loaded += sectionLoaderState.miscToLoad[m].size;
+        } else {
+            loaded += sectionLoaderState.miscToLoad[m].size*sectionLoaderState.miscToLoad[m].perc;
+        }
+    }
+    for (var i=0; i<sectionLoaderState.imagesToLoad.length; i++) {
+        totalLoad += sectionLoaderState.imagesToLoad[i].size;
+        if(sectionLoaderState.imagesToLoad[i].done){
+            loaded += sectionLoaderState.imagesToLoad[i].size;
+        }
+    }
+    
+    // console.log(loaded+ ' / '+totalLoad);
     return loaded/totalLoad;
 }
 
@@ -359,19 +506,20 @@ function fileError (e) {
 }
 
 function checkComplete(){
-    if (sectionLoaderState.filesLoaded >= sectionLoaderState.filesToLoad.length) {
+    // console.log('checkComplete '+sectionLoaderState.imagesLoaded+' vs. '+sectionLoaderState.imagesToLoad.length+' | '+sectionLoaderState.miscLoaded+' vs. '+sectionLoaderState.miscToLoad.length);
+    if (sectionLoaderState.imagesLoaded >= sectionLoaderState.imagesToLoad.length && sectionLoaderState.miscLoaded >= sectionLoaderState.miscToLoad.length) {
         this.complete();
     }
 }
 
 function complete () {
-    if (this.verbose) {
+    if(this.verbose){
         console.log('SectionLoader | complete: ');
         console.log('******************************************* ');
         console.log('******************************************* ');
         console.log('******************************************* ');
     }
-
+    
     var numSectionsLoaded = sectionLoaderState.currentlyLoadingIDs.length;
     while (numSectionsLoaded--) {
         var sectionID = sectionLoaderState.currentlyLoadingIDs[numSectionsLoaded];
@@ -380,33 +528,17 @@ function complete () {
     }
 
     sectionLoaderState.currentlyLoadingIDs = [];
-    sectionLoaderState.filesToLoad = [];
-    sectionLoaderState.filesLoaded = 0;
+    sectionLoaderState.imagesToLoad = [];
+    sectionLoaderState.imagesLoaded = 0;
+    sectionLoaderState.miscToLoad = [];
+    sectionLoaderState.miscLoaded = 0;
 
     if (sectionLoaderState.loader && !sectionLoaderState.loader.finished) {
         sectionLoaderState.loader.complete(sectionLoader.filesLoadedCallback);
+        // sectionLoaderState.loader.complete(arrayExecuter.stepComplete_instant.bind(arrayExecuter));
     } else {
-        sectionLoader.filesLoadedCallback();
+        sectionLoader.filesLoadedCallback()
     }
-}
-
-function getSectionTemplates (id) {
-    var data = returnSectionOBJ(id);
-
-    return sectionLoaderState.sections.reduce(function (obj, section) {
-        if (section.id === id) {
-            let template = sectionLoaderState.files[section.templatePath];
-            let partials = section.partials.reduce(function (partialsObj, partialName) {
-                let partial = returnSectionOBJ(partialName);
-                obj.data[partialName] = partial.data;
-                partialsObj[partialName] = sectionLoaderState.files[partial.templatePath];
-                return partialsObj;
-            }, {});
-            obj.template = template;
-            obj.partials = partials;
-        }
-        return obj;
-    }, {data: data});
 }
 
 function returnSectionOBJ (id) {
@@ -438,7 +570,7 @@ var sectionLoader = {
     loadSection: loadSection,
     initScrape: initScrape,
     // loadHTML: loadHTML,
-    // loadTemplate: loadTemplate,
+    loadTemplate: loadTemplate,
     // htmlLoaded: htmlLoaded,
     // loadCSS: loadCSS,
     // cssLoaded: cssLoaded,
@@ -446,19 +578,18 @@ var sectionLoader = {
     // jsLoaded: jsLoaded,
     isDuplicate: isDuplicate,
     loadFiles: loadFiles,
-    // filesizes: [],
-    // defaultSize: 100,
-    // setFileSize: setFileSize,
-    // getFileSize: getFileSize,
+    filesizes: [],
+    defaultSize: 100,
+    setFileSize: setFileSize,
+    getFileSize: getFileSize,
     getPerc: getPerc,
     fileError: fileError,
     checkComplete: checkComplete,
     complete: complete,
     returnSectionOBJ: returnSectionOBJ,
-    getSectionTemplates: getSectionTemplates,
     getSectionLoaderState: getSectionLoaderState,
     loadImage: loadImage,
-    // miscLoadFile: miscLoadFile,
+    miscLoadFile: miscLoadFile,
     arrayExecuter: arrayExecuter,
     getWidgets: getWidgets
 };

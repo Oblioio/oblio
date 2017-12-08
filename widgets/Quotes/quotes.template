@@ -1,0 +1,25 @@
+<aside class="quotes_module">
+    {{#quotes}}                
+        {{#visible}}
+        <blockquote>
+            {{#quote}}
+            {{#visible}}
+                <p style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</p>
+            {{/visible}}
+            {{/quote}}
+            <footer style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">
+                {{#author}}
+                {{#visible}}
+                    <p class="author">{{{text}}}</p>
+                {{/visible}}
+                {{/author}}
+                {{#publication}}
+                {{#visible}}
+                    <p class="publication">{{{text}}}</p>
+                {{/visible}}
+                {{/publication}}
+            </footer>
+        </blockquote>
+        {{/visible}}
+    {{/quotes}}
+</aside>

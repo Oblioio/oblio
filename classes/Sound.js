@@ -163,6 +163,8 @@ define([
     function initSoundButton (id) {
         id = id || 'soundBars';
         this.btn = document.getElementById(id);
+        if (!this.btn) return;
+
         this.btn.className = this.btn.className.replace(' off', '') + ' on';
         this.btn.addEventListener('click', toggleSound.bind(this), false);
         this.btn.addEventListener('touchstart', toggleSound.bind(this) , supportsPassive ? { passive: true } : false);

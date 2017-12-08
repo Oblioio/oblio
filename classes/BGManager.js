@@ -1,217 +1,215 @@
-define([
-        'OblioUtils/classes/BG_Image',
-        'OblioUtils/classes/BG_Video',
-        'OblioUtils/utils/DeviceDetect'
-    ], function (BG_Image, BG_Video) {
+import { BG_Image } from 'OblioUtils/classes/BG_Image';
+import { BG_Video } from 'OblioUtils/classes/BG_Video';
+import 'OblioUtils/utils/DeviceDetect';
+import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 
-    'use strict';
+'use strict';
 
-    var BGManager = function (renderer, data) {
-        console.log("BGManager | "+data);
-        this.initialized = false;
-        this.verbose = false;
-        this.renderer = renderer;
+var sectionLoader = SectionLoader.getInstance();
 
-        this.sections = data.sections;
-        this.images = data.images;
-    };
+var bgManager = function () {
+    console.log("bgManager");
+    this.initialized = false;
+    this.verbose = false;
+};
 
-    function init(){
-        /*jshint validthis:true*/
-        if(this.verbose)console.log("BGManager | init");
+function init (renderer, data) {
+    /*jshint validthis:true*/
+    if(this.verbose)console.log("bgManager | init");
 
-        this.initialized = true;
-        this.currBgObj = null;
+    this.renderer = renderer;
 
-        var sectionsLength = this.sections.length;
+    this.sections = data.sections;
+    this.images = data.images;
 
-        // randomize the imgIDs array of each section
-        while (sectionsLength--) {
-            var sectionObj = this.sections[sectionsLength];
-            if (sectionObj.imgIDs && sectionObj.randomize !== false) {
-                sectionObj.imgIDs = randomizeArray(sectionObj.imgIDs);
-            }
-        }
+    this.initialized = true;
+    this.currBgObj = null;
 
-        // create sectionLoader entries for each image
-        for (var imageName in this.images){
-            this.images[imageName].img = null;
-            if (this.images[imageName].type === 'image') {
-                this.images[imageName].url = oblio.settings.assetsUrl + this.images[imageName].url;
-                oblio.utils.SectionLoader.addSection('background_' + imageName, {
-                    files: {
-                        images: [this.images[imageName].url]
-                    }
-                });
-            }
-        }
+    var sectionsLength = this.sections.length;
 
-    }
-
-    function returnSectionObj (id) {
-        /*jshint validthis:true*/
-        if(this.verbose)console.log("BGManager | returnSectionObj: "+id);
-        var sectionObj = null,
-            numSections = this.sections.length;
-
-        while (numSections--) {
-            if (this.sections[numSections].id === id) {
-                sectionObj = this.sections[numSections];
-                break;
-            }
-        }
-
-        return sectionObj;
-    }
-
-    function deprioritize (imgID) {
-        /*jshint validthis:true*/
-        if(this.verbose)console.log("BGManager | deprioritize: "+imgID);
-        var sectionsLength = this.sections.length,
-            numIDs;
-
-        // if image exists in any sections... move it to the end of their queue
-        while (sectionsLength--) {
-            numIDs = (this.sections[sectionsLength].imgIDs) ? this.sections[sectionsLength].imgIDs.length : 0;
-            while (numIDs--) {
-                if (this.sections[sectionsLength].imgIDs[numIDs] === imgID) {
-                    this.sections[sectionsLength].imgIDs.push(this.sections[sectionsLength].imgIDs.splice(numIDs,1)[0]);
-                }
-            }
+    // randomize the imgIDs array of each section
+    while (sectionsLength--) {
+        var sectionObj = this.sections[sectionsLength];
+        if (sectionObj.imgIDs && sectionObj.randomize !== false) {
+            sectionObj.imgIDs = randomizeArray(sectionObj.imgIDs);
         }
     }
 
-    function getBg (sectionId, sectionLoaderId, keepPriority) {
-        /*jshint validthis:true*/
-
-        if(this.verbose)console.log("BGManager | getBg: "+sectionId);
-        if(!this.initialized)this.init();
-
-        var sectionObj = this.returnSectionObj(sectionId),
-            imgID;
-
-        // check that section exists and has images
-        if (!sectionObj || !sectionObj.imgIDs || sectionObj.imgIDs.length <= 0) {
-            return false;
+    // create sectionLoader entries for each image
+    for (var imageName in this.images){
+        this.images[imageName].img = null;
+        if (this.images[imageName].type === 'image') {
+            this.images[imageName].url = oblio.settings.assetsUrl + this.images[imageName].url;
+            sectionLoader.addSection('background_' + imageName, {
+                files: [this.images[imageName].url]
+            });
         }
+    }
+}
 
-        imgID = sectionObj.imgIDs[0];
+function returnSectionObj (id) {
+    /*jshint validthis:true*/
+    if(this.verbose)console.log("bgManager | returnSectionObj: "+id);
+    var sectionObj = null,
+        numSections = this.sections.length;
 
-        if(!keepPriority)this.deprioritize(imgID);
-
-        //return id of sectionLoader obj to load
-        return (sectionLoaderId) ? 'background_'+imgID : imgID;
+    while (numSections--) {
+        if (this.sections[numSections].id === id) {
+            sectionObj = this.sections[numSections];
+            break;
+        }
     }
 
-    function changeBg(sectionId, instant, callbackFn){
-        /*jshint validthis:true*/
-        var bgId = this.getBg(sectionId, false, false),
-            imgObj = this.images[bgId],
-            loadCatch = false,
-            that = this;
+    return sectionObj;
+}
 
-        if (bgId === false) {
-            imgObj = {
-                img: false
-            };
+function deprioritize (imgID) {
+    /*jshint validthis:true*/
+    if(this.verbose)console.log("bgManager | deprioritize: "+imgID);
+    var sectionsLength = this.sections.length,
+        numIDs;
+
+    // if image exists in any sections... move it to the end of their queue
+    while (sectionsLength--) {
+        numIDs = (this.sections[sectionsLength].imgIDs) ? this.sections[sectionsLength].imgIDs.length : 0;
+        while (numIDs--) {
+            if (this.sections[sectionsLength].imgIDs[numIDs] === imgID) {
+                this.sections[sectionsLength].imgIDs.push(this.sections[sectionsLength].imgIDs.splice(numIDs,1)[0]);
+            }
         }
+    }
+}
 
-        if (imgObj === this.currBgObj) {
-            if(callbackFn)callbackFn();
-            return;
-        }
+function getBg (sectionId, sectionLoaderId, keepPriority) {
+    /*jshint validthis:true*/
 
-        this.currBgObj = imgObj;
+    if(this.verbose)console.log("bgManager | getBg: "+sectionId);
+    if(!this.initialized)this.init();
 
-        if (imgObj.img === false || (imgObj.img && imgObj.loaded)) {
-            this.renderer.changeBg(imgObj, instant, callbackFn);
+    var sectionObj = this.returnSectionObj(sectionId),
+        imgID;
+
+    // check that section exists and has images
+    if (!sectionObj || !sectionObj.imgIDs || sectionObj.imgIDs.length <= 0) {
+        return false;
+    }
+
+    imgID = sectionObj.imgIDs[0];
+
+    if(!keepPriority)this.deprioritize(imgID);
+
+    //return id of sectionLoader obj to load
+    return (sectionLoaderId) ? 'background_'+imgID : imgID;
+}
+
+function changeBg(sectionId, instant, callbackFn){
+    /*jshint validthis:true*/
+    var bgId = this.getBg(sectionId, false, false),
+        imgObj = this.images[bgId],
+        loadCatch = false,
+        that = this;
+
+    if (bgId === false) {
+        imgObj = {
+            img: false
+        };
+    }
+
+    if (imgObj === this.currBgObj) {
+        if(callbackFn)callbackFn();
+        return;
+    }
+
+    this.currBgObj = imgObj;
+
+    if (imgObj.img === false || (imgObj.img && imgObj.loaded)) {
+        this.renderer.changeBg(imgObj, instant, callbackFn);
+    } else {
+        if (imgObj.type === 'image') {
+
+            imgObj = BG_Image.getNew(imgObj, function () {
+                if(loadCatch)return;
+                loadCatch = true;
+                imgObj.loaded = true;
+                if(that.verbose)console.log("bgManager | image loaded: "+imgObj.url);
+                that.renderer.changeBg(imgObj, instant, callbackFn);
+            });
+
         } else {
-            if (imgObj.type === 'image') {
 
-                imgObj = new BG_Image(imgObj, function () {
+            if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
+                imgObj.url = imgObj.fallback;
+                imgObj = BG_Image.getNew(imgObj, function () {
                     if(loadCatch)return;
                     loadCatch = true;
                     imgObj.loaded = true;
-                    if(that.verbose)console.log("BGManager | image loaded: "+imgObj.url);
+                    if(that.verbose)console.log("bgManager | image loaded: "+imgObj.url);
                     that.renderer.changeBg(imgObj, instant, callbackFn);
                 });
-
             } else {
-
-                if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
-                    imgObj.url = imgObj.fallback;
-                    imgObj = new BG_Image(imgObj, function () {
-                        if(loadCatch)return;
-                        loadCatch = true;
-                        imgObj.loaded = true;
-                        if(that.verbose)console.log("BGManager | image loaded: "+imgObj.url);
-                        that.renderer.changeBg(imgObj, instant, callbackFn);
-                    });
-                } else {
-                    imgObj = new BG_Video(imgObj, function () {
-                        if(loadCatch)return;
-                        loadCatch = true;
-                        this.loaded = true;
-                        if(that.verbose)console.log("BGManager | image loaded: ", this);
-                        that.renderer.changeBg(this, instant, callbackFn);
-                        oblio.app.Shell.resize();
-                    }, this.renderer.resize);
-                }
+                imgObj = BG_Video.getNew(imgObj, function () {
+                    if(loadCatch)return;
+                    loadCatch = true;
+                    this.loaded = true;
+                    if(that.verbose)console.log("bgManager | image loaded: ", this);
+                    that.renderer.changeBg(this, instant, callbackFn);
+                    // oblio.app.Shell.resize();
+                }, this.renderer.resize);
             }
         }
     }
+}
 
-    function preloadNextBg(sectionId, callbackFn){
-        /*jshint validthis:true*/
-        var bgId = this.getBg(sectionId, false, true);
-        if(!bgId)return;
-        var imgObj = this.images[bgId];
+function preloadNextBg(sectionId, callbackFn){
+    /*jshint validthis:true*/
+    var bgId = this.getBg(sectionId, false, true);
+    if(!bgId)return;
+    var imgObj = this.images[bgId];
 
-        if(!imgObj.img) {
-            imgObj.img = new Image();
-            imgObj.img.alt = 'Background';
+    if(!imgObj.img) {
+        imgObj.img = new Image();
+        imgObj.img.alt = 'Background';
 
-            imgObj.img.addEventListener('load', function () {
-                imgObj.loaded = true;
-                if(callbackFn)callbackFn();
-            });
+        imgObj.img.addEventListener('load', function () {
+            imgObj.loaded = true;
+            if(callbackFn)callbackFn();
+        });
 
-            imgObj.img.src = imgObj.url;
-        }
+        imgObj.img.src = imgObj.url;
+    }
+}
+
+function clear(){
+    /*jshint validthis:true*/
+    this.renderer.clear();
+}
+
+function randomizeArray(arr){
+    var newArr = [],
+        arrLength = arr.length;
+
+    while(arrLength--){
+        var aIndex = Math.floor(Math.random()*arr.length);
+        var aItem = arr.splice(aIndex,1)[0];
+
+        newArr.unshift(aItem);
     }
 
-    function clear(){
-        /*jshint validthis:true*/
-        this.renderer.clear();
+    return newArr;
+}
+
+
+// override base class functions
+bgManager.prototype.init = init;
+bgManager.prototype.returnSectionObj = returnSectionObj;
+bgManager.prototype.deprioritize = deprioritize;
+bgManager.prototype.getBg = getBg;
+bgManager.prototype.preloadNextBg = preloadNextBg;
+bgManager.prototype.clear = clear;
+bgManager.prototype.changeBg = changeBg;
+
+export var BGManager = {
+    getNew: function () {
+        return new bgManager();
     }
-
-    function randomizeArray(arr){
-        var newArr = [],
-            arrLength = arr.length;
-
-        while(arrLength--){
-            var aIndex = Math.floor(Math.random()*arr.length);
-            var aItem = arr.splice(aIndex,1)[0];
-
-            newArr.unshift(aItem);
-        }
-
-        return newArr;
-    }
-
-
-    // override base class functions
-    BGManager.prototype.init = init;
-    BGManager.prototype.returnSectionObj = returnSectionObj;
-    BGManager.prototype.deprioritize = deprioritize;
-    BGManager.prototype.getBg = getBg;
-    BGManager.prototype.preloadNextBg = preloadNextBg;
-    BGManager.prototype.clear = clear;
-    BGManager.prototype.changeBg = changeBg;
-
-    window.oblio = window.oblio || {};
-    oblio.classes = oblio.classes || {};
-    oblio.classes.BGManager = BGManager;
-
-    return oblio.classes.BGManager;
-});
+}

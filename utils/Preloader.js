@@ -1,175 +1,174 @@
-define([
-        'OblioUtils/utils/SectionLoader'
-    ], function () {
+import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 
-    var sectionLoader = oblio.utils.SectionLoader,
-        curr_loaderID = false, // current preloader
-        loaderUIObjects = {}, // object to store preloaders by id
-        perc = 0,
-        tracker,
-        complete_callback = false;
+var sectionLoader = SectionLoader.getInstance(),
+    curr_loaderID = false, // current preloader
+    loaderUIObjects = {}, // object to store preloaders by id
+    perc = 0,
+    tracker,
+    complete_callback = false,
+    instance;
 
-    var preloader = function() {
-        if (!oblio.settings.instaLoad) {
-            sectionLoader.addLoaderUI(this);
-        }
-        this.finished = true;
+var preloader = function() {
+    if (!oblio.settings.instaLoad) {
+        sectionLoader.addLoaderUI(this);
     }
+    this.finished = true;
+}
 
-    function switchLoader(loader_id) {
-        if(loaderUIObjects[loader_id]){
-            curr_loaderID = loader_id;
-        } else {
-            console.log("preloader.js : switchLoader : no loader found with ID: "+loader_id);
-        }
+function switchLoader(loader_id) {
+    if(loaderUIObjects[loader_id]){
+        curr_loaderID = loader_id;
+    } else {
+        console.log("preloader.js : switchLoader : no loader found with ID: "+loader_id);
     }
-            
-    function addLoader(loader_obj, callback) {
-
-        loaderUIObjects[loader_obj.id] = loader_obj;
-
-        // if there is not already a UI attached, it will automatically be set to the current UI
-        if(!curr_loaderID)curr_loaderID = loader_obj.id;
-
-        if (callback) {
-            callback();
-        }
-    }
-            
-    function bringIn() {
-        console.log('preloader bringIn', curr_loaderID);
-
-        if(!curr_loaderID)return;
-
-        this.finished = false;
-        perc = 0;
-
-        if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
-            oblio.settings.prepreloader.goOut();
-        }
+}
         
-        //
-        if(curr_loaderID && loaderUIObjects[curr_loaderID].bringIn !== undefined){
-            //custom bringIn
-            loaderUIObjects[curr_loaderID].bringIn(isIn.bind(this));
+function addLoader(loader_obj, callback) {
+
+    loaderUIObjects[loader_obj.id] = loader_obj;
+
+    // if there is not already a UI attached, it will automatically be set to the current UI
+    if(!curr_loaderID)curr_loaderID = loader_obj.id;
+
+    if (callback) {
+        callback();
+    }
+}
+        
+function bringIn() {
+    console.log('preloader bringIn', curr_loaderID);
+
+    if(!curr_loaderID)return;
+
+    this.finished = false;
+    perc = 0;
+
+    if (oblio.settings.prepreloader && oblio.settings.prepreloader.goOut) {
+        oblio.settings.prepreloader.goOut();
+    }
+    
+    //
+    if(curr_loaderID && loaderUIObjects[curr_loaderID].bringIn !== undefined){
+        //custom bringIn
+        loaderUIObjects[curr_loaderID].bringIn(isIn.bind(this));
+    } else {
+        if(curr_loaderID && loaderUIObjects[curr_loaderID].elem !== undefined){
+            //default bringIn
+            loaderUIObjects[curr_loaderID].elem.style.display = 'block';
+            TweenLite.to(loaderUIObjects[curr_loaderID].elem, 0.5, {autoAlpha: 1, onComplete: isIn.bind(this)});
+            track.apply(this);
         } else {
-            if(curr_loaderID && loaderUIObjects[curr_loaderID].elem !== undefined){
-                //default bringIn
-                TweenLite.to(loaderUIObjects[curr_loaderID].elem, 0.5, {autoAlpha: 1, onComplete: isIn.bind(this)});
-                track.apply(this);
-            } else {
-                isIn.call(this);
-            }
+            isIn.call(this);
+        }
+    }
+
+}
+
+function isIn(){
+    console.log('preloader isIn', curr_loaderID);
+
+    startTracking.apply(this);
+}
+       
+function startTracking(e) {
+    tracker = track.bind(this);
+    TweenLite.ticker.addEventListener("tick", tracker);
+}
+        
+function track(e) {
+    var newPerc = sectionLoader.getPerc();
+    if(isNaN(newPerc))newPerc = 1;
+
+    //ease it
+    newPerc = perc+(Math.ceil(10*(newPerc-perc)/.2)/1000);
+
+    perc = Math.max(perc, newPerc);
+
+    if(curr_loaderID && loaderUIObjects[curr_loaderID].onProgress !== undefined){
+        //custom onProgress
+        var animComplete = loaderUIObjects[curr_loaderID].onProgress(perc);
+
+        if(perc >= 1 && this.finished && animComplete === true){
+            TweenLite.ticker.removeEventListener("tick", tracker);
+            goOut();
+        }
+    } else {
+
+        if(curr_loaderID && loaderUIObjects[curr_loaderID].updateBar !== undefined){
+            //custom progressBar update
+            loaderUIObjects[curr_loaderID].updateBar(perc);
+        } else if (curr_loaderID && loaderUIObjects[curr_loaderID].progressBar !== undefined){
+            //default progressBar update
+            loaderUIObjects[curr_loaderID].progressBar.style.width = (perc*100)+'%';
         }
 
+        if(curr_loaderID && loaderUIObjects[curr_loaderID].updateLabel !== undefined){
+            //custom label fill
+            loaderUIObjects[curr_loaderID].updateText(perc);
+        } else if (curr_loaderID && loaderUIObjects[curr_loaderID].loaderText !== undefined){
+            //default label fill                
+            var labelString = "";
+            if(curr_loaderID && loaderUIObjects[curr_loaderID].loaderText_before !== undefined)
+                labelString += loaderUIObjects[curr_loaderID].loaderText_before;
+
+            labelString += Math.round(perc*100);
+
+            if(curr_loaderID && loaderUIObjects[curr_loaderID].loaderText_after !== undefined)
+                labelString += loaderUIObjects[curr_loaderID].loaderText_after;
+
+            loaderUIObjects[curr_loaderID].loaderText.innerHTML = labelString;
+        }
+
+        if(perc >= 1 && this.finished){
+            TweenLite.ticker.removeEventListener("tick", tracker);
+            goOut();
+        }
     }
-
-    function isIn(){
-        console.log('preloader isIn', curr_loaderID);
-
-        startTracking.apply(this);
-    }
-           
-    function startTracking(e) {
-        tracker = track.bind(this);
-        TweenLite.ticker.addEventListener("tick", tracker);
-    }
-            
-    function track(e) {
-        var newPerc = sectionLoader.getPerc();
-        if(isNaN(newPerc))newPerc = 1;
-
-        //ease it
-        newPerc = perc+(Math.ceil(10*(newPerc-perc)/.2)/1000);
-
-        perc = Math.max(perc, newPerc);
-
-        if(curr_loaderID && loaderUIObjects[curr_loaderID].onProgress !== undefined){
-            //custom onProgress
-            var animComplete = loaderUIObjects[curr_loaderID].onProgress(perc);
-
-            if(perc >= 1 && this.finished && animComplete === true){
-                TweenLite.ticker.removeEventListener("tick", tracker);
-                goOut();
-            }
+}
+        
+function goOut() {
+    console.log('preloader goOut');
+    if(curr_loaderID && loaderUIObjects[curr_loaderID].goOut !== undefined){
+        //custom goOut
+        loaderUIObjects[curr_loaderID].goOut(isOut.bind(this));
+    } else {
+        if(curr_loaderID && loaderUIObjects[curr_loaderID].elem !== undefined){
+            //default goOut
+            TweenLite.to(loaderUIObjects[curr_loaderID].elem, 0.5, {autoAlpha: 0, onComplete: isOut.bind(this)});
         } else {
-
-            if(curr_loaderID && loaderUIObjects[curr_loaderID].updateBar !== undefined){
-                //custom progressBar update
-                loaderUIObjects[curr_loaderID].updateBar(perc);
-            } else if (curr_loaderID && loaderUIObjects[curr_loaderID].progressBar !== undefined){
-                //default progressBar update
-                loaderUIObjects[curr_loaderID].progressBar.style.width = (perc*100)+'%';
-            }
-
-            if(curr_loaderID && loaderUIObjects[curr_loaderID].updateLabel !== undefined){
-                //custom label fill
-                loaderUIObjects[curr_loaderID].updateText(perc);
-            } else if (curr_loaderID && loaderUIObjects[curr_loaderID].loaderText !== undefined){
-                //default label fill                
-                var labelString = "";
-                if(curr_loaderID && loaderUIObjects[curr_loaderID].loaderText_before !== undefined)
-                    labelString += loaderUIObjects[curr_loaderID].loaderText_before;
-
-                labelString += Math.round(perc*100);
-
-                if(curr_loaderID && loaderUIObjects[curr_loaderID].loaderText_after !== undefined)
-                    labelString += loaderUIObjects[curr_loaderID].loaderText_after;
-
-                loaderUIObjects[curr_loaderID].loaderText.innerHTML = labelString;
-            }
-
-            if(perc >= 1 && this.finished){
-                TweenLite.ticker.removeEventListener("tick", tracker);
-                goOut();
-            }
+            isOut();
         }
     }
-            
-    function goOut() {
-        console.log('preloader goOut');
-        if(curr_loaderID && loaderUIObjects[curr_loaderID].goOut !== undefined){
-            //custom goOut
-            loaderUIObjects[curr_loaderID].goOut(isOut.bind(this));
-        } else {
-            if(curr_loaderID && loaderUIObjects[curr_loaderID].elem !== undefined){
-                //default goOut
-                TweenLite.to(loaderUIObjects[curr_loaderID].elem, 0.5, {autoAlpha: 0, onComplete: isOut.bind(this)});
-            } else {
-                isOut();
-            }
-        }
+}
+        
+function isOut(callback){
+    console.log('Preloader isOut');
+    loaderUIObjects[curr_loaderID].elem.style.display = 'none';
+    if (complete_callback) {
+        complete_callback();
     }
-            
-    function isOut(callback){
-        console.log('Preloader isOut');
-        loaderUIObjects[curr_loaderID].elem.style.display = 'none';
-        if (complete_callback) {
-            complete_callback();
-        }
+}
+        
+function complete(callback) {
+    // console.log('preloader complete');
+    // TweenLite.ticker.removeEventListener("tick", this.track);
+
+    complete_callback = callback || false;
+
+    if(!curr_loaderID)isOut();
+
+    this.finished = true;
+}
+
+preloader.prototype.switchLoader = switchLoader;
+preloader.prototype.addLoader = addLoader;
+
+preloader.prototype.bringIn = bringIn;
+preloader.prototype.complete = complete;
+
+export var Preloader = {
+    getInstance: function () {
+        instance = instance || new preloader();
+        return instance;
     }
-            
-    function complete(callback) {
-        // console.log('preloader complete');
-        // TweenLite.ticker.removeEventListener("tick", this.track);
-
-        complete_callback = callback || false;
-
-        if(!curr_loaderID)isOut();
-
-        this.finished = true;
-    }
-
-    preloader.prototype.switchLoader = switchLoader;
-    preloader.prototype.addLoader = addLoader;
-
-    preloader.prototype.bringIn = bringIn;
-    preloader.prototype.complete = complete;
-
-    window.oblio = window.oblio || {};
-    oblio.utils = oblio.utils || {};
-    oblio.utils.Preloader = new preloader();
-
-    return oblio.utils.Preloader;
-
-});
+}
