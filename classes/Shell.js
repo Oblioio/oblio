@@ -70,7 +70,7 @@ function ready(callbackFn){
         this.setupMenu();
     }
 
-    this.resize();
+    // this.resize();
 }
 
 function setLayout () {
@@ -111,7 +111,6 @@ function setupMenu(){
     oblio.app.mainMenu.init(navigation.currentSection);
 
     document.getElementById('menu').addEventListener('click', function (e) {
-        e.preventDefault();
 
         var el = findAncestor(e.target, 'a');
 
@@ -119,6 +118,14 @@ function setupMenu(){
         if (!el || el.getAttribute('target') === '_blank') {
             return;
         }
+
+        if (el.getAttribute('data-popup')) {
+            alert(el.getAttribute('data-popup'))
+            oblio.app.mainMenu.openPopUp(e);
+            return;
+        }
+
+        e.preventDefault();
 
         var section_name = el.getAttribute('data-section');
 
@@ -130,20 +137,15 @@ function setupMenu(){
     }, false);
 }
 
-function resize(){
+function resize(w, h, top){
     if(!this.initialized)return;
 
-    var w, h;
-
     oblio.settings.windowDimensions = {
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: w,
+        height: h
     };
 
     setLayout();
-
-    w = Math.max(oblio.settings.minWidth, oblio.settings.windowDimensions.width),
-    h = Math.max(oblio.settings.minHeight, oblio.settings.windowDimensions.height);
 
     this.elements.shell.style.width = w + 'px';
 
@@ -155,39 +157,11 @@ function resize(){
         oblio.settings.menuWidth = oblio.app.mainMenu.elements.el.offsetWidth;
     }
 
-    /**
-    * Portrait messaging
-    */
-    if (oblio.settings.isAndroid || oblio.settings.isMobile || oblio.settings.isIOS){
-        var main_mobileHorizontal = (w>h)?true:false;
-        var portraitDiv = document.getElementById('portraitTest');
-        // alert(portraitDiv);
-        // alert(main_mobileHorizontal);
-
-        if (portraitDiv) {
-            // alert(main_mobileHorizontal);
-            if(!main_mobileHorizontal){
-                portraitDiv.style.display = 'block';
-            } else {
-                portraitDiv.style.display = 'none';
-                if (oblio.settings.isIpad) {
-                    h = oblio.settings.windowDimensions.height = 672;
-                }
-            }
-        }
-
-        //double check that zooming hasn't messup dimensions, if so correct the dimensions
-        if(w != 1000){
-            h = h*(1000/w);
-            w = 1000;
-        }
-    }
-
     oblio.settings.sectionWidth = w;
 
     if (oblio.sections[navigation.currentSection]) {
         if (oblio.sections[navigation.currentSection].initialized && oblio.sections[navigation.currentSection].resize) {
-            oblio.sections[navigation.currentSection].resize(w, h);
+            oblio.sections[navigation.currentSection].resize(w, h, top);
         }
     }
 

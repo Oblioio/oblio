@@ -29,7 +29,6 @@ function createElem(){
 
 function createCircle(){
     var loaderCircle = document.createElement('div');
-    var arr = '8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,';
     var svg = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="201px" height="201px" viewBox="0 0 201 201"><circle cx="100.5" cy="100.5" r="100" stroke-dasharray="628, 628"/></svg>';
     
     loaderCircle.id = 'loader_circle';

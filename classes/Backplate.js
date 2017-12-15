@@ -136,7 +136,7 @@ backplate.prototype.resize = resize;
 backplate.prototype.changeImage = changeImage;
 
 export var Backplate = {
-    getNew: function () {
-        return new backplate();
+    getNew: function (bg, loaded, resizeContainer, mode) {
+        return new backplate(bg, loaded, resizeContainer, mode);
     }
 }

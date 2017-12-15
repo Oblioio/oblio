@@ -20,6 +20,11 @@ var menu = function (data) {
         paginatorEl: document.getElementById(data.paginatorElID)
     };
 
+    that.elements.burger = this.elements.wrapper.querySelector('.burger');
+    if (that.elements.burger) that.elements.burger.addEventListener('touchstart', function () {
+        that.elements.wrapper.classList.toggle('open');
+    });
+
     this.menuList = data.menuList;
     this.menuStyle = data.menuStyle;
 };
@@ -54,6 +59,8 @@ function selectMenuItem (section_name) {
 
     selected.className = selected.className + ' selected';
     this.elements.selected = selected;
+
+    that.elements.wrapper.classList.remove('open');
 }
 
 function hide (instant) {
@@ -85,13 +92,17 @@ function hide (instant) {
 
 function openPopUp(e){
     e.preventDefault();
+
+    let link = e.target;
+    let popupSize = link.getAttribute('data-popup');
+
     var vSplit = String(e.target.rel).split(',');
-    window.open(vSplit[0], "_blank", "width="+vSplit[1]+", height="+vSplit[2]);
+    window.open(link.getAttribute('href'), "_blank", popupSize);
     return false;
 }
 
 function getHeight () {
-    return this.menuStyle === 'horizontal' ? this.elements.el.offsetHeight : 0;
+    return this.menuStyle === 'horizontal' ? this.elements.wrapper.offsetHeight : 0;
 }
 
 function show (instant) {

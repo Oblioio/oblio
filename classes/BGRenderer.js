@@ -3,6 +3,8 @@ import 'OblioUtils/utils/DeviceDetect';
 
 'use strict';
 
+var instance;
+
 var bgRenderer = function () {
     this.initialized = false;
 };
@@ -146,7 +148,8 @@ bgRenderer.prototype.resize = resize;
 bgRenderer.prototype.setContainerID = setContainerID;
 
 export var BGRenderer = {
-    getNew: function () {
-        return new bgRenderer();
+    getInstance: function () {
+        instance = instance || new bgRenderer();
+        return instance;
     }
 }

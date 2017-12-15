@@ -1,11 +1,14 @@
 import { BG_Image } from 'OblioUtils/classes/BG_Image';
 import { BG_Video } from 'OblioUtils/classes/BG_Video';
-import 'OblioUtils/utils/DeviceDetect';
+import { BGRenderer } from 'OblioUtils/classes/BGRenderer';
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
+import 'OblioUtils/utils/DeviceDetect';
 
 'use strict';
 
-var sectionLoader = SectionLoader.getInstance();
+var instance,
+    bgRenderer = BGRenderer.getInstance(),
+    sectionLoader = SectionLoader.getInstance();
 
 var bgManager = function () {
     console.log("bgManager");
@@ -198,7 +201,6 @@ function randomizeArray(arr){
     return newArr;
 }
 
-
 // override base class functions
 bgManager.prototype.init = init;
 bgManager.prototype.returnSectionObj = returnSectionObj;
@@ -208,8 +210,14 @@ bgManager.prototype.preloadNextBg = preloadNextBg;
 bgManager.prototype.clear = clear;
 bgManager.prototype.changeBg = changeBg;
 
+// export var BGManager = {
+//     getNew: function () {
+//         return new bgManager();
+//     }
+// }
 export var BGManager = {
-    getNew: function () {
-        return new bgManager();
+    getInstance: function () {
+        instance = instance || new bgManager();
+        return instance;
     }
 }

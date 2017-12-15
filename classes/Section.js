@@ -21,7 +21,7 @@ Section.prototype = {
             var sectionLoader = SectionLoader.getInstance(),
                 sectionObj = sectionLoader.getSectionTemplates(that.id),
                 template = sectionObj.template,
-                content = sectionObj.data;
+                content = sectionObj.data.data;
 
             content.slugify = function () {
                 return function (text, render) {
@@ -34,7 +34,7 @@ Section.prototype = {
             };
 
             let html = Mustache.render(sectionObj.template, content, sectionObj.partials);
-            
+            console.log(content);
             wrapper.insertAdjacentHTML('beforeend', html);
 
             window.requestAnimationFrame(function () {

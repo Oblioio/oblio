@@ -77,9 +77,8 @@ function startTracking(e) {
         
 function track(e) {
     var newPerc = sectionLoader.getPerc();
-    if(isNaN(newPerc))newPerc = 1;
+    if(isNaN(newPerc) || !isFinite(newPerc))newPerc = 1;
 
-    //ease it
     newPerc = perc+(Math.ceil(10*(newPerc-perc)/.2)/1000);
 
     perc = Math.max(perc, newPerc);
