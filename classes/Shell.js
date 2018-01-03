@@ -120,7 +120,6 @@ function setupMenu(){
         }
 
         if (el.getAttribute('data-popup')) {
-            alert(el.getAttribute('data-popup'))
             oblio.app.mainMenu.openPopUp(e);
             return;
         }
