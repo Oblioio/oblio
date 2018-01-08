@@ -33,7 +33,7 @@ function placeHTML () {
         var wrapper = document.getElementById('shell'),
             sectionObj = sectionLoader.getSectionTemplates('main'),
             template = sectionObj.template,
-            content = sectionObj.data;
+            content = sectionObj.data.data;
 
         content.slugify = function () {
             return function (text, render) {

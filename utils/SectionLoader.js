@@ -398,7 +398,7 @@ function getSectionTemplates (id) {
             let template = sectionLoaderState.files[section.templatePath];
             let partials = section.partials.reduce(function (partialsObj, partialName) {
                 let partial = returnSectionOBJ(partialName);
-                obj.data[partialName] = partial.data;
+                obj.data.data[partialName] = partial.data;
                 partialsObj[partialName] = sectionLoaderState.files[partial.templatePath];
                 return partialsObj;
             }, {});
