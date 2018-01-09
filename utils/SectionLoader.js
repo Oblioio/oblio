@@ -100,7 +100,6 @@ function addSection (id, data) {
     if (data.files) {
         sectionObj.files = sectionObj.files || [];
         sectionObj.files = sectionObj.files.concat(data.files);
-        console.log(sectionObj.id, sectionObj.files, data.files);
     }
 
     if (data.templatePath) {
@@ -214,7 +213,6 @@ function getWidgets (sectionObj) {
 }
 
 function getAjax (url, success) {
-    console.log(url);
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('GET', url);
     xhr.onreadystatechange = function() {
@@ -330,7 +328,7 @@ function fileLoadComplete (url) {
 }
 
 function loadImage(url, callback){
-    if(this.verbose)console.log('SectionLoader | load image: ' + url);
+    console.log('SectionLoader | load image: ' + url);
 
     var newImage = new Image();
 

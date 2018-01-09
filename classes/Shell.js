@@ -46,7 +46,7 @@ function placeHTML () {
         };
 
         let html = Mustache.render(sectionObj.template, content, sectionObj.partials);
-        
+
         wrapper.innerHTML = html;
 
         window.requestAnimationFrame(function(){
@@ -66,7 +66,7 @@ function ready(callbackFn){
         callbackFn();
     }
 
-    if (oblio.app.dataSrc.widgets.menu && oblio.app.dataSrc.widgets.menu.data.menu) {
+    if (oblio.app.dataSrc.widgets.menu.data.menu) {
         this.setupMenu();
     }
 

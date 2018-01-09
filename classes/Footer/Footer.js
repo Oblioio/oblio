@@ -29,7 +29,7 @@ function onClick (e) {
         target = e.target
     }
 
-    if (target.getAttribute('target') !== '_blank') e.preventDefault();
+    if (target.tagName === 'A' && target.getAttribute('target') !== '_blank') e.preventDefault();
 
     switch (target.id) {
         case 'credits-button':

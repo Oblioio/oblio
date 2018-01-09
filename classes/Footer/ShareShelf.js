@@ -75,7 +75,7 @@ function facebookScript (callback) {
         FB.init({
             appId: appID,
             xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.6' // use version 2.1
+            version    : 'v2.11' // use version 2.11
         });
         // window.setTimeout(callback, 500);
     };

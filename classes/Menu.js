@@ -6,13 +6,12 @@ import 'OblioUtils/classes/MenuPaginator';
 /*jshint validthis: true */
 
 var isMobile = oblio.utils.DeviceDetect.isMobile;
-var that;
 
 var menu = function (data) {
     this.menuID = data.menuID || '';
     this.verbose = false;
 
-    that = this;
+    var that = this;
 
     this.elements = {
         el: document.getElementById(data.menuID),
@@ -49,7 +48,8 @@ function init (current_section) {
 function selectMenuItem (section_name) {
     if(this.verbose)console.log('Main Menu | '+this.menuID+' | selectMenuItem: '+section_name);
 
-    var selected = this.elements.el.querySelector('a[data-section="' + section_name + '"]');
+    var that = this,
+        selected = this.elements.el.querySelector('a[data-section="' + section_name + '"]');
 
     if (!selected) return;
 

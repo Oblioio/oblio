@@ -34,7 +34,7 @@ Section.prototype = {
             };
 
             let html = Mustache.render(sectionObj.template, content, sectionObj.partials);
-            console.log(content);
+
             wrapper.insertAdjacentHTML('beforeend', html);
 
             window.requestAnimationFrame(function () {
