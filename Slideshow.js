@@ -692,7 +692,7 @@ function activate (slideIndex) {
             slide.resize(this.slideDimensions.w, this.slideDimensions.h);
             slide.needsUpdate = false;
         }
-        console.log(slide, slide.obj);
+
         if (slide.obj.el.play) {
             slide.obj.el.play();
         }
@@ -777,7 +777,7 @@ slideShow.prototype.drag = drag;
 slideShow.prototype.stopDrag = stopDrag;
 slideShow.prototype.positionSlides = positionSlides;
 
-export var SlideShow = {
+export var Slideshow = {
     getNew: function (data) {
         return new slideShow(data);
     }
