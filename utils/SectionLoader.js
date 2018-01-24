@@ -1,11 +1,9 @@
 import { ArrayExecuter } from 'OblioUtils/utils/ArrayExecuter.js';
-import Mustache from 'mustache';
-import 'OblioUtils/utils/DeviceDetect';
+import { loadScript } from 'OblioUtils/utils/loadScript';
 
 var instance,
     verbose = false,
-    arrayExecuter = ArrayExecuter(null, 'SectionLoader'),
-    DeviceDetect = oblio.utils.DeviceDetect;
+    arrayExecuter = ArrayExecuter(null, 'SectionLoader');
 
 /*
 --------------------------------------------------------------------------------------------------------------------
@@ -57,8 +55,7 @@ var sectionLoaderState = {
         filesLoaded: 0,
         loader: null,
         files: {}
-    },
-    isMobile = DeviceDetect.isMobile;
+    };
 
 function addLoaderUI (loaderObj) {
     if (this.verbose) console.log('SectionLoader | addLoaderUI: '+loaderObj);
@@ -102,11 +99,11 @@ function addSection (id, data) {
         sectionObj.files = sectionObj.files.concat(data.files);
     }
 
-    if (data.templatePath) {
-        sectionObj.templatePath = data.templatePath;
-        sectionObj.files = sectionObj.files || [];
-        sectionObj.files.push(data.templatePath);
-    }
+    // if (data.templatePath) {
+    //     sectionObj.templatePath = data.templatePath;
+    //     sectionObj.files = sectionObj.files || [];
+    //     sectionObj.files.push(data.templatePath);
+    // }
 
     sectionLoaderState.sections.push(sectionObj);
 }
@@ -176,9 +173,10 @@ function initScrape (...args) {
     sectionLoaderState.currentlyLoadingIDs.push(sectionOBJ.id);
 
     sectionOBJ.partials = getWidgets(sectionOBJ);
+    sectionOBJ.template = id;
 
-    if (sectionOBJ.templatePath) sectionLoaderState.filesToLoad.push(sectionOBJ.templatePath);
-    sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.partials.map(partial => returnSectionOBJ(partial).templatePath).filter(path => path !== undefined));
+    // if (sectionOBJ.templatePath) sectionLoaderState.filesToLoad.push(sectionOBJ.templatePath);
+    // sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.partials.map(partial => returnSectionOBJ(partial).templatePath).filter(path => path !== undefined));
     if (sectionOBJ.files) sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.files);
 
     resolve();
@@ -388,6 +386,26 @@ function complete () {
     }
 }
 
+function getSectionData (id) {
+    var data = returnSectionOBJ(id);
+
+    return sectionLoaderState.sections.filter(function (section) {
+        return section.id === id;
+    }).reduce(function (obj, section) {
+        let template = sectionLoaderState.files[section.templatePath];
+        let partialsData = section.partials.reduce(function (partialsObj, partialName) {
+            let partial = returnSectionOBJ(partialName);
+            obj.data[partialName] = partial.data;
+            // partialsObj[partialName] = sectionLoaderState.files[partial.templatePath];
+            return partialsObj;
+        }, {});
+        obj.template = id;
+        obj.partials = section.partials;
+
+        return obj;
+    }, data);
+}
+
 function getSectionTemplates (id) {
     var data = returnSectionOBJ(id);
 
@@ -453,6 +471,7 @@ var sectionLoader = {
     checkComplete: checkComplete,
     complete: complete,
     returnSectionOBJ: returnSectionOBJ,
+    getSectionData: getSectionData,
     getSectionTemplates: getSectionTemplates,
     getSectionLoaderState: getSectionLoaderState,
     loadImage: loadImage,
