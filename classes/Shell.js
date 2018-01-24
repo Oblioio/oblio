@@ -31,9 +31,9 @@ function placeHTML () {
     return new Promise (function (resolve, reject) {
 
         var wrapper = document.getElementById('shell'),
-            sectionObj = sectionLoader.getSectionTemplates('main'),
-            template = sectionObj.template,
-            content = sectionObj.data.data;
+            sectionObj = sectionLoader.getSectionData('main'),
+            // template = sectionObj.template,
+            content = sectionObj.data;
 
         content.slugify = function () {
             return function (text, render) {
@@ -45,7 +45,13 @@ function placeHTML () {
             };
         };
 
-        let html = Mustache.render(sectionObj.template, content, sectionObj.partials);
+        let partials = {};
+        for (var i = sectionObj.partials.length - 1; i >= 0; i--) {
+            partials[sectionObj.partials[i]] = oblio.templates[sectionObj.partials[i]];
+        }
+        let template = oblio.templates[sectionObj.template];
+
+        let html = template.render(content, partials);
 
         wrapper.innerHTML = html;
 
@@ -66,7 +72,7 @@ function ready(callbackFn){
         callbackFn();
     }
 
-    if (oblio.app.dataSrc.widgets.menu.data.menu) {
+    if (oblio.app.dataSrc.widgets.menu && oblio.app.dataSrc.widgets.menu.data.menu) {
         this.setupMenu();
     }
 

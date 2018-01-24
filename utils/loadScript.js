@@ -1,26 +1,14 @@
 'use strict';
 
-function loadScript(url, callback){
-
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-
-    if (script.readyState){  //IE
-        script.onreadystatechange = function(){
-            if (script.readyState == "loaded" ||
-                    script.readyState == "complete"){
-                script.onreadystatechange = null;
-                callback();
-            }
-        };
-    } else {  //Others
-        script.onload = function(){
-            callback();
-        };
-    }
-
-    script.src = url;
-    document.getElementsByTagName("head")[0].appendChild(script);
+function loadScript(src){
+    return new Promise(function (resolve, reject) {
+        var s;
+        s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
 }
 
 export { loadScript };
