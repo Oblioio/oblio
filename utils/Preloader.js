@@ -143,7 +143,6 @@ function goOut() {
 function isOut(callback){
     console.log('Preloader isOut');
     if (loaderUIObjects[curr_loaderID].elem) loaderUIObjects[curr_loaderID].elem.style.display = 'none';
-    loaderUIObjects[curr_loaderID].elem.style.display = 'none';
     if (complete_callback) {
         complete_callback();
     }
