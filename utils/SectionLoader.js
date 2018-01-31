@@ -312,7 +312,8 @@ function loadFiles (resolve, reject){
         if (url.indexOf('.gif') > 0 || url.indexOf('.jpg') > 0 || url.indexOf('.jpeg') > 0 || url.indexOf('.png') > 0) {
             loadImage.call(this, url, fileLoadComplete(url));               
         } else if (url.indexOf('.js') > 0) {
-            loadScript(url).then(fileLoadComplete(url));
+            let jspath = oblio.settings.jsUrl || '';
+            loadScript(jspath + url).then(fileLoadComplete(url));
         } else {
             _loadFile.call(this, url, 'misc', fileLoadComplete(url));
         }
