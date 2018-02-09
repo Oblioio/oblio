@@ -19,28 +19,9 @@ Section.prototype = {
 
         return new Promise (function (resolve, reject) {
             var sectionLoader = SectionLoader.getInstance(),
-                sectionObj = sectionLoader.getSectionData(that.id),
-                // template = sectionObj.template,
-                content = sectionObj.data;
+                sectionObj = sectionLoader.returnSectionOBJ(that.id);
 
-            content.slugify = function () {
-                return function (text, render) {
-                    return render(text)
-                        .toLowerCase()
-                        .replace(/[^\w ]+/g,'')
-                        .replace(/ +/g,'_')
-                        ;
-                };
-            };
-
-            let partials = {};
-            for (var i = sectionObj.partials.length - 1; i >= 0; i--) {
-                partials[sectionObj.partials[i]] = oblio.templates[sectionObj.partials[i]];
-            }
-            let template = oblio.templates[sectionObj.template];
-            let html = template.render(content, partials);
-
-            wrapper.insertAdjacentHTML('beforeend', html);
+            wrapper.insertAdjacentHTML('beforeend', sectionObj.html);
 
             window.requestAnimationFrame(function () {
                 resolve();

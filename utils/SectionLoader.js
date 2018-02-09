@@ -54,6 +54,7 @@ var sectionLoaderState = {
         filesToLoad: [],
         filesLoaded: 0,
         loader: null,
+        loadedUrls: {},
         files: {}
     };
 
@@ -172,8 +173,37 @@ function initScrape (...args) {
 
     sectionLoaderState.currentlyLoadingIDs.push(sectionOBJ.id);
 
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
     sectionOBJ.partials = getWidgets(sectionOBJ);
     sectionOBJ.template = id;
+
+    let partials = {};
+
+    if (sectionOBJ.partials) {
+        for (var i = sectionOBJ.partials.length - 1; i >= 0; i--) {
+            partials[sectionOBJ.partials[i]] = oblio.templates[sectionOBJ.partials[i]];
+        }
+    }
+    sectionOBJ = getSectionData(id);
+    var template = oblio.templates[id];
+
+    sectionOBJ.html = template.render(sectionOBJ.data, partials);
+
+    // preload images from html
+    var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
+    var results;
+    var files = [];
+
+    while ((results = img_pattern.exec(sectionOBJ.html)) !== null) {
+        files.push(results[1]);
+    }
+
+    addFiles(id, files);
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
     // if (sectionOBJ.templatePath) sectionLoaderState.filesToLoad.push(sectionOBJ.templatePath);
     // sectionLoaderState.filesToLoad = sectionLoaderState.filesToLoad.concat(sectionOBJ.partials.map(partial => returnSectionOBJ(partial).templatePath).filter(path => path !== undefined));
@@ -313,7 +343,13 @@ function loadFiles (resolve, reject){
             loadImage.call(this, url, fileLoadComplete(url));               
         } else if (url.indexOf('.js') > 0) {
             let jspath = oblio.settings.jsUrl || '';
-            loadScript(jspath + url).then(fileLoadComplete(url));
+            if (sectionLoaderState.loadedUrls[url]) {
+                fileLoadComplete(url)();
+                return;
+            } else {
+                sectionLoaderState.loadedUrls[url] = url;
+                loadScript(jspath + url).then(fileLoadComplete(url));
+            }
         } else {
             _loadFile.call(this, url, 'misc', fileLoadComplete(url));
         }
@@ -329,8 +365,14 @@ function fileLoadComplete (url) {
 }
 
 function loadImage(url, callback){
+    
+    if (sectionLoaderState.loadedUrls[url]) {
+        if (callback) callback();
+        return;
+    }
     console.log('SectionLoader | load image: ' + url);
 
+    sectionLoaderState.loadedUrls[url] = url;
     var newImage = new Image();
 
     newImage.addEventListener('load', function () {
@@ -390,6 +432,7 @@ function complete () {
 }
 
 function getSectionData (id) {
+
     var data = returnSectionOBJ(id);
 
     return sectionLoaderState.sections.filter(function (section) {
