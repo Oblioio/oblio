@@ -83,6 +83,27 @@
         }
       },
       "/Applications/MAMP/htdocs/Oceans8/site"
+    ],
+    [
+      {
+        "raw": "OblioUtils@github:oblioio/oblio#es6",
+        "scope": null,
+        "escapedName": "OblioUtils",
+        "name": "OblioUtils",
+        "rawSpec": "github:oblioio/oblio#es6",
+        "spec": "github:oblioio/oblio#es6",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:oblioio/oblio.git#es6",
+          "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git#es6",
+          "httpsUrl": "git+https://github.com/oblioio/oblio.git#es6",
+          "gitUrl": "git://github.com/oblioio/oblio.git#es6",
+          "shortcut": "github:oblioio/oblio#es6",
+          "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/es6/package.json"
+        }
+      },
+      "/Applications/MAMP/htdocs/Generator/site"
     ]
   ],
   "_from": "oblioio/oblio#es6",
@@ -109,13 +130,14 @@
     }
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
-  "_resolved": "git://github.com/oblioio/oblio.git#82bfed00c6ec2932bb874e1bca276b835e37355c",
-  "_shasum": "07c00e6f6ec7a81ef592ce0b83baa908202f5b24",
+  "_resolved": "git://github.com/oblioio/oblio.git#e970a9d050508583ede4b3a7dce97f9987f63745",
+  "_shasum": "edb3c4cc0bfb5a58e2eeb93c29be9bc9b524506d",
   "_shrinkwrap": null,
   "_spec": "OblioUtils@github:oblioio/oblio#es6",
-  "_where": "/Applications/MAMP/htdocs/Oceans8/site",
+  "_where": "/Applications/MAMP/htdocs/Generator/site",
   "author": {
     "name": "Scott Agrimson"
   },

@@ -1,42 +1,45 @@
-import Mustache from 'mustache';
-import template from './quotes.template';
-
 'use strict';
 
 var prototype = {
     init: function (params, callback) {
-
-        let wrapper = params.wrapper || document.body;
-        let quotes = params.data.quotes || [];
-        let html = Mustache.render(template, { quotes: quotes });
-        let tmp = document.createElement('div');
-        tmp.innerHTML = html;
-
-        let el = tmp.firstChild;
-        let position = params.data.position;
-
-        el.classList.add(position.h);
-        el.classList.add(position.v);
-
-        this.quotes = el.getElementsByTagName('blockquote');
-        this.quotes[0].classList.add('current');
-
-        wrapper.appendChild(el);
-
-        if (callback) callback();
+        this.currentQuote = 0;
+        this.now = Date.now();
+        this.delay = 2000;
+        this.nextTime = this.now + this.delay;
+        this.quotes = [].slice.call(this.wrapper.getElementsByTagName('blockquote'));
     },
     start: function () {
-
+        this.paused = false;
+        loop.call(this);
     },
     stop: function () {
-
+        this.paused = true;
     }
 }
 
+function loop () {
+    if (this.paused) return;
+    this.now = Date.now();
+    if (this.now > this.nextTime) {
+        this.nextTime += this.delay;
+        nextQuote.call(this);
+    }
+
+    window.requestAnimationFrame(loop.bind(this));
+}
+
+function nextQuote () {
+    this.quotes[this.currentQuote].style.display = 'none';
+    this.currentQuote++; 
+    this.currentQuote = this.currentQuote % this.quotes.length;
+    this.quotes[this.currentQuote].style.display = 'block';
+}
+
 export var Quotes = {
-    getNew: function () {
+    getNew: function (wrapper) {
         return Object.assign(Object.create(prototype), {
-            shown: false
+            shown: false,
+            wrapper: wrapper
         });
     }
 }

@@ -40,6 +40,7 @@ function createCircle(){
 function onProgress (perc) {
     this.loaderText.textContent = Math.round(perc * 100);
     this.circ.style.strokeDashoffset = ((1 - perc) * 628);
+    console.log(perc, perc >= 1);
     return perc >= 1;
 }
 
