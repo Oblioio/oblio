@@ -21,7 +21,7 @@ function loop () {
     if (this.paused) return;
     this.now = Date.now();
     if (this.now > this.nextTime) {
-        this.nextTime += this.delay;
+        this.nextTime = this.now + this.delay;
         nextQuote.call(this);
     }
 
@@ -29,10 +29,10 @@ function loop () {
 }
 
 function nextQuote () {
-    this.quotes[this.currentQuote].style.display = 'none';
+    this.quotes[this.currentQuote].style.visibility = 'hidden';
     this.currentQuote++; 
     this.currentQuote = this.currentQuote % this.quotes.length;
-    this.quotes[this.currentQuote].style.display = 'block';
+    this.quotes[this.currentQuote].style.visibility = 'visible';
 }
 
 export var Quotes = {
