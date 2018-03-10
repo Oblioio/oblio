@@ -280,7 +280,6 @@ function section_init(sectionID, callbackFn){
         oblio.sections[sectionID].initialized = true;
 
         if (oblio.sections[sectionID].init) {
-            console.log('HEY THERE', sectionID);
             oblio.sections[sectionID].init(callbackFn);
             return;
         }
