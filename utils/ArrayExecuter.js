@@ -57,8 +57,8 @@ var ArrayExecuter = function (scope, id = Math.random()) {
                     if (cont === true) {
                         this.next();
                     } else {
-                        console.log(funct);
-                        throw 'ARRAY EXECUTER ERROR ' + cont;
+                        console.log('ARRAY EXECUTER ERROR');
+                        throw cont;
                     }
                 }
             );

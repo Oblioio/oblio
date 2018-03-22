@@ -69,14 +69,22 @@ function isIn(){
 
     startTracking.apply(this);
 }
+
+var stop = false;
+function raf () {
+    track.call(this);
+    if (!stop) window.requestAnimationFrame(tracker);
+}
        
 function startTracking(e) {
-    tracker = track.bind(this);
-    TweenLite.ticker.addEventListener("tick", tracker);
+    tracker = raf.bind(this);
+    stop = false;
+    window.requestAnimationFrame(tracker);
 }
         
 function track(e) {
     var newPerc = sectionLoader.getPerc();
+
     if(isNaN(newPerc) || !isFinite(newPerc))newPerc = 1;
 
     newPerc = perc+(Math.ceil(10*(newPerc-perc)/.2)/1000);
@@ -88,7 +96,7 @@ function track(e) {
         var animComplete = loaderUIObjects[curr_loaderID].onProgress(perc);
 
         if(perc >= 1 && this.finished && animComplete === true){
-            TweenLite.ticker.removeEventListener("tick", tracker);
+            stop = true;
             goOut();
         }
     } else {
@@ -119,7 +127,7 @@ function track(e) {
         }
 
         if(perc >= 1 && this.finished){
-            TweenLite.ticker.removeEventListener("tick", tracker);
+            stop = true;
             goOut();
         }
     }
@@ -149,7 +157,7 @@ function isOut(callback){
 }
         
 function complete(callback) {
-    // console.log('preloader complete');
+    console.log('preloader complete');
     // TweenLite.ticker.removeEventListener("tick", this.track);
 
     complete_callback = callback || false;
