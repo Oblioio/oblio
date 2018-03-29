@@ -102,7 +102,7 @@ function changeSection (sectionID, completeFn) {
     this.currentSection = sectionID;
     this.currentSubsection = subSectionID || '';
 
-    if (!pop && oblio.settings.deepLinking !== false && window.history && window.history.pushState && this.previous_section !== '' ) {
+    if (!pop && oblio.settings.deeplinking !== false && window.history && window.history.pushState && this.previous_section !== '' ) {
 
         var data = {
             currentSection: this.currentSection,
