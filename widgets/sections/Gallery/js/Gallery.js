@@ -23,10 +23,10 @@ function prepareLoad () {
         'assets/images/gallery/O8-20555r[2].jpg'
     ];
 
-    data = oblio.app.dataSrc.widgets.gallery.data;
+    data = oblio.app.dataSrc.widgets.Gallery.data;
 
     if (files.length > 0) {
-        sectionLoader.addFiles('gallery', files);
+        sectionLoader.addFiles(myName, files);
     }
 }
 
@@ -53,7 +53,7 @@ function buildGallery () {
         slides: images,
         fullBleed: true,
         resizeContainer: this.elements.sectionWrapper,
-        paginator_container: this.elements.sectionWrapper.querySelector('.buttons')
+        paginator_container: this.elements.sectionWrapper
     };
 
     this.slideshow = Slideshow.getNew(slideshow_params);
@@ -103,4 +103,4 @@ export var Gallery = {
         instance = instance || Object.assign(Object.create(Section.prototype), props);
         return instance;
     }
-}
+};

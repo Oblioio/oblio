@@ -106,13 +106,13 @@ var player_proto = {
         return function () {
             if (this.updateID !== undefined) this.stop();
             this.updateID = masterclock.registerCallback(updateFn);
-        }
+        };
     },
     stop: function () {
         if (this.updateID) masterclock.unregisterCallback(this.updateID);
         this.updateID = undefined;
     }
-}
+};
 
 function onError (e) {
     console.log('YOUTUBE ERROR', e);
@@ -144,12 +144,12 @@ function resize (w, h) {
     return function (w, h) {
         if (!w || !h) {
             w = this.wrapper.offsetWidth;
-            h = Math.floor(w * ratio)
+            h = Math.floor(w * ratio);
         }
 
         this.player.iframe.style.width = w + 'px';
         this.player.iframe.style.height = h + 'px';
-    }
+    };
 }
 
 function update () {
@@ -201,4 +201,4 @@ export var player = {
     proto: player_proto,
     resize: resize,
     load: load
-}
+};

@@ -2,7 +2,6 @@ import { ArrayExecuter } from 'OblioUtils/utils/ArrayExecuter.js';
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 
 'use strict';
-/*jshint validthis:true */
 
 var instance,
     sectionLoader = SectionLoader.getInstance();
@@ -296,7 +295,7 @@ function section_startup(sectionID, callbackFn){
         if(oblio.sections[sectionID].startup){
             oblio.sections[sectionID].startup(callbackFn);
         } else {
-            var container = document.getElementById(sectionID);
+            var container = document.getElementById(sectionID.toLowerCase());
             if (container) {
                 container.style.display = 'block';
             }
@@ -313,7 +312,7 @@ function section_show(sectionID, callbackFn){
     if (oblio.sections[sectionID] && oblio.sections[sectionID].show) {
         oblio.sections[sectionID].show(callbackFn);
     } else{
-        var container = document.getElementById(sectionID);
+        var container = document.getElementById(sectionID.toLowerCase());
         if (container) {
             container.style.opacity = 1;
             container.style.visibility = 'visible';
@@ -329,7 +328,7 @@ function section_hide(sectionID, callbackFn){
         if (oblio.sections[sectionID].hide) {
             oblio.sections[sectionID].hide(callbackFn);
         } else {
-            var container = document.getElementById(sectionID);
+            var container = document.getElementById(sectionID.toLowerCase());
             if(container)container.style.display = 'none';
             container.style.opacity = 0;
             container.style.visibility = 'hidden';

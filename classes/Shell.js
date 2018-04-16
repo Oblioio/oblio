@@ -72,11 +72,10 @@ function ready(callbackFn){
         callbackFn();
     }
 
-    if (oblio.app.dataSrc.widgets.menu && oblio.app.dataSrc.widgets.menu.data.menu) {
-        this.setupMenu();
+    if (oblio.app.dataSrc.widgets.main && oblio.app.dataSrc.widgets.main.data.menu) {
+        setupMenu()
     }
 
-    // this.resize();
 }
 
 function setLayout () {
@@ -96,16 +95,15 @@ function setLayout () {
     oblio.settings.layout = 'desktop';
 }
 
-function setupMenu(){
-
+function setupMenu () {
     // create menu
     var menuData = {
         menuID: 'menu',
         wrapperID: 'mainHeader',
         paginatorElID: 'mainNav',
-        menuStyle: oblio.app.dataSrc.widgets.menu.data.menu.style,
-        menuAlignment: oblio.app.dataSrc.widgets.menu.data.menu.alignment,
-        menuList: oblio.app.dataSrc.widgets.menu.data.menu.links
+        menuStyle: oblio.app.dataSrc.widgets.main.data.menu.style,
+        menuAlignment: oblio.app.dataSrc.widgets.main.data.menu.alignment,
+        menuList: oblio.app.dataSrc.widgets.main.data.menu.links
     };
 
     var menuTemplate = document.getElementById('menuTemplate');

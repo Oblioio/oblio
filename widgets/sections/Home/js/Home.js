@@ -19,7 +19,7 @@ function prepareLoad () {
     var files = [];
 
     if (files.length > 0) {
-        sectionLoader.addFiles('home', files);
+        sectionLoader.addFiles(myName, files);
     }
 }
 
@@ -37,32 +37,28 @@ function initQuotes () {
     let quotes = (typeof Quotes !== 'undefined') ? Quotes.getNew(elements.sectionWrapper) : false;
     if (quotes) {
         quotes.init({
-            wrapper: elements.sectionWrapper,
-            data: oblio.app.dataSrc.widgets.Quotes.data
+            wrapper: elements.sectionWrapper
         });
     }
     return quotes;
 }
 
 function resize (w, h) {
-    return new Promise (function (resolve, reject) {
+    sectionWidth = w;
+    sectionHeight = h;
 
-        sectionHeight = h;
-        sectionWidth = w;
-
-        elements.sectionWrapper.style.width = sectionWidth + 'px';
-        elements.sectionWrapper.style.height = sectionHeight + 'px';
-
-        resolve();
-    });
+    elements.sectionWrapper.style.width = sectionWidth + 'px';
+    elements.sectionWrapper.style.height = sectionHeight + 'px';
 }
 
 function show (callback) {
-    resize(sectionWidth, sectionHeight, sectionTop).then(function () {
-        TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
-            if (callback) callback();
-        }});
-    });
+    if (quotesModule) {
+        quotesModule.start();
+    }
+
+    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
+        if (callback) callback();
+    }});
 }
 
 function hide (callback) {

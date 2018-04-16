@@ -12,6 +12,14 @@
     }
 }
 
+.vid_wrapper {
+    .close_btn {
+        position: absolute;
+        left: 1em;
+        bottom: calc(100% + 1em);
+    }
+}
+
 .pause_cover {
     display: none;
     width: 100%;

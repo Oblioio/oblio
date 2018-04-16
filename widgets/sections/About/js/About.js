@@ -25,7 +25,7 @@ function prepareLoad () {
     ];
 
     if (files.length > 0) {
-        sectionLoader.addFiles('about', files);
+        sectionLoader.addFiles(myName, files);
     }
 }
 

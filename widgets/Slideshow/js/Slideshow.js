@@ -324,7 +324,7 @@ function buildSlideshow (slides) {
         */
         slide.elements.outer.className = slide.elements.outer.className + ' slide';
         slide.elements.inner.className = slide.elements.inner.className + ' backplate_wrapper';
-        console.log(bg)
+
         bg.el.className = bg.el.className + ' backplate';
 
         slidesFrag.appendChild(slide.elements.outer);

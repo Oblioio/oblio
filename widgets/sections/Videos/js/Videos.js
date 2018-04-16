@@ -20,14 +20,17 @@ var myName = 'Videos',
     totalVisibleVideos = 0,
     currVidId,
     navigation = Navigation.getInstance(),
-    videosPlayerObj;
+    pause_cover,
+    // playercontrols,
+    // vid_buttons,
+    resizables = [];
 
 function prepareLoad () {
     console.log('prepareLoad! ' + myName);
     var files = [];
 
     if (files.length > 0) {
-        sectionLoader.addFiles('videos', files);
+        sectionLoader.addFiles(myName, files);
     }
 }
 
@@ -39,23 +42,25 @@ function prepareLoad () {
 function init (callback) {
     console.log('Videos: init');
 
-    data = oblio.app.dataSrc.widgets.videos.data;
+    data = oblio.app.dataSrc.widgets.Videos.data;
 
     elements = this.elements = {
         sectionWrapper: document.getElementById(myName.toLowerCase()),
         videoMenuObj: document.getElementById('playerMenu'),
         menuWrapper: document.getElementById('vid_nav_wrapper'),
-        player: document.getElementById('player'),
         cookiePrefs: document.getElementById('teconsent'),
-        footer: document.getElementById('footer')
+        footer: document.getElementById('footer'),
+        header: document.getElementById('mainHeader')
     };
 
-    // this.elements.closeBtn.addEventListener('click', function (e) {
-    //     e.preventDefault();
-    //     navigation.changeSection('home');
-    // });
+    elements.player = elements.sectionWrapper.querySelector('.vid_wrapper');
+    setupYoutubePlayer();
 
     videoInfo = [];
+
+    if (data.videos.length > 1) {
+        elements.menuWrapper.style.display = 'block';
+    }
 
     for (var i = 0; i < data.videos.length; i++) {
 
@@ -66,6 +71,11 @@ function init (callback) {
             totalVisibleVideos ++;
         }
     }
+
+    elements.sectionWrapper.querySelector('.close_btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        navigation.changeSection('Home');
+    });
 
     // Set the name of the hidden property and the change event for visibility
     var hidden, visibilityChange; 
@@ -103,37 +113,21 @@ function init (callback) {
 function setupYoutubePlayer (callback) {
     var playerOptions = {
         autoplay: 1,
-        videoSrc: 'DhLFMiHwuxo',
-        controls: 0,
+        videoSrc: oblio.app.dataSrc.widgets.Videos.data.videos[oblio.app.dataSrc.settings.defaultVideoIndex].videoSrc,
         rel: 0,
         showinfo: 1,
         modestbranding: 1,
         pauseoverlay: 0
     };
 
-    youtube_wrapper = elements.sectionWrapper.querySelector('.vid_wrapper');
-    pause_cover = youtube_wrapper.querySelector('.pause_cover');
-    play_button = playButton.create(pause_cover.querySelector('.playSvg'));
+    var youtube_wrapper = elements.sectionWrapper.querySelector('.vid_wrapper');
 
     if (typeof player !== 'undefined') {
         player.create(youtube_wrapper.querySelector('.videoplayer'), youtube_wrapper, 'youtube', playerOptions).then(function (videoPlayer) {
-            playercontrols = controls.create(videoPlayer, youtube_wrapper.querySelector('.controls_wrapper'), ['play_pause', 'progress', 'fullscreen', 'volume', 'mute']);
-
             yt_player = videoPlayer;
-
-            yt_player.events.subscribe('play', onPlay);
-            playercontrols.events.subscribe('pause', onPause);
-
-            vid_buttons = document.getElementById('vid_buttons');
-            elements.sectionWrapper.addEventListener('click', playVideo);
-
-            resizables.push(videoPlayer, playercontrols);
-            DetailView.resize = resize;
-
-            callback();
+            resizables.push(videoPlayer);
         }.bind(this));
-    }
-    
+    }   
 }
 
 function startup (callbackFn) {
@@ -142,9 +136,6 @@ function startup (callbackFn) {
     if (this.verbose) {
         console.log('Videos: startup');
     }
-
-    var cover = document.getElementById('playerFlashCover');
-    TweenLite.set(cover, {autoAlpha:1});
 
     this.elements.sectionWrapper.style.display = 'block';
 
@@ -158,18 +149,14 @@ function startup (callbackFn) {
             menuList: videoMenuItems
         });
 
-        // for (i = 0; i < vidMenu.elements.listItems.length; i++) {
-        //     vidMenu.elements.listItems[i].getElementsByTagName('a')[0].rel = i;
-        // }
-
         elements.videoMenuObj.addEventListener('click', changeVideo.bind(this));
     }
 
     /** show vids **/
     this.elements.vidMenuButtons = this.elements.videoMenuObj.getElementsByTagName('a');
-    // for(i=0; i<this.elements.vidMenuButtons.length; i++){
-    //     this.elements.vidMenuButtons[i].addEventListener('click', this.changeVideo.bind(this));
-    // }
+    for (i = 0; i < this.elements.vidMenuButtons.length; i++){
+        this.elements.vidMenuButtons[i].setAttribute('rel', i);
+    }
 
     var buttonIndex = currVidId;
 
@@ -190,29 +177,9 @@ function startup (callbackFn) {
 }
 
 function show (callback) {
-    resize(sectionWidth, sectionHeight, sectionTop).then(function () {
-        TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
-            if (callback) callback();
-        }});
-
-        var videoObj = videoInfo[currVidId];
-        var playerVars = {
-                videoSrc: String(videoObj.videoSrc),
-                autoplay: 1
-            };
-        if (videoObj.type === 'youTube'){
-            videosPlayerObj = new oblio.utils.VideoPlayerYT('youtube-player', playerVars);
-        } else if (videoObj.type === 'htmlVideo'){
-            videosPlayerObj = new oblio.utils.VideoPlayerHTML5('youtube-player', playerVars);
-        }
-        if (this.introVideo) {
-            videosPlayerObj.onComplete = this.onIntroComplete;
-            this.introVideo = false;
-        }
-        var cover = document.getElementById('playerFlashCover');
-        TweenLite.to(cover, 1, {autoAlpha:0, delay:1.5});
-
-    }.bind(this));
+    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
+        if (callback) callback();
+    }});
 }
 
 function hide (callback) {
@@ -229,9 +196,9 @@ function shutdown (callBackFn){
         console.log('Videos: shutdown');
     }
 
-    if (videosPlayerObj) {
-        videosPlayerObj.destroy();
-    }
+    // if (yt_player) {
+    //     yt_player.destroy();
+    // }
 
     if (oblio.app.mainMenu) {
         oblio.app.mainMenu.show();
@@ -251,7 +218,8 @@ function shutdown (callBackFn){
 }
 
 function changeVideo (e) {
-
+// e.preventDefault();
+// debugger;
     if (e.target.parentNode.classList.contains('active')) {
         e.stopPropagation();
         e.preventDefault();
@@ -282,9 +250,9 @@ function changeVideo (e) {
     }
 
     if (oldVidObj.type === newVidObj.type) {
-        videosPlayerObj.loadVideo(videoInfo[currVidId].videoSrc);
+        yt_player.loadVideoById(videoInfo[currVidId].videoSrc);
     } else {
-        videosPlayerObj.destroy();
+        // yt_player.destroy();
         setTimeout(this.show.bind(this), 100);
     }
 
@@ -292,10 +260,10 @@ function changeVideo (e) {
 }
 
 function pauseVideo () {
-    console.log('Videos: pauseVideo', videosPlayerObj, videosPlayerObj.pause);
+    console.log('Videos: pauseVideo');
 
-    if (videosPlayerObj && videosPlayerObj.pause) {
-        videosPlayerObj.pause();
+    if (yt_player && yt_player.pause) {
+        yt_player.pause();
     }
 }
 
@@ -304,35 +272,34 @@ function onIntroComplete () {
         console.log('Videos: onIntroComplete');
     }
 
-    navigation.changeSection('home');
+    navigation.changeSection('Home');
 }
 
-function resize (w, h, top) {
+function resize (w, h) {
     if (elements === undefined) {
         return;
     }
 
-    return new Promise (function (resolve, reject) {
-        let footerHeight = elements.footer.offsetHeight;
+    let footerHeight = elements.footer.offsetHeight;
+    let headerHeight = elements.header.offsetHeight;
+    let menuHeight = elements.menuWrapper.offsetHeight;
 
-        sectionHeight = (h - top);
-        sectionWidth = w;
-        sectionTop = top;
+    sectionHeight = h;
+    sectionWidth = w;
 
-        elements.sectionWrapper.style.top = top + 'px';
-        elements.sectionWrapper.style.width = w + 'px';
-        elements.sectionWrapper.style.height = sectionHeight + 'px';
+    elements.sectionWrapper.style.width = sectionWidth + 'px';
+    elements.sectionWrapper.style.height = sectionHeight + 'px';
 
-        let vidWidth = sectionWidth,
-            vidHeight = Math.min(sectionHeight - footerHeight, sectionWidth * (9 / 16));
+    let vidWidth = sectionWidth,
+        vidHeight = Math.min(sectionHeight - (footerHeight + headerHeight + menuHeight), sectionWidth * (9 / 16));
 
-        elements.player.style.top = 0.35 * (sectionHeight - vidHeight) + 'px';
-        elements.player.style.height = vidHeight + 'px';
-        elements.player.style.width = vidWidth + 'px';
-        elements.player.style.left = ((sectionWidth - vidWidth) * 0.5) + 'px';
+    elements.menuWrapper.style.top = headerHeight + 'px';
+    elements.player.style.top = headerHeight + menuHeight + 0.5 * ((sectionHeight - (headerHeight + footerHeight)) - vidHeight) + 'px';
+    elements.player.style.height = vidHeight + 'px';
+    elements.player.style.width = vidWidth + 'px';
+    elements.player.style.left = ((sectionWidth - vidWidth) * 0.5) + 'px';
 
-        resolve()
-    });
+    resizables.forEach(resizable => resizable.resize(vidWidth, vidHeight));
 }
 
 var props = {
@@ -353,4 +320,4 @@ export var Videos = {
         instance = instance || Object.assign(Object.create(Section.prototype), props);
         return instance;
     }
-}
+};

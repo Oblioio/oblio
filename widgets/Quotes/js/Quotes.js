@@ -35,10 +35,10 @@ function loop () {
 function nextQuote () {
     /* jshint validthis:true */
 
-    this.quotes[this.currentQuote].style.visibility = 'hidden';
+    this.quotes[this.currentQuote].style.opacity = 0;
     this.currentQuote++; 
     this.currentQuote = this.currentQuote % this.quotes.length;
-    this.quotes[this.currentQuote].style.visibility = 'visible';
+    this.quotes[this.currentQuote].style.opacity = 1;
 }
 
 export var Quotes = {

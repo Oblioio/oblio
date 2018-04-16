@@ -1,9 +1,8 @@
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
-// import Mustache from 'mustache';
 
 'use strict';
 
-var Section = function () {}
+var Section = function () {};
 
 Section.prototype = {
     init: function (callback) {
@@ -28,6 +27,6 @@ Section.prototype = {
             });
         });
     }
-}
+};
 
-export { Section }
+export { Section };

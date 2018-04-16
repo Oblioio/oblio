@@ -23,19 +23,10 @@ var t = 0;
 function prepareLoad () {
     console.log('prepareLoad! ' + myName);
 
-    var files = [
-        'html/tumblrPostTypes/post.html',
-        'html/tumblrPostTypes/footer.html',
-        'html/tumblrPostTypes/link.html',
-        'html/tumblrPostTypes/photo.html',
-        'html/tumblrPostTypes/photoset.html',
-        'html/tumblrPostTypes/quote.html',
-        'html/tumblrPostTypes/text.html',
-        'html/tumblrPostTypes/video.html'
-    ];
+    var files = [];
 
     if (files.length > 0) {
-        sectionLoader.addFiles('tumblr', files);
+        sectionLoader.addFiles(myName, files);
     }
 }
 
@@ -137,4 +128,4 @@ export var Tumblr = {
         instance = instance || Object.assign(Object.create(Section.prototype), props);
         return instance;
     }
-}
+};
