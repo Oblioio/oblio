@@ -43,7 +43,7 @@ function setShell (shellID) {
 }
 
 function parseDeepLink(){
-    var home = oblio.settings.homeSection || 'home';
+    var home = oblio.settings.homeSection || 'Home';
 
     var base = oblio.settings.baseUrl,
         url_arr,
@@ -73,7 +73,7 @@ function changeSection (sectionID, completeFn) {
     console.log('navigation | changeSection: ' + sectionID + ' | ' + subSectionID);
 
     var hash = window.location.hash;
-    if (sectionID.match(/^#/)) sectionID = 'home';
+    if (sectionID.match(/^#/)) sectionID = 'Home';
 
     // if the user clicked the back or forward button while section is changing, tack the change on to arrayExecuter
     if (!this.active) {
@@ -113,12 +113,12 @@ function changeSection (sectionID, completeFn) {
         if (oblio.settings.baseUrl && oblio.settings.baseUrl !== '' && oblio.settings.htaccess !== false) {
             // pushState breaks fullscreen in chrome, so check if fullscreen first
             if( window.innerHeight !== screen.height) {
-                history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.baseUrl : oblio.settings.baseUrl + this.currentSection + '/' + this.currentSubsection + hash ));
+                history.pushState(data, '', (this.currentSection == 'Home' ? oblio.settings.baseUrl : oblio.settings.baseUrl + this.currentSection + '/' + this.currentSubsection + hash ));
             }
         } else {
             // pushState breaks fullscreen in chrome, so check if fullscreen first
             if( window.innerHeight !== screen.height) {
-                history.pushState(data, '', (this.currentSection == 'home' ? oblio.settings.baseUrl : oblio.settings.baseUrl + '#/' + this.currentSection + '/' + this.currentSubsection ));
+                history.pushState(data, '', (this.currentSection == 'Home' ? oblio.settings.baseUrl : oblio.settings.baseUrl + '#/' + this.currentSection + '/' + this.currentSubsection ));
             }
         }
     }
