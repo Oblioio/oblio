@@ -126,7 +126,7 @@ function resize (callback) {
 }
 
 var props = {
-        id: myName.toLowerCase(),
+        id: myName,
         prepareLoad: prepareLoad,
         init: init,
         resize: resize
