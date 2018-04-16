@@ -38,7 +38,7 @@ function initQuotes () {
     if (quotes) {
         quotes.init({
             wrapper: elements.sectionWrapper,
-            data: oblio.app.dataSrc.widgets.quotes.data
+            data: oblio.app.dataSrc.widgets.Quotes.data
         });
     }
     return quotes;
