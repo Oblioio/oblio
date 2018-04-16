@@ -34,7 +34,7 @@ function init (callback) {
 }
 
 function initQuotes () {
-    let quotes = (typeof Quotes !== 'undefined') ? Quotes.getNew() : false;
+    let quotes = (typeof Quotes !== 'undefined') ? Quotes.getNew(elements.sectionWrapper) : false;
     if (quotes) {
         quotes.init({
             wrapper: elements.sectionWrapper,

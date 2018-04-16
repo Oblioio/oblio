@@ -15,11 +15,15 @@ var prototype = {
     stop: function () {
         this.paused = true;
     }
-}
+};
 
 function loop () {
+    /* jshint validthis:true */
+
     if (this.paused) return;
+
     this.now = Date.now();
+
     if (this.now > this.nextTime) {
         this.nextTime = this.now + this.delay;
         nextQuote.call(this);
@@ -29,6 +33,8 @@ function loop () {
 }
 
 function nextQuote () {
+    /* jshint validthis:true */
+
     this.quotes[this.currentQuote].style.visibility = 'hidden';
     this.currentQuote++; 
     this.currentQuote = this.currentQuote % this.quotes.length;
@@ -42,4 +48,4 @@ export var Quotes = {
             wrapper: wrapper
         });
     }
-}
+};
