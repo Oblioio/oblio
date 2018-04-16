@@ -1,0 +1,235 @@
+
+    <div id="postContent">
+{block:Posts}
+    <article class="tumblrpost {block:Text}text {/block:Text}{block:Photoset}photoset {/block:Photoset}{block:Photo}photo {/block:Photo}{block:RebloggedFrom}reblogged {/block:RebloggedFrom}{block:Quote}quote {/block:Quote}{block:Link}link {/block:Link}{block:Chat}chat {/block:Chat}{block:Audio}audio {/block:Audio}{block:Video}video {/block:Video}{block:Answer}answer {/block:Answer}{block:Date}not-page post-{PostID}{/block:Date} {block:PermalinkPage} permalink-page{/block:PermalinkPage}" data-permalink="{Permalink}" {block:Date}data-post-id="{PostID}"{/block:Date}>
+        <div class="post-wrapper clearfix">
+            <div class="thumb">
+
+                {block:Text}
+                    {block:Title}<h2><a href="{Permalink}">{Title}</a></h2>{/block:Title}
+                    {block:Body}
+                    <div class="body-text">
+                        {Body}
+                    </div>
+                    {/block:Body}
+                {/block:Text}
+
+                {block:Photo}
+                    {LinkOpenTag}<img src="{PhotoURL-HighRes}" alt="{PhotoAlt}" width="{PhotoWidth-HighRes}" height="{PhotoHeight-HighRes}">{LinkCloseTag}
+                {/block:Photo}
+
+                {block:Photoset}
+                    {Photoset}
+                {/block:Photoset}
+
+                {block:Quote}
+                <blockquote class="{Length}">
+                    <p>{Quote}</p>
+                </blockquote>
+                {block:Source}
+                <div class="source">{Source}</div>
+                {/block:Source}
+                {/block:Quote}
+
+                {block:Link}
+                    {block:Thumbnail}
+                    <img src="{Thumbnail-HighRes}" alt="{Name}">
+                    {/block:Thumbnail}
+                {/block:Link}
+
+                {block:Chat}
+                {block:Title}<h2><a href="{Permalink}">{Title}</a></h2>{/block:Title}
+                    <ul class="conversation">
+                    {block:Lines}
+                        <li class="chat-{Alt}">{block:Label}<span class="label">{Label}</span>{/block:Label} {Line}</li>
+                    {/block:Lines}
+                    </ul>
+                {/block:Chat}
+
+                {block:Audio}
+                <div class="audio_container">
+                    {block:AudioEmbed}
+                        {AudioEmbed color="white"}
+                    {/block:AudioEmbed}
+                </div>
+                {block:Caption}
+                <div class="caption">
+                    {Caption}
+                </div>
+                {/block:Caption}
+                {/block:Audio}
+
+                {block:Video}                            
+                    {Video-700}
+                {/block:Video}
+
+                {block:Answer}
+                <div class="note-item note-item-asker">
+                    <div class="text">
+                        <p class="asker"><strong>{Asker}</strong> asked:</p>
+                        <div class="asker-question">
+                            <p>{Question}</p>
+                        </div>
+                    </div>
+                    <div class="avatar">
+                        <img class="asker-avatar" src="{AskerPortraitURL-96}" alt="">
+                    </div>
+                </div>
+
+                {block:Answerer}
+                <div class="note-item note-item-answerer">
+                    <div class="text">
+                        <p class="answerer"><strong>{Answerer}</strong> answered:</p>
+                        <div class="answerer-answer">
+                            {Answer}
+                        </div>
+                    </div>
+                    <div class="avatar">
+                        <img class="answerer-avatar" src="{AnswererPortraitURL-96}" alt="">
+                    </div>
+                </div>
+                {/block:Answerer}
+
+                <div class="replies">
+                    {Replies}
+                </div>
+                {/block:Answer}
+
+                {block:RebloggedFrom}
+                <div class="attribution-tags clearfix">
+                    <ul>
+                        <li>
+                            <a class="reblog-link" href="{ReblogParentURL}">{ReblogParentName}</a>
+                        </li>
+                        {block:ContentSource}
+                        <li>
+                            <a class="source-link" href="{SourceURL}">{lang:Source}: {SourceTitle}</a>
+                        </li>
+                        {/block:ContentSource}
+                        {block:HasTags}
+                            {block:Tags}
+                                <li>
+                                    <a href="{TagURL}" class="tag">{Tag}</a>
+                                </li>
+                            {/block:Tags}
+                        {/block:HasTags} 
+                    </ul>
+                </div>
+                {/block:RebloggedFrom}
+
+                {block:NotReblog}
+                    {block:HasTags}
+                    <div class="attribution-tags clearfix">
+                        <ul>
+                            {block:ContentSource}
+                            <li>
+                                <a class="source-link" href="{SourceURL}">{lang:Source}: {SourceTitle}</a>
+                            </li>
+                            {/block:ContentSource}
+                            {block:Tags}
+                                <li>
+                                    <a href="{TagURL}" class="tag">{Tag}</a>
+                                </li>
+                            {/block:Tags}
+                        </ul>
+                    </div>
+                    {/block:HasTags}                                
+                {/block:NotReblog}
+
+            </div>
+
+            <div class="darken"></div>
+            
+            <div class="overlay">
+
+                {block:Photo}
+                    {block:Caption}
+                        {Caption}
+                    {/block:Caption}
+                {/block:Photo}
+
+                {block:Photoset}
+                    {block:Caption}
+                        {Caption}
+                    {/block:Caption}
+                {/block:Photoset}
+
+                {block:Link}
+                {block:Host}
+                <a class="host" {Target} href="{URL}">{Host}</a>
+                {/block:Host}
+                <h2><a {Target} href="{URL}">{Name}</a></h2>
+                {/block:Link}
+
+                {block:Video}                            
+                    {Caption}
+                {/block:Video}
+
+                <footer class="post-footer">
+                    <div class="meta"> 
+                        <ul class="post-date">
+                            <li>
+                                <a href="{Permalink}" title="{TimeAgo}">{ShortMonth} {DayOfMonth}{DayOfMonthSuffix}, {Year}</a>
+                            </li>
+                            {block:NoteCount}
+                            <li> 
+                                <a href="{Permalink}#notes">{NoteCountWithLabel}</a>
+                            </li>
+                            {/block:NoteCount}
+                        </ul>
+                    </div>
+                    
+                    <div class="post-controls">
+                        <ul>
+                            <li class="share-control">
+                                <nav class="pop">
+                                    <a href="#" class="share selector"></a>
+                                    <div class="pop-menu share-menu south" id="share_{PostID}">
+                                        <ul>
+                                            <li><a href="http://facebook.com/sharer.php?u={URLEncodedPermalink}&amp;t={URLEncodedTitle}" class="share-item facebook" target="_blank">Facebook</a></li>
+                                            <li><a href="https://twitter.com/intent/tweet?text={URLEncodedTweetSummary}" class="share-item twitter" target="_blank">Tweet</a></li>
+                                            <li><a href="mailto:?subject={URLEncodedShareString}&amp;body={URLEncodedMailSummary}" class="share-item mail">Mail</a></li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                            </li>
+                            <li class="reblog-control"><div class="reblog_custom"><svg width="100%" height="100%" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FFFFFF"><path d="M5.01092527,5.99908429 L16.0088498,5.99908429 L16.136,9.508 L20.836,4.752 L16.136,0.083 L16.1360004,3.01110845 L2.09985349,3.01110845 C1.50585349,3.01110845 0.979248041,3.44726568 0.979248041,4.45007306 L0.979248041,10.9999998 L3.98376463,8.30993634 L3.98376463,6.89801007 C3.98376463,6.20867902 4.71892527,5.99908429 5.01092527,5.99908429 Z"></path><path d="M17.1420002,13.2800293 C17.1420002,13.5720293 17.022957,14.0490723 16.730957,14.0490723 L4.92919922,14.0490723 L4.92919922,11 L0.5,15.806 L4.92919922,20.5103758 L5.00469971,16.9990234 L18.9700928,16.9990234 C19.5640928,16.9990234 19.9453125,16.4010001 19.9453125,15.8060001 L19.9453125,9.5324707 L17.142,12.203"></path></svg></div>{ReblogButton}</li>
+                            <li class="like-control">{LikeButton}<div class="like_custom"><svg width="100%" height="100%" viewBox="0 0 19 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FFFFFF"><path d="M14.0425097,0.000920262799 C16.1435097,-0.0400797372 18.8835097,1.28192026 18.9635097,5.36992026 C19.0525097,9.95492026 15.1985097,13.3079203 9.48350967,16.2089203 C3.76650967,13.3079203 -0.0874903349,9.95492026 0.00150966509,5.36992026 C0.0815096651,1.28192026 2.82150967,-0.0400797372 4.92250967,0.000920262799 C7.02450967,0.0419202628 8.87050967,2.26592026 9.46950967,2.92792026 C10.0945097,2.26592026 11.9405097,0.0419202628 14.0425097,0.000920262799 Z"></path></svg></div></li>
+                            <li class="permalink-control"><a href="{Permalink}">+</a></li>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
+
+            {block:PermalinkPage}
+
+                {block:PostNotes}
+                <div id="notes" class="notes-wrapper clearfix">
+                    {PostNotes-64}
+                </div>
+                {/block:PostNotes}
+
+                {block:Date}
+
+                    {block:IfDisqusShortname}
+                    <div class="comments">
+                        <div id="disqus_thread"></div>
+                        <script type="text/javascript">
+                          (function() {
+                           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                           dsq.src = 'http://{text:Disqus Shortname}.disqus.com/embed.js';
+                           (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                          })();
+                        </script>
+                        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript={text:Disqus Shortname}">comments powered by Disqus.</a></noscript>
+                        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+                    </div>
+                    {/block:IfDisqusShortname}
+
+                {/block:Date}
+
+            {/block:PermalinkPage}
+        </div>
+    </article>
+{/block:Posts}
+</div>

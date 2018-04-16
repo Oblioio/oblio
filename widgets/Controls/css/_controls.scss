@@ -1,0 +1,205 @@
+.vid_wrapper {
+    position: relative;
+
+    .cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+.video-control {
+    cursor: pointer;
+    float: left;
+
+    transform: translateZ(1px);
+
+    svg {
+        fill: rgba(255, 255, 255, 1);
+    }
+}
+
+.time {
+    line-height: 20px;
+    position: absolute;
+    right: 0;
+    color: #fff;
+    letter-spacing: 3px;
+}
+
+.playpause {
+    margin-right: 10px;
+
+    svg {
+        position: relative;
+    }
+
+    .play {
+        display: none;
+    }
+
+    &.paused {
+        .pause {
+            display: none;
+        }
+
+        .play {
+            display: block;
+        }
+    }
+}
+
+.fullscreen {
+
+}
+
+#youtube_wrapper {
+    iframe {
+        // pointer-events: none;
+    }
+}
+
+.controls_wrapper {
+    opacity: 0;
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: calc(100% - 60px);
+
+    transform: translateZ(1px);
+    transition: opacity 0.25s ease-out;
+}
+
+.progress {
+    width: calc(100% - (90px));
+    height: 20px;
+    position: relative;
+
+    .track {
+        width: 100%;
+        height: 1px;
+        background: rgba(255,255,255,0.3);
+        position: absolute;
+        top: calc(50% - 1px);
+        left: 0;
+
+        .progressbar {
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            
+            transform-origin: 0;
+            transform: scaleX(0);
+        }
+    }
+}
+
+.fullscreen {
+    float: right;
+    margin-left: 18px;
+}
+
+.volume_wrapper {
+    position: relative;
+    float: right;
+    
+    &:hover {
+        .volume {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
+    .volume {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        bottom: -15px;
+        width: 36px;
+        height: 139px;
+        left: 50%;
+        margin-left: -18px;
+        background: rgba(0,0,0,0.8);
+
+        transition: opacity 0.5s ease-out;
+        
+        .slider {
+            position: absolute;
+            width: 100%;
+            bottom: 48px;
+
+            .track {
+                width: 1px;
+                height: 74px;
+                background: rgba(255,255,255,0.3);            
+                margin: 0 auto;
+                position: relative;
+
+                .handle {
+                    width: 13px;
+                    height: 5px;
+                    border: solid 1px #FFF;
+                    background: #000;
+                    position: absolute;
+                    bottom: 0;
+                    margin-bottom: -2.5px;
+                    margin-left: -6.5px
+                }
+
+                .volumebar {
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255,255,255,0.6);
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    
+                    transform-origin: 0 100%;
+                    transform: scaleY(0);
+                }
+            }
+        }
+    }
+
+    .mute {
+        position: relative;
+
+        svg {
+            left: 0;
+            top: 0;
+        }
+
+        .speaker {
+            display: block;
+        }
+
+        .vibes {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .offx {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        &.muted {
+            .offx {
+                display: block;
+            }
+            .vibes {
+                display: none;
+            }
+        }
+    }
+}

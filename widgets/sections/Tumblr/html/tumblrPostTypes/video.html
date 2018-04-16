@@ -1,0 +1,23 @@
+<div class="thumb">
+    {{#permalink}}
+    {{#player}}
+        {{{embed_code}}}
+    {{/player}}
+    {{/permalink}}
+    {{^permalink}}
+    <img src="" alt="" data-sizes="{{thumbnail_width}},{{thumbnail_height}},{{thumbnail_url}}|">
+    {{/permalink}}
+</div>
+
+<div class="darken"></div>
+
+<div class="overlay">
+    {{#permalink}}
+    {{{caption}}}
+    {{/permalink}}
+    {{^permalink}}
+    {{{summary}}}
+    {{/permalink}}
+
+    {{> footer}}
+</div>

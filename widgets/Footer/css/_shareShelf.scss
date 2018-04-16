@@ -1,0 +1,35 @@
+#shareShelf {
+    position: absolute;
+    width: 100%;
+    padding: 4em 0 1em;
+    background: $black;
+    color: $primary_color;
+    line-height: 1em;
+    text-align: center;
+    overflow: hidden;
+    bottom: 0;
+    left: 0;
+    transform: translate3d(0, 200px, 0);
+
+    .facebook {
+        float: none;
+        margin: 0;
+        display: block;
+    }
+
+    .shareshelf-button {
+        display: inline-block;
+        margin: 0 1em 0 0;
+        vertical-align: top;
+    }
+
+    .close_btn {
+        position: absolute;
+        top: 1em;
+        left: calc(50% - 1em);
+    }
+}
+
+#sharelabel {
+    transform: translateZ(0);
+}

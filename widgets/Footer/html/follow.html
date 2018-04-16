@@ -1,0 +1,16 @@
+{{#follow}}
+{{#visible}}
+    <div id="follow" class="footer-btn">
+        {{#label}}
+            {{#visible}}
+            <span id="follow_label" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}" class="no-select-text">{{text}}</span>
+            {{/visible}}
+        {{/label}}
+        {{#links}}
+            {{#visible}}
+            <a class="icon-{{name}} social-icon" target="_blank" href="{{url}}"></a>
+            {{/visible}}
+        {{/links}}
+    </div>
+{{/visible}}
+{{/follow}}

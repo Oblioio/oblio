@@ -1,0 +1,29 @@
+<section class="absFull" id="home">
+    {{#actors}}
+        {{#visible}}
+        <ul id="actors">{{#names}}{{#visible}}<li>{{#first}}<span class="first" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</span>{{/first}}{{#last}}<span class="last" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{#before}}{{#visible}}<span class="before" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</span>{{/visible}}{{/before}}{{{text}}}</span>{{/last}}</li>{{/visible}}{{/names}}</ul>
+        {{/visible}}
+    {{/actors}}
+    {{#tagline}}
+        {{#visible}}
+    <h2 style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</h2>
+        {{/visible}}
+    {{/tagline}}
+    <div class="content_wrapper">
+    {{#watchTrailerButton}}
+        {{#visible}}
+    <button id="watchTrailerButton" {{#css}}{{#value}}data-{{property}}="{{value}}"{{/value}} {{/css}}>{{{text}}}</button>
+        {{/visible}}
+    {{/watchTrailerButton}}
+    {{#title}}
+        {{#visible}}
+    <img id="mainTitleImage" src="{{{img}}}" alt="{{{text}}}">
+        {{/visible}}
+    {{/title}}
+    {{#releaseDate}}
+        {{#visible}}
+    <h3 id="releaseDate" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</h3>
+        {{/visible}}
+    {{/releaseDate}}
+    </div>
+</section>

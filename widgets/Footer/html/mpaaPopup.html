@@ -1,0 +1,20 @@
+{{#mpaaPopup}}
+{{#visible}}
+<div id="MPAA_requirements">
+    
+    {{#ratingImage}}
+    {{#visible}}
+    <img src="{{{assetsUrl}}}{{{url}}}" />
+    {{/visible}}
+    {{/ratingImage}}
+
+    <ul id="mpaa_legal">
+        {{#links}}
+            {{#visible}}
+                <li><a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a></li>
+            {{/visible}}
+        {{/links}}
+    </ul>   
+</div>
+{{/visible}}
+{{/mpaaPopup}}

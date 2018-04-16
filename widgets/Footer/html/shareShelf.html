@@ -1,0 +1,10 @@
+{{#shareShelf}}
+{{#label}}
+<a class="footer-btn" href="#" id="sharelabel" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}"><div class="border-arrow"></div>{{text}}</a>                  
+{{/label}}
+
+<div id="shareShelf"> 
+    {{#tweet}}{{#visible}}<div class="shareshelf-button tweet-button" id="tweetBtn"><a href="https://twitter.com/share" class="twitter-share-button" data-text="{{text}}" data-url="{{{url}}}" data-count="none">{{label}}</a></div>{{/visible}}{{/tweet}}{{#facebookLike}}{{#visible}}<div id="fbLike" data-href="{{{url}}}" class="shareshelf-button fb-like" data-layout="button_count" data-share="true" data-action="like"></div>{{/visible}}{{/facebookLike}}{{#facebookShare}}{{#visible}}<div id="fbShare" class="shareshelf-button fb-share-button" data-href="{{{url}}}" data-layout="button_count"></div>{{/visible}}{{/facebookShare}}{{#googlePlus}}{{#visible}}<div class="shareshelf-button google-button" data-href="{{{url}}}" id="gPlusBtn"></div>{{/visible}}{{/googlePlus}}
+    {{> close_btn}}
+</div>
+{{/shareShelf}}

@@ -1,0 +1,19 @@
+<section class="absFull" id="videos">
+
+    <div id="vid_nav_wrapper" class="header horizontal">
+        <nav id="vid_nav_paginator">
+            <ul class="centeredMenu" id="playerMenu">
+                {{#videos}}
+                    {{#visible}}
+                    <li>
+                        <a class="slashWrapper" href="{{videoSrc}}" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{title}}</a>
+                    </li>
+                    {{/visible}}
+                {{/videos}}
+            </ul>
+        </nav>
+    </div>
+
+    {{> videoplayer}}
+
+</section>

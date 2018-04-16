@@ -1,0 +1,44 @@
+{{#footer}}
+<div id="footer">
+    <div id="soundButton">
+        <div id="soundBars">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    {{#getTickets}}
+        {{#visible}}
+        <a id="get_tickets" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
+        {{/visible}}
+    {{/getTickets}}
+
+    {{> shareShelf}}
+
+    {{#privacyPolicy}}
+        {{#visible}}
+            <a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
+        {{/visible}}
+    {{/privacyPolicy}}
+
+    {{#termsOfUse}}
+        {{#visible}}
+            <a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
+        {{/visible}}
+    {{/termsOfUse}}
+
+    {{> creditsDrawer}}
+    {{> mpaaPopup}}
+    {{> follow}}
+
+    {{#copyrightTxt}}
+        {{#visible}}
+            <p class="copyrightTxt" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{text}}</p>
+        {{/visible}}
+    {{/copyrightTxt}}
+
+</div>
+{{/footer}}

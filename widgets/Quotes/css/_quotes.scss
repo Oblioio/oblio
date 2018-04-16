@@ -1,0 +1,92 @@
+.quotes_module {
+    position: absolute;
+    width: 30%;
+    line-height: 1.4em;
+    font-size: 16px;
+    max-width: 18.5em;
+
+    &.t {
+        top: 10%;
+        bottom: auto;
+    }
+
+    &.b {
+        top: auto;
+        bottom: 10%;
+    }
+
+    &.r {
+        right: 6.25%;
+        left: auto;
+    }
+
+    &.l {
+        right: auto;
+        left: 6.25%;
+    }
+
+    blockquote {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        margin: 0;
+
+        &::before {
+            content: "“";
+            position: absolute;
+            left: -0.05em;
+            bottom: calc(100% - 0.3em);
+            font-size: 5.5em;
+            line-height: 1em;
+            opacity: 0;
+
+            transition: opacity 1s ease-in-out;
+            transition-delay: 0s;
+        }
+
+        &.current {
+            opacity: 1;
+
+            &::before {
+                opacity: 1;
+
+                transition-delay: 1s;
+            }
+        }
+
+        p {
+            margin: 0;
+        }
+
+        footer {
+            margin-top: 1em;
+            text-align: right;
+
+            .author {
+                font-size: 1.375em;
+            }
+
+            .publication {
+                font-size: 0.75em;
+            }
+        }
+
+        p,
+        footer {
+            span {
+                opacity: 1;
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+
+                i {
+                    display: inline-block;
+                    position: relative;
+                    font-style: normal;
+
+                    transform: translateZ(1px);
+                }
+            }
+        }
+    }
+}

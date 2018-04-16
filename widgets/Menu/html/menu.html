@@ -1,0 +1,18 @@
+{{#menu}}
+<header id="mainHeader" class="header">
+    {{> burger}}
+    <nav id="mainNav">
+        {{#menu}}
+        <ul id="menu">
+            {{#links}}
+                {{#visible}}
+                <li>
+                    <a href="{{link}}" {{#popup}}data-popup="width={{width}},height={{height}}"{{/popup}} {{#external}}target="_blank"{{/external}} data-section="{{link}}" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}"><span class="label">{{label}}</span></a>
+                </li>
+                {{/visible}}
+            {{/links}}
+        </ul>
+        {{/menu}}
+    </nav>
+</header>
+{{/menu}}

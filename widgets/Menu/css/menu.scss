@@ -1,0 +1,10 @@
+#mainHeader {
+    position: fixed;
+    z-index: 10;
+    display: none;
+    transform: translateZ(1px);
+
+    @import 'vertical';
+    @import 'horizontal';
+
+}

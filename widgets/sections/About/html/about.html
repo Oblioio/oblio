@@ -1,0 +1,19 @@
+<section class="absFull" id="about">
+    <div class="wrapper">
+        {{#header}}
+            {{#visible}}
+        <h1 style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</h1>
+            {{/visible}}
+        {{/header}}
+        {{#subhead}}
+            {{#visible}}
+        <h2 style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</h2>
+            {{/visible}}
+        {{/subhead}}
+        {{#body}}
+            {{#visible}}
+        <div class="bod" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{text}}}</div>
+            {{/visible}}
+        {{/body}}
+    </div>
+</section>

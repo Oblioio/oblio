@@ -1,0 +1,233 @@
+$soundColor: $secondary_color;
+
+#soundButton {
+    display: none;
+    // display: inline-block;
+    padding: 2px;
+    position: relative;
+    cursor: pointer;
+    z-index: 8;
+    margin: -2px 1.5em 0 0;
+    // transparent pixel for IE clickability
+    background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7);
+
+    .no-touch &:hover {
+        #soundBars {
+            div {
+                &::after {
+                    background: $hover_color;
+                }
+            }
+        }
+    }
+
+    #soundBars {
+        display: inline-block;
+        width: 20px;
+        height: 10px;
+        position: relative;
+
+        transform: translateZ(101px);
+
+        div {
+            position: relative;
+            float: left;
+            margin-right: 1px;
+            width: 2px;
+            height: 100%;
+
+            &::after {
+                background: $soundColor;
+                content: '';
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 2px;
+                height: 100%;
+
+                transition: background 0.5s ease-in-out;
+                transform-origin: 0 100%;
+                transform: scaleY(10%);
+
+                -webkit-animation-name: soundBar;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-direction: alternate;
+                -moz-animation-name: soundBar;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-direction: alternate;
+                animation-name: soundBar;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+            }
+
+            &:nth-child(0n + 1) {
+                &::after {
+                    -webkit-animation-duration: 0.5s;
+                    -moz-animation-duration: 0.5s;
+                    animation-duration: 0.5s;
+                }
+            }
+
+            &:nth-child(2) {
+                &::after {
+                    -webkit-animation-duration: 0.54s;
+                    -moz-animation-duration: 0.54s;
+                    animation-duration: 0.54s;
+                }
+            }
+
+            &:nth-child(3) {
+                &::after {
+                    -webkit-animation-duration: 0.47s;
+                    -moz-animation-duration: 0.47s;
+                    animation-duration: 0.47s;
+                }
+            }
+
+            &:nth-child(4) {
+                &::after {
+                    -webkit-animation-duration: 0.46s;
+                    -moz-animation-duration: 0.46s;
+                    animation-duration: 0.46s;
+                }
+            }
+
+            &:nth-child(5) {
+                &::after {
+                    -webkit-animation-duration: 0.53s;
+                    -moz-animation-duration: 0.53s;
+                    animation-duration: 0.53s;
+                }
+            }
+        }
+
+        &.on {
+            div {
+                &::after {
+                    -webkit-animation-name: soundBar;
+                    -webkit-animation-iteration-count: infinite;
+                    -webkit-animation-direction: alternate;
+                    -moz-animation-name: soundBar;
+                    -moz-animation-iteration-count: infinite;
+                    -moz-animation-direction: alternate;
+                    animation-name: soundBar;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                }
+            }
+        }
+
+        .ie &.on {
+            div {
+                &:nth-child(0n + 1) {
+                    &::after {
+                        transform: scaleY(0.5);
+                        //height: 50%;
+                    }
+                }
+
+                &:nth-child(2) {
+                    &::after {
+                        transform: scaleY(0.4);
+                        // height: 40%;
+                    }
+                }
+
+                &:nth-child(3) {
+                    &::after {
+                        transform: scaleY(0.85);
+                        // height: 85%;
+                    }
+                }
+
+                &:nth-child(4) {
+                    &::after {
+                        transform: scaleY(1);
+                        // height: 100%;
+                    }
+                }
+
+                &:nth-child(5) {
+                    &::after {
+                        transform: scaleY(0.6);
+                        // height: 60%;
+                    }
+                }
+            }
+        }
+
+        &.off {
+            div {
+                &::after {
+                    -webkit-animation-name: soundBarOff;
+                    -webkit-animation-iteration-count: 1;
+                    -webkit-animation-direction: alternate;
+                    -moz-animation-name: soundBarOff;
+                    -moz-animation-iteration-count: 1;
+                    -moz-animation-direction: alternate;
+                    animation-name: soundBarOff;
+                    animation-iteration-count: 1;
+                    animation-direction: alternate;
+                }
+            }
+        }
+    }
+}
+
+@-webkit-keyframes soundBarOff {
+    100% {
+        transform: scaleY(0.1);
+        // height: 10%;
+    }
+}
+
+@-webkit-keyframes soundBar {
+    0% {
+        transform: scaleY(0.01);
+        // height: 1%;
+    }
+}
+
+100% {
+    transform: scaleY(1);
+    // height: 100%;
+}
+
+@-moz-keyframes soundBarOff {
+    100% {
+        transform: scaleY(0.1);
+        // height: 10%;
+    }
+}
+
+@-moz-keyframes soundBar {
+    0% {
+        transform: scaleY(0.01);
+        // height: 1%;
+    }
+}
+
+100% {
+    transform: scaleY(1);
+    // height: 100%;
+}
+
+@keyframes soundBarOff {
+    100% {
+        transform: scaleY(0.1);
+        // height: 10%;
+    }
+}
+
+@keyframes soundBar {
+    0% {
+        transform: scaleY(0.01);
+        // height: 1%;
+    }
+}
+
+100% {
+    transform: scaleY(1);
+    // height: 100%;
+}

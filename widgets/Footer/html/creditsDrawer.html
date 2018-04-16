@@ -1,0 +1,34 @@
+{{#creditsDrawer}}
+{{#label}}
+<a class="footer-btn" href="#" id="credits-button" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}"><div class="border-arrow"></div>{{text}}</a>
+{{/label}}
+
+<!-- Credits Box -->
+<div id="credits">
+    <div class="rel">
+        
+        {{#billingBlock}}
+        {{#visible}}
+        <img class="billing_block" src="{{{assetsUrl}}}{{{url}}}" alt="Credits" />
+        {{/visible}}
+        {{/billingBlock}}
+        
+        <ul id="credits_drawer_links">
+            {{#links}}
+                {{#visible}}
+                <li><a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a></li>
+                {{/visible}}
+            {{/links}}
+        </ul>
+
+        {{#copyrightTxt}}
+            {{#visible}}
+            <div id="copyright" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{text}}</div>
+            {{/visible}}
+        {{/copyrightTxt}}
+    </div>
+
+    {{> close_btn}}
+
+</div>
+{{/creditsDrawer}}

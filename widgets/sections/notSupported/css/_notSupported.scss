@@ -1,0 +1,34 @@
+#notSupported {
+    opacity: 1;
+    display: block;
+    visibility: visible;
+    text-align: center;
+    padding-top: 2em;
+    font-size: 1em;
+    line-height: 1.25em;
+    position: relative;
+    max-width: 80%;
+    margin: 0 auto;
+    
+    .releaseDate {
+        font-size: 3em;
+        line-height: 1em;
+        margin-bottom: 1em;
+    }
+
+    #TT {
+        display: block;
+        margin: 20px auto;
+        max-width: 75%;
+    }
+
+    .line1 {
+        font-size: 1.5em;
+        line-height: 1.25em;
+        font-weight: bold;
+    }
+
+    .line2 {
+        font-size: 1em;
+    }
+}

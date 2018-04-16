@@ -1,0 +1,214 @@
+.slideshow {
+
+    // cursor: url(../assets/images/openhand.cur), default;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    &.disabled {
+        cursor: default;
+    }
+
+    transform: translate3d(0, 0, 1px);
+
+    &.dragging {
+        cursor: -webkit-grabbing;
+        cursor: -moz-grabbing;
+    }
+
+    .backplate {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+    }
+
+    .video_backplate {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    > ul {
+        list-style-type: none;
+        position: absolute;
+    }
+
+    .slide {
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: none;
+        transform: translate3d(0, 0, 2px);
+
+        &.active {
+            display: block;
+        }
+
+        .gallery {
+            position: absolute;
+
+            .gallery_image {
+                position: absolute;
+
+                img {
+                    display: block;
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.paginator {
+    position: absolute;
+    bottom: 60px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 0 40px;
+    left: 50%;
+    transform: translate3d(0, 0, 3px);
+
+    .count {
+        font-size: 11px;
+        position: absolute;
+        line-height: 1em;
+        top: -1.15em;
+        padding-left: 0.5em;
+        color: $white;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    .prev_page,
+    .next_page {
+        display: block;
+        position: absolute;
+        overflow: hidden;
+        top: 50%;
+        margin-top: -25px;
+        width: 24px;
+        height: 50px;
+        font: 0/0 a;
+        text-shadow: none;
+        color: transparent;
+        border-top: 25px solid transparent;
+        border-bottom: 25px solid transparent;
+        opacity: 0.5;
+        transition: opacity 0.25s, border 0.25s ease-out;
+
+        &.disabled {
+            cursor: default;
+            opacity: 0;
+
+            &:hover {
+                opacity: 0;
+            }
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .prev_page {
+        border-left: 0 solid #fff;
+        border-right: 24px solid #fff;
+        left: 6px;
+    }
+
+    .next_page {
+        border-right: 0 solid #fff;
+        border-left: 24px solid #fff;
+        right: 6px;
+    }
+
+    span {
+        display: block;
+        line-height: 50px;
+        text-align: center;
+    }
+
+    .thumb_wrapper {
+        position: relative;
+        height: 90px;
+        width: 737px;
+        overflow: hidden;
+
+        ul {
+            position: absolute;
+            height: 90px;
+            width: 737px;
+            top: 0;
+            left: 0;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+
+            > li {
+                display: block;
+                float: left;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+
+            li {
+                height: 100%;
+                padding: 4px 2px;
+
+                a {
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    position: relative;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        position: absolute;
+                        opacity: 0.75;
+                        transition: opacity 0.5s;
+                    }
+
+                    &:hover,
+                    &.selected {
+                        border: solid 1px #fff;
+
+                        img {
+                            opacity: 1;
+                        }
+                    }
+
+                    &.selected {
+                        cursor: default;
+                    }
+                }
+            }
+
+            @for $i from 1 through 25 {
+                &.num_thumbs_#{$i} {
+                    li {
+                        width: 1 / $i * 100%;
+                    }
+                }
+            }
+        }
+    }
+}

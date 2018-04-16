@@ -1,0 +1,45 @@
+.burger {
+    position: absolute;
+    width: 32px;
+    height: 16px;
+
+    &::before {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-top: solid 2px $red;
+        border-bottom: solid 2px $red;
+    }
+
+    &::after {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        top: calc(50% - 1px);
+        background: $red;
+    }
+
+    .close_btn {
+        display: none;
+    }
+
+    .open & {
+        &::before,
+        &::after {
+            display: none;
+        }
+
+        .close_btn {
+            display: block;
+            width: 32px;
+            height: 32px;
+            margin-top: -8px;
+        }
+    }
+}

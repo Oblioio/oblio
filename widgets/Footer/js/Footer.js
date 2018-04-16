@@ -1,6 +1,6 @@
 import { ArrayExecuter } from 'OblioUtils/utils/ArrayExecuter';
 
-/* footer.widgets */
+/* Footer.widgets */
 
 'use strict';
 

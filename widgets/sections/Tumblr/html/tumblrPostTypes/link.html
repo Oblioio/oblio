@@ -1,0 +1,15 @@
+<div class="thumb">
+    {{#photos}}
+    <img src="" data-sizes="{{#photos}}{{#alt_sizes}}{{width}},{{height}},{{url}}|{{/alt_sizes}}{{/photos}}" alt="{{title}}">
+    {{/photos}}
+</div>
+
+<div class="darken"></div>
+
+<div class="overlay">
+
+    <a class="host" target="_blank" href="{{url}}">{{{publisher}}}</a>
+    <h2><a target="_blank" href="{{url}}">{{{title}}}</a></h2>
+
+    {{> footer}}
+</div>
