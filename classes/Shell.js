@@ -7,6 +7,7 @@ import 'OblioUtils/utils/DeviceDetect';
 
 'use strict';
 
+// testing
 var instance,
     footer = (typeof Footer !== 'undefined') ? Footer.getInstance() : false,
     navigation = Navigation.getInstance(),
