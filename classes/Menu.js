@@ -1,9 +1,7 @@
-import Mustache from 'mustache';
 import 'OblioUtils/utils/DeviceDetect';
 import 'OblioUtils/classes/MenuPaginator';
 
 'use strict';
-/*jshint validthis: true */
 
 var isMobile = oblio.utils.DeviceDetect.isMobile;
 

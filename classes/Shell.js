@@ -1,4 +1,3 @@
-import Mustache from 'mustache';
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 import { findAncestor } from 'OblioUtils/utils/findAncestor';
 import { Navigation } from 'OblioUtils/classes/Navigation';
