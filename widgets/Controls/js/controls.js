@@ -3,7 +3,7 @@ import {progress_control} from './control_components/progress';
 import {volume_control} from './control_components/volume';
 import {mute_control} from './control_components/mute';
 import {fullscreen_control} from './control_components/fullscreen';
-import {events} from '../../utils/pubsub.js';
+import {events} from 'OblioUtils/utils/pubsub.js';
 
 var availableControls = {
     play_pause: play_pause_control,

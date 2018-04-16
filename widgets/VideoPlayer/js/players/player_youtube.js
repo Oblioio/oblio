@@ -1,4 +1,4 @@
-import { clock } from '../../../utils/MasterClock.js';
+import { clock } from 'OblioUtils/utils/MasterClock.js';
 
 var masterclock = clock.getInstance();
 
