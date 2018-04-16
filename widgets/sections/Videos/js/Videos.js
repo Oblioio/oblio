@@ -1,6 +1,5 @@
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 import { Section } from 'OblioUtils/classes/Section';
-import { Menu } from 'OblioUtils/classes/Menu';
 import { Navigation } from 'OblioUtils/classes/Navigation';
 
 /* Videos.widgets */
