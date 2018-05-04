@@ -26,7 +26,7 @@ function onClick (e) {
             firstClick = false;
         }
     } else {
-        target = e.target
+        target = e.target;
     }
 
     if (target.tagName === 'A' && target.getAttribute('target') !== '_blank') e.preventDefault();

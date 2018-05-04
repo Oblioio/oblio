@@ -365,7 +365,7 @@ function section_remove(sectionID, callbackFn){
 
     if(oblio.sections[sectionID].added){
         oblio.sections[sectionID].added = false;
-        document.getElementById(sectionID).remove();
+        this.shell.removeChild(document.getElementById(sectionID));
     }
 
     callbackFn();
