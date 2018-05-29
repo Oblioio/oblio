@@ -11,19 +11,15 @@
     }
 
     ul {
-        margin: 1em 0.25em 0;
+        margin: 1em 0;
 
         li {
             text-align: left;
             display: block;
-            margin-top: 0.5em;
 
-            a {
+            .footer-btn {
                 margin: 0;
                 float: none;
-                line-height: 1.25em;
-                color: #666;
-                opacity: 0.75;
 
                 .no-touch &:hover {
                     opacity: 1;
