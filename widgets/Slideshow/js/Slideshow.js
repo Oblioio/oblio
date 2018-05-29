@@ -655,8 +655,7 @@ function clickHandler (e) {
 
     e.preventDefault();
 
-    switch (clicked.className) {
-    case 'prev_slide': // left arrow
+    if (clicked.classList.contains('prev_slide')) {
         if (this.state.animating) {
             return;
         }
@@ -667,7 +666,7 @@ function clickHandler (e) {
         activate.call(this, this.state.previous_index);
         
         this.previous();
-    case 'next_slide': // right arrow
+    } else if (clicked.classList.contains('next_slide')) {
         if (this.state.animating) {
             return;
         }
@@ -677,8 +676,6 @@ function clickHandler (e) {
         this.slides[this.state.next_index].elements.outer.style.left = '4000px'; // the 4000px is a hack to workaround firefox bug that causes slide to flash before animating
         activate.call(this, this.state.next_index);
         this.next();
-    default:
-        // nothin'
     }
 }
 
