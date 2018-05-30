@@ -1,4 +1,4 @@
-import 'platform';
+// import 'platform';
 
 var player_proto = {
     play: function () {
