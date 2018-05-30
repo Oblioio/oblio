@@ -89,7 +89,7 @@ function addSection (id, data) {
         id: id,
         data: data.data,
         loaded: false
-    }
+    };
 
     if (data.widgets) {
         sectionObj.widgets = data.widgets;
@@ -186,11 +186,12 @@ function initScrape (...args) {
             partials[sectionOBJ.partials[i]] = oblio.templates[sectionOBJ.partials[i]];
         }
     }
+
     sectionOBJ = getSectionData(id);
     var template = oblio.templates[id];
 
-    sectionOBJ.html = template.render(sectionOBJ.data, partials);
-
+    if (template) sectionOBJ.html = template.render(sectionOBJ.data, partials);
+    
     // preload images from html
     var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
     var results;
