@@ -1,5 +1,4 @@
 define([
-        'OblioUtils/utils/DeviceDetect',
         'OblioUtils/classes/Menu'
     ], function () {
 

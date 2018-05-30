@@ -8,11 +8,7 @@ import { Section } from 'OblioUtils/classes/Section';
 var myName = "Gallery",
     data,
     instance,
-    sectionLoader = SectionLoader.getInstance(),
-    elements,
-    mobile = false,
-    winHeight = 0,
-    winWidth = 0;
+    sectionLoader = SectionLoader.getInstance();
 
 var t = 0;
 
@@ -29,12 +25,12 @@ function prepareLoad () {
 function init (callback) {
     console.log('init ' + myName);
 
-    elements = this.elements = {
+    this.elements = {
         sectionWrapper: document.getElementById(myName.toLowerCase()),
         footer: document.getElementById('footer')
     };
 
-    elements.wrapper = elements.sectionWrapper.querySelector('.wrapper');
+    this.elements.wrapper = this.elements.sectionWrapper.querySelector('.wrapper');
 
     if (typeof Slideshow !== 'undefined') buildGallery.call(this);
 
@@ -55,43 +51,23 @@ function buildGallery () {
     this.slideshow = Slideshow.getNew(slideshow_params);
 }
 
-function show (callback) {
-    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
-        if (callback) callback();
-    }});
-}
-
-function hide (callback) {
-    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 0, ease: Power3.easeInOut, onComplete: function () {
-        elements.sectionWrapper.style.display = 'none';
-        if (callback) callback();
-    }});
-}
-
-function resize (w, h, top) {
-    let footerHeight = elements.footer.offsetHeight;
+function resize (w, h) {
+    let top = oblio.settings.headerHeight;
     let minPadding = 75;
+    let height = h - top;
 
-    elements.sectionWrapper.style.top = top + 'px';
-    elements.sectionWrapper.style.width = w + 'px';
-    elements.sectionWrapper.style.height = (h - (top + footerHeight)) + 'px';
+    this.elements.sectionWrapper.style.top = top + 'px';
+    this.elements.sectionWrapper.style.width = w + 'px';
+    this.elements.sectionWrapper.style.height = height + 'px';
 
-    if (elements.wrapper) {
-        let wrapperHeight = elements.wrapper.offsetHeight;
-
-        // elements.wrapper.style.marginTop = elements.wrapper.style.marginBottom = Math.max(minPadding, (h - top - wrapperHeight) / 2) + 'px';   
-
-        if (this.slideshow) this.slideshow.resize(w, h - (top + footerHeight));
-    }
+    if (this.slideshow) this.slideshow.resize(w, height);
 }
 
 var props = {
         id: myName,
         prepareLoad: prepareLoad,
         init: init,
-        resize: resize,
-        show: show,
-        hide: hide
+        resize: resize
     };
 
 export var Gallery = {

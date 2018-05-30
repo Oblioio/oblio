@@ -1,9 +1,6 @@
-import 'OblioUtils/utils/DeviceDetect';
 import 'OblioUtils/classes/MenuPaginator';
 
 'use strict';
-
-var isMobile = oblio.utils.DeviceDetect.isMobile;
 
 var menu = function (data) {
     this.menuID = data.menuID || '';

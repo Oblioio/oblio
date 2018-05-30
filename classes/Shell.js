@@ -1,7 +1,6 @@
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 import { findAncestor } from 'OblioUtils/utils/findAncestor';
 import { Navigation } from 'OblioUtils/classes/Navigation';
-import 'OblioUtils/utils/DeviceDetect';
 
 /* main.widgets */
 
@@ -73,7 +72,7 @@ function ready(callbackFn){
     }
 
     if (oblio.app.dataSrc.widgets.main && oblio.app.dataSrc.widgets.main.data.menu) {
-        setupMenu()
+        setupMenu();
     }
 
 }
@@ -140,7 +139,7 @@ function setupMenu () {
     }, false);
 }
 
-function resize(w, h, top){
+function resize(w, h){
     if(!this.initialized)return;
 
     oblio.settings.windowDimensions = {
@@ -162,20 +161,24 @@ function resize(w, h, top){
 
     oblio.settings.sectionWidth = w;
 
-    if (oblio.sections[navigation.currentSection]) {
-        if (oblio.sections[navigation.currentSection].initialized && oblio.sections[navigation.currentSection].resize) {
-            oblio.sections[navigation.currentSection].resize(w, h, top);
-        }
-    }
-
     if (oblio.app.mainMenu) {
         oblio.settings.menuWidth = oblio.app.mainMenu.resize();
         oblio.settings.headerHeight = oblio.app.mainMenu.getHeight();
+    } else {
+        oblio.settings.headerHeight = 0;
     }
 
     if (footer) {
         footer.resize();
         oblio.settings.footerHeight = footer.getHeight();
+    } else {
+        oblio.settings.footerHeight = 0;
+    }
+
+    if (oblio.sections[navigation.currentSection]) {
+        if (oblio.sections[navigation.currentSection].initialized && oblio.sections[navigation.currentSection].resize) {
+            oblio.sections[navigation.currentSection].resize(w, h);
+        }
     }
 
 }

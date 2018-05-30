@@ -8,11 +8,6 @@ import { Section } from 'OblioUtils/classes/Section';
 var myName = "Home",
     instance,
     sectionLoader = SectionLoader.getInstance(),
-    elements,
-    mobile = false,
-    sectionHeight = 0,
-    sectionWidth = 0,
-    sectionTop = 0,
     quotesModule;
 
 function prepareLoad () {
@@ -24,7 +19,7 @@ function prepareLoad () {
 }
 
 function init (callback) {
-    elements = {
+    this.elements = {
         sectionWrapper: document.getElementById(myName.toLowerCase())
     };
 
@@ -34,21 +29,13 @@ function init (callback) {
 }
 
 function initQuotes () {
-    let quotes = (typeof Quotes !== 'undefined') ? Quotes.getNew(elements.sectionWrapper) : false;
+    let quotes = (typeof Quotes !== 'undefined') ? Quotes.getNew(this.elements.sectionWrapper) : false;
     if (quotes) {
         quotes.init({
-            wrapper: elements.sectionWrapper
+            wrapper: this.elements.sectionWrapper
         });
     }
     return quotes;
-}
-
-function resize (w, h) {
-    sectionWidth = w;
-    sectionHeight = h;
-
-    elements.sectionWrapper.style.width = sectionWidth + 'px';
-    elements.sectionWrapper.style.height = sectionHeight + 'px';
 }
 
 function show (callback) {
@@ -56,14 +43,7 @@ function show (callback) {
         quotesModule.start();
     }
 
-    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
-        if (callback) callback();
-    }});
-}
-
-function hide (callback) {
-    TweenMax.to(elements.sectionWrapper, 0.75, {autoAlpha: 0, ease: Power3.easeInOut, onComplete: function () {
-        elements.sectionWrapper.style.display = 'none';
+    TweenMax.to(this.elements.sectionWrapper, 0.75, {autoAlpha: 1, ease: Power3.easeInOut, onComplete: function () {
         if (callback) callback();
     }});
 }
@@ -72,9 +52,7 @@ var props = {
         id: myName,
         prepareLoad: prepareLoad,
         init: init,
-        resize: resize,
-        show: show,
-        hide: hide
+        show: show
     };
 
 export var Home = {
@@ -82,4 +60,4 @@ export var Home = {
         instance = instance || Object.assign(Object.create(Section.prototype), props);
         return instance;
     }
-}
+};

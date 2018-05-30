@@ -1,3 +1,22 @@
 #videos {
-    //
+    .header {
+        font-size: 1.5em;
+
+        .active {
+            opacity: 0.5;
+
+            a {
+                cursor: default;
+
+                &:hover {
+                    color: inherit;
+                }
+            }
+        }
+    }
+
+    .videoplayer {
+        width: 100%;
+        height: 100%;
+    }
 }

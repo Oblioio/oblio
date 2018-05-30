@@ -1,3 +1,5 @@
+{{#Footer}}
+{{#visible}}
 <div id="footer">
     <div id="soundButton">
         <div id="soundBars">
@@ -9,28 +11,15 @@
         </div>
     </div>
 
-    {{#getTickets}}
-        {{#visible}}
-        <a id="get_tickets" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
-        {{/visible}}
-    {{/getTickets}}
+    {{#links}}
+    {{#visible}}
+    <a class="footer-btn" href="{{{url}}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{{label}}}</a>
+    {{/visible}}
+    {{/links}}
 
-    {{> shareShelf}}
-
-    {{#privacyPolicy}}
-        {{#visible}}
-            <a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
-        {{/visible}}
-    {{/privacyPolicy}}
-
-    {{#termsOfUse}}
-        {{#visible}}
-            <a class="footer-btn" href="{{url}}" target="_blank" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{label}}</a>
-        {{/visible}}
-    {{/termsOfUse}}
-
-    {{> creditsDrawer}}
-    {{> mpaaPopup}}
+    {{> ShareShelf}}
+    {{> CreditsDrawer}}
+    {{> MpaaPopup}}
     {{> follow}}
 
     {{#copyrightTxt}}
@@ -38,5 +27,6 @@
             <p class="copyrightTxt" style="{{#css}}{{#value}}{{property}}:{{value}};{{/value}}{{/css}}">{{text}}</p>
         {{/visible}}
     {{/copyrightTxt}}
-
 </div>
+{{/visible}}
+{{/Footer}}

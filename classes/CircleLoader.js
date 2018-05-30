@@ -5,6 +5,7 @@ var CircleLoader = function () {
     this.id = "CircleLoader";
 
     this.elem = createElem();
+    this.tt = document.getElementById('loader_tt');
     document.body.appendChild(this.elem);
 
     this.progressCircle = createCircle();
@@ -16,9 +17,11 @@ var CircleLoader = function () {
     this.loaderText.id = 'loaderText';
     this.elem.appendChild(this.loaderText);
 
+    // this.tt = document.getElementById('load_tt');
+
     this.elem.style.display = 'block';
     this.elem.style.visibility = 'hidden';
-}
+};
 
 function createElem(){
     var elem = document.createElement('div');
@@ -37,10 +40,47 @@ function createCircle(){
     return loaderCircle;
 }
 
+function goOut (isOut) {
+    let tl = new TimelineMax({
+        paused: true,
+        onComplete: function () {
+            // this.tt.style.display = 'none';
+            this.elem.style.display = 'none';
+            isOut();
+        }.bind(this)
+    });
+
+    this.tt.style.opacity = 0;
+
+    // tl.to(this.tt, 0.5, {alpha: 0}, 0);
+    tl.to(this.elem, 0.5, {alpha: 0}, 0);
+
+    tl.play();
+}
+
+function bringIn (isIn) {
+    onProgress.call(this, 0);
+    this.tt.style.opacity = 1;
+
+    let tl = new TimelineMax({
+        paused: true,
+        onComplete: function () {
+            isIn();
+        }.bind(this)
+    });
+
+    // this.tt.style.display = 'block';
+    this.elem.style.display = 'block';
+
+    // tl.to(this.tt, 0.5, {alpha: 1}, 0);
+    tl.to(this.elem, 0.5, {autoAlpha: 1}, 0);
+
+    tl.play();
+}
+
 function onProgress (perc) {
     this.loaderText.textContent = Math.round(perc * 100);
     this.circ.style.strokeDashoffset = ((1 - perc) * 628);
-    console.log(perc, perc >= 1);
     return perc >= 1;
 }
 
@@ -50,5 +90,7 @@ function resize () {
 
 CircleLoader.prototype.resize = resize;
 CircleLoader.prototype.onProgress = onProgress;
+CircleLoader.prototype.goOut = goOut;
+CircleLoader.prototype.bringIn = bringIn;
 
-export { CircleLoader }
+export { CircleLoader };

@@ -2,9 +2,7 @@ import { BG_Image } from 'OblioUtils/classes/BG_Image';
 import { BG_Video } from 'OblioUtils/classes/BG_Video';
 import { Backplate } from 'OblioUtils/classes/Backplate';
 
-var isMobile,
-    useFallbackImage,
-    slide_ids = {};
+var slide_ids = {};
 
 var slideShow = function (data) {
 
@@ -22,9 +20,6 @@ var slideShow = function (data) {
     this.dragPosition = {};
     this.dragOffset = {};
     this.state = {};
-
-    isMobile = oblio.settings.isMobile;
-    useFallbackImage = isMobile || oblio.settings.isIOS;
 
     this.slides = [];
 
@@ -304,7 +299,7 @@ function buildSlideshow (slides) {
                 break;
             case 'htmlVideo':
             case 'youtube':
-                if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
+                if (!document.createElement('video').canPlayType) {
                     slides[i].url = slides[i].fallback;
                     bg = BG_Image.getNew(slides[i], bgImgReady);
                 } else {

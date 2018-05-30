@@ -1,5 +1,4 @@
 import { Backplate } from 'OblioUtils/classes/Backplate';
-import 'OblioUtils/utils/DeviceDetect';
 
 'use strict';
 

@@ -14,13 +14,13 @@ var prototype = {
         var mousedownHandler = function (e) {
             that.close();
             window.removeEventListener('mousedown', mousedownHandler);
-        }
+        };
 
         window.addEventListener('mousedown', mousedownHandler);
 
         this.isOpen = true;
         credits.style.zIndex = 9;
-        TweenLite.to(credits, 0.5, {y: '0px', ease:Power4.easeInOut});
+        TweenLite.to(credits, 0.5, {y: '0px', ease: Power4.easeInOut});
     },
     close: function () {
         if (!this.isOpen) return;
@@ -30,16 +30,16 @@ var prototype = {
 
         this.isOpen = false;
 
-        TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+        TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease: Power4.easeInOut, onComplete: function () {
             credits.style.zIndex = 0;
         }.bind(this)});
     }
-}
+};
 
 function clickHandler () {
     return function () {
 
-    }
+    };
 }
 
 export var CreditsDrawer = {
@@ -48,4 +48,4 @@ export var CreditsDrawer = {
             isOpen: false
         });
     }
-}
+};

@@ -2,7 +2,7 @@ $header_height: 2.8em;
 
 &.horizontal {
     display: block;
-    font-size: 24.26px;
+    font-size: 2.426em;
     font-weight: $primary_medium;
     top: 0;
     left: 0;
@@ -13,8 +13,8 @@ $header_height: 2.8em;
         display: none;
     }
 
-    #mainNav {
-        #menu {
+    nav {
+        ul {
             padding: 0;
             text-align: center;
             list-style: none;
@@ -63,7 +63,6 @@ $header_height: 2.8em;
                             width: 100%;
                             height: 0.08em;
                             background: rgba(255, 255, 255, 0.35);
-
                             transform: scale(0);
                             transition: transform 0.25s ease-in-out;
                         }
@@ -78,9 +77,10 @@ $header_height: 2.8em;
                     }
 
                     &.selected {
+                        pointer-events: none;
+
                         span::after {
                             background: $primary_color;
-
                             transform: scale(1);
                         }
                     }
@@ -90,39 +90,38 @@ $header_height: 2.8em;
     }
 
     @media (max-width: 768px), (max-height: 768px) {
-        font-size: 20px;
-
-        #mainNav #menu li a {
+        nav ul li a {
             padding: 0 0.5em;
         }
     }
 
     @media (max-height: 414px) {
-        font-size: 16px;
+        // font-size: 16px;
     }
 
     @media (max-width: 414px) {
-        height: 58px;
+        height: 2.4167em;
         overflow: hidden;
 
         &.open {
             height: 100%;
 
-            #mainNav {
+            nav {
                 display: block;
             }
         }
 
         .burger {
             display: block;
-            top: 21px;
-            left: calc(50% - 16px);
+            top: 50%;
+            transform: translateY(-50%);
+            left: calc(50% - 1.6em);
         }
 
-        #mainNav {
+        nav {
             display: none;
 
-            #menu {
+            ul {
                 height: auto;
                 top: 50%;
                 transform: translateY(-50%);
@@ -133,7 +132,6 @@ $header_height: 2.8em;
                     a.selected {
                         span::after {
                             left: 50%;
-
                             transform: translateX(-50%) scale(1);
                         }
                     }

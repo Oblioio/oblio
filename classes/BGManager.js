@@ -2,7 +2,6 @@ import { BG_Image } from 'OblioUtils/classes/BG_Image';
 import { BG_Video } from 'OblioUtils/classes/BG_Video';
 import { BGRenderer } from 'OblioUtils/classes/BGRenderer';
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
-import 'OblioUtils/utils/DeviceDetect';
 
 'use strict';
 
@@ -140,7 +139,7 @@ function changeBg(sectionId, instant, callbackFn){
 
         } else {
 
-            if (oblio.utils.DeviceDetect.isMobile || oblio.utils.DeviceDetect.isAndroid || oblio.utils.DeviceDetect.isIpad || !document.createElement('video').canPlayType) {
+            if (!document.createElement('video').canPlayType) {
                 imgObj.url = imgObj.fallback;
                 imgObj = BG_Image.getNew(imgObj, function () {
                     if(loadCatch)return;
