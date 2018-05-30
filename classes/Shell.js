@@ -63,9 +63,12 @@ function placeHTML () {
 function ready(callbackFn){
     this.initialized = true;
 
+    oblio.app.footer = footer;
+
     if (footer) {
         footer.init(function () {
-            footer.show(callbackFn);
+            callbackFn();
+            // footer.show(callbackFn);
         });
     } else {
         callbackFn();
@@ -139,7 +142,7 @@ function setupMenu () {
     }, false);
 }
 
-function resize(w, h){
+function resize (w, h) {
     if(!this.initialized)return;
 
     oblio.settings.windowDimensions = {
@@ -150,10 +153,11 @@ function resize(w, h){
     setLayout();
 
     this.elements.shell.style.width = w + 'px';
+    this.elements.shell.style.height = h + 'px';
 
-    if (!document.documentElement.className.match(/^(?=.*\bipad\b)(?=.*\bios7\b)/)) {
-        this.elements.shell.style.height = h + 'px';
-    }
+    // if (!document.documentElement.className.match(/^(?=.*\bipad\b)(?=.*\bios7\b)/)) {
+    //     this.elements.shell.style.height = h + 'px';
+    // }
 
     if (oblio.app.mainMenu && oblio.app.mainMenu.elements) {
         oblio.settings.menuWidth = oblio.app.mainMenu.elements.el.offsetWidth;

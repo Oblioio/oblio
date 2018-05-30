@@ -101,7 +101,8 @@ function hide () {
 }
 
 function show (callback) {
-    TweenLite.fromTo(this.elements.el, 0.25, {y: this.elements.el.offsetHeight + 'px'}, {y: '0px', ease:Power2.easeInOut, onComplete: function () {
+    TweenLite.set(this.elements.el, {y: 0});
+    TweenLite.fromTo(this.elements.el, 1, {alpha: 0}, {alpha: 1, ease:Power2.easeInOut, onComplete: function () {
         if (callback) {
             callback();
         }
