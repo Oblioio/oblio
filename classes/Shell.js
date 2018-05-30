@@ -170,9 +170,13 @@ function resize(w, h, top){
 
     if (oblio.app.mainMenu) {
         oblio.settings.menuWidth = oblio.app.mainMenu.resize();
+        oblio.settings.headerHeight = oblio.app.mainMenu.getHeight();
     }
 
-    if (footer) footer.resize();
+    if (footer) {
+        footer.resize();
+        oblio.settings.footerHeight = footer.getHeight();
+    }
 
 }
 

@@ -79,7 +79,7 @@ $header_height: 2.8em;
 
                     &.selected {
                         span::after {
-                            background: $red;
+                            background: $primary_color;
 
                             transform: scale(1);
                         }

@@ -17,11 +17,7 @@ var myName = "Gallery",
 var t = 0;
 
 function prepareLoad () {
-    var files = [
-        'assets/images/gallery/O8-04725r.jpg',
-        'assets/images/gallery/O8-11265r.jpg',
-        'assets/images/gallery/O8-20555r[2].jpg'
-    ];
+    var files = [];
 
     data = oblio.app.dataSrc.widgets.Gallery.data;
 

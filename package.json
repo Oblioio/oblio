@@ -106,45 +106,40 @@
       "/Applications/MAMP/htdocs/Generator/site"
     ]
   ],
-  "_from": "oblioio/oblio#es6",
+  "_from": "github:oblioio/oblio#es6",
   "_id": "OblioUtils@0.0.1",
+  "_inBundle": false,
   "_inCache": true,
+  "_integrity": "",
   "_location": "/OblioUtils",
   "_phantomChildren": {},
   "_requested": {
+    "type": "git",
     "raw": "OblioUtils@github:oblioio/oblio#es6",
-    "scope": null,
-    "escapedName": "OblioUtils",
     "name": "OblioUtils",
+    "escapedName": "OblioUtils",
     "rawSpec": "github:oblioio/oblio#es6",
-    "spec": "github:oblioio/oblio#es6",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:oblioio/oblio.git#es6",
-      "sshUrl": "git+ssh://git@github.com/oblioio/oblio.git#es6",
-      "httpsUrl": "git+https://github.com/oblioio/oblio.git#es6",
-      "gitUrl": "git://github.com/oblioio/oblio.git#es6",
-      "shortcut": "github:oblioio/oblio#es6",
-      "directUrl": "https://raw.githubusercontent.com/oblioio/oblio/es6/package.json"
-    }
+    "saveSpec": "github:oblioio/oblio#es6",
+    "fetchSpec": null,
+    "gitCommittish": "es6"
   },
   "_requiredBy": [
-    "#USER",
     "/"
   ],
-  "_resolved": "git://github.com/oblioio/oblio.git#e970a9d050508583ede4b3a7dce97f9987f63745",
+  "_resolved": "github:oblioio/oblio#bd709559c06d38e26c4cb4f93aefe09a21bf9a93",
   "_shasum": "edb3c4cc0bfb5a58e2eeb93c29be9bc9b524506d",
   "_shrinkwrap": null,
   "_spec": "OblioUtils@github:oblioio/oblio#es6",
-  "_where": "/Applications/MAMP/htdocs/Generator/site",
+  "_where": "/Applications/MAMP/htdocs/oblio/DefaultSite",
   "author": {
     "name": "Scott Agrimson"
   },
   "bugs": {
     "url": "https://github.com/Oblioio/oblio/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {},
+  "deprecated": false,
   "description": "Utilities",
   "devDependencies": {},
   "gitHead": "25ade50b2b06489d98a4bb3a772ab28083e55fca",
@@ -156,8 +151,6 @@
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
   "name": "OblioUtils",
   "optionalDependencies": {},
-  "readme": "oblio UTILS\n=====\n\nThis is a set of shared classes and utilities that we use in our sites. The code probably isn't useful to anyone other than us but if you're out there in cyberspace reading this, you're welcome to use anything you find here.\n",
-  "readmeFilename": "README.md",
   "release": "",
   "repository": {
     "type": "git",

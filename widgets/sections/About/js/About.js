@@ -1,7 +1,5 @@
 import { SectionLoader } from 'OblioUtils/utils/SectionLoader';
 import { Section } from 'OblioUtils/classes/Section';
-import { Backplate } from 'OblioUtils/classes/Backplate';
-import { BG_Image } from 'OblioUtils/classes/BG_Image';
 
 /* About.widgets */
 
@@ -13,16 +11,12 @@ var myName = "About",
     elements,
     mobile = false,
     winHeight = 0,
-    winWidth = 0,
-    backplate,
-    bgRatio = 0.58375;
+    winWidth = 0;
 
 var t = 0;
 
 function prepareLoad () {
-    var files = [
-        "assets/images/about/backplate.jpg"
-    ];
+    var files = [];
 
     if (files.length > 0) {
         sectionLoader.addFiles(myName, files);
@@ -38,18 +32,8 @@ function init (callback) {
     };
 
     elements.wrapper = elements.sectionWrapper.querySelector('.wrapper');
-    initBackplate();
 
     if (callback) callback();
-}
-
-function initBackplate () {
-    backplate = Backplate.getNew(BG_Image.getNew(oblio.app.dataSrc.backgrounds.images.about_desktop, function () {
-        console.log('about bg ready');
-    }), false, elements.sectionWrapper, 'contain');
-
-    backplate.elements.outer.className = 'backplate desktopBG';
-    elements.sectionWrapper.insertBefore(backplate.elements.outer, elements.sectionWrapper.firstChild);
 }
 
 function updateProgress (p, i) {
@@ -76,20 +60,7 @@ function resize (w, h, top) {
 
     elements.sectionWrapper.style.top = top + 'px';
     elements.sectionWrapper.style.width = w + 'px';
-    elements.sectionWrapper.style.height = sectionHeight + 'px';
-
-    let bgHeight = w * bgRatio;
-    let perc = w > 768 ? 0.4239828694 : 0.75;
-    let wrapperTop = Math.min(0.5 * sectionHeight, perc * bgHeight);
-    // elements.wrapper.style.marginTop = wrapperTop + 'px';
-
-    let minPadding = 75;
-    let wrapperHeight = elements.wrapper.offsetHeight;
-
-    backplate.resize(w, sectionHeight);
-
-    elements.wrapper.style.marginTop = wrapperTop + 'px';
-    elements.wrapper.style.marginBottom = Math.max(minPadding, (h - top - wrapperTop - wrapperHeight) / 2) + 'px';   
+    elements.sectionWrapper.style.height = sectionHeight + 'px';  
 }
 
 var props = {

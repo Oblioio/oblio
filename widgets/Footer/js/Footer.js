@@ -112,8 +112,12 @@ function show (callback) {
     }
 }
 
+function getHeight () {
+    return this.elements.el.offsetHeight;
+}
 
 footer.prototype.init = init;
+footer.prototype.getHeight = getHeight;
 footer.prototype.hide = hide;
 footer.prototype.show = show;
 footer.prototype.resize = resize;
