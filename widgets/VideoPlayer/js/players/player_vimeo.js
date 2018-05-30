@@ -136,10 +136,10 @@ function loadOEmbed (vID, options) {
             var json = JSON.parse(e.target.responseText);
             var background = 1;
 
-            // background feature breaks vimeo on mobile devices
-            if (platform.os.family.match(/(Android|iOS|Windows\sPhone)/)) {
-                background = 0;
-            };
+            // // background feature breaks vimeo on mobile devices
+            // if (platform.os.family.match(/(Android|iOS|Windows\sPhone)/)) {
+            //     background = 0;
+            // }
 
             resolve(json.html.replace(/(src="(?:[^\\"]+|\\.)*(?="))/, '$1?background=' + background + '&loop=0&autoplay=0'));
         });
