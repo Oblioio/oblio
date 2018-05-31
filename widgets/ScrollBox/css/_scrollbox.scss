@@ -1,0 +1,18 @@
+.scrollbox {
+    position: relative;
+
+    .scrollmasker {
+        overflow: hidden;
+    }
+
+    .scrollwrapper {
+        overflow-y: scroll;
+    }
+
+    .scrollbar {
+        position: absolute;
+        right: 0;
+        width: 0.5em;
+        background: $secondary_color;
+    }
+}
