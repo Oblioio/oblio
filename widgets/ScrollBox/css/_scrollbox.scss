@@ -15,4 +15,10 @@
         width: 0.5em;
         background: $secondary_color;
     }
+
+    @media (max-width: 414px), (max-height: 414px) {
+        .scrollbar {
+            display: none;
+        }
+    }
 }

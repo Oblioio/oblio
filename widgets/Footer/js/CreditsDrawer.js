@@ -3,6 +3,15 @@
 var prototype = {
     init: function (el, callback) {
         this.el = el;
+        this.firstClick = true;
+        this.touch = false;
+
+        var touchlistener = function () {
+            this.touch = true;
+            window.removeEventListener('touchstart', touchlistener);
+        }.bind(this);
+        window.addEventListener('touchstart', touchlistener);
+
         callback();
     },
     open: function () {
@@ -11,16 +20,35 @@ var prototype = {
         var that = this;
         let credits = this.el;
 
-        var mousedownHandler = function (e) {
-            that.close();
-            window.removeEventListener('mousedown', mousedownHandler);
-        };
-
-        window.addEventListener('mousedown', mousedownHandler);
-
         this.isOpen = true;
         credits.style.zIndex = 9;
-        TweenLite.to(credits, 0.5, {y: '0px', ease: Power4.easeInOut});
+
+        TweenLite.to(credits, 0.5, {y: '0px', ease:Power4.easeInOut});
+    
+        var clickHandler = function (e) {
+
+            that.close();
+            
+            if (that.touch) {
+                window.removeEventListener('touchstart', clickHandler);
+            } else {
+                window.removeEventListener('mousedown', clickHandler);
+                window.removeEventListener('touchstart', clickHandler);
+            }
+
+            return true;
+        };
+
+        // wrapping this in an event listener because it seems that the touchstart is registered immediately and just closes the drawer right away
+        window.requestAnimationFrame(function () {
+            if (this.touch) {
+                window.addEventListener('touchstart', clickHandler);
+            } else {
+                window.addEventListener('mousedown', clickHandler);
+                window.addEventListener('touchstart', clickHandler);
+            }
+        }.bind(this));
+
     },
     close: function () {
         if (!this.isOpen) return;
@@ -30,17 +58,11 @@ var prototype = {
 
         this.isOpen = false;
 
-        TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease: Power4.easeInOut, onComplete: function () {
+        TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
             credits.style.zIndex = 0;
         }.bind(this)});
     }
 };
-
-function clickHandler () {
-    return function () {
-
-    };
-}
 
 export var CreditsDrawer = {
     getNew: function () {
@@ -48,4 +70,4 @@ export var CreditsDrawer = {
             isOpen: false
         });
     }
-};
+}
