@@ -26,16 +26,16 @@ var prototype =  {
             startY: this.startY, 
             touchX: this.touchX, 
             touchY: this.touchY
-        }
+        };
     }
-}
+};
 
 var properties = {
     startX: 0,
     startY: 0,
     touchX: 0,
     touchY: 0,
-}
+};
 
 function onTouchStart (e) {
     this.touchX = this.startX = e.touches[0].pageX;
@@ -45,6 +45,7 @@ function onTouchStart (e) {
 }
 
 function onTouchEnd (e) {
+    this.events.publish('end', {});
 }
 
 function onTouchMove (e) {
@@ -69,7 +70,7 @@ function removeListeners (element, touchstartFn, touchendFn, touchmoveFn) {
         element.removeEventListener('touchstart', touchstartFn, {passive: true});
         element.removeEventListener('touchend', touchendFn, {passive: true});
         element.removeEventListener('touchmove', touchmoveFn, {passive: true});
-    }
+    };
 }
 
 export var touch = {
@@ -80,4 +81,4 @@ export var touch = {
 
         return instance;
     }
-}
+};
