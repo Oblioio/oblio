@@ -1,6 +1,6 @@
-import { wheelEvent } from '../polyfills/wheelEvent.js';
-import { events } from '../utils/pubsub.js';
-import { clock } from '../utils/MasterClock.js';
+import { wheelEvent } from './polyfills/wheelEvent.js';
+import { events } from './pubsub.js';
+import { clock } from './MasterClock.js';
 
 var masterclock = clock.getInstance();
 
@@ -18,7 +18,7 @@ var prototype =  {
         this.removeWheelEvent();
         delete this.events;
     }
-}
+};
 
 var properties = {
     delta: 1,
@@ -26,10 +26,10 @@ var properties = {
     lastPeak: 0,
     center: null,
     x: 0
-}
+};
 
 function hasPeak () {
-    if (this.deltas[0] == null) return false;
+    if (this.deltas[0] === null) return false;
 
     let flat = this.deltas.map(function (delta) {
         return Math.abs(delta);
@@ -61,7 +61,7 @@ function update () {
     }
 
     if (hasPeak.call(this)) {
-        this.events.publish('peak', {});
+        this.events.publish('peak', {delta: this.delta});
     }
 
     this.deltas.shift();
@@ -85,4 +85,4 @@ export var wheel = {
 
         return instance;
     }
-}
+};
