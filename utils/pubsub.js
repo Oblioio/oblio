@@ -26,9 +26,14 @@ export var events = {
 
                 // Cycle through topics queue, fire!
                 topics[topic].forEach(function (item) {
-                    item(info != undefined ? info : {});
+                    item(info !== undefined ? info : {});
                 });
+            },
+            destroy: function () {
+                for (let key in topics) {
+                    delete topics[key];
+                }
             }
-        }
+        };
     }
-}
+};
