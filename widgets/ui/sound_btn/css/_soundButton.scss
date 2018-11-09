@@ -21,7 +21,7 @@ $soundColor: $secondary_color;
         }
     }
 
-    #soundBars {
+    .soundBars {
         display: inline-block;
         width: 20px;
         height: 10px;
@@ -102,7 +102,48 @@ $soundColor: $secondary_color;
             }
         }
 
-        &.on {
+        // .ie &.on {
+        //     div {
+        //         &:nth-child(0n + 1) {
+        //             &::after {
+        //                 transform: scaleY(0.5);
+        //                 //height: 50%;
+        //             }
+        //         }
+
+        //         &:nth-child(2) {
+        //             &::after {
+        //                 transform: scaleY(0.4);
+        //                 // height: 40%;
+        //             }
+        //         }
+
+        //         &:nth-child(3) {
+        //             &::after {
+        //                 transform: scaleY(0.85);
+        //                 // height: 85%;
+        //             }
+        //         }
+
+        //         &:nth-child(4) {
+        //             &::after {
+        //                 transform: scaleY(1);
+        //                 // height: 100%;
+        //             }
+        //         }
+
+        //         &:nth-child(5) {
+        //             &::after {
+        //                 transform: scaleY(0.6);
+        //                 // height: 60%;
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    &.on {
+        .soundBars {
             div {
                 &::after {
                     -webkit-animation-name: soundBar;
@@ -117,47 +158,10 @@ $soundColor: $secondary_color;
                 }
             }
         }
+    }
 
-        .ie &.on {
-            div {
-                &:nth-child(0n + 1) {
-                    &::after {
-                        transform: scaleY(0.5);
-                        //height: 50%;
-                    }
-                }
-
-                &:nth-child(2) {
-                    &::after {
-                        transform: scaleY(0.4);
-                        // height: 40%;
-                    }
-                }
-
-                &:nth-child(3) {
-                    &::after {
-                        transform: scaleY(0.85);
-                        // height: 85%;
-                    }
-                }
-
-                &:nth-child(4) {
-                    &::after {
-                        transform: scaleY(1);
-                        // height: 100%;
-                    }
-                }
-
-                &:nth-child(5) {
-                    &::after {
-                        transform: scaleY(0.6);
-                        // height: 60%;
-                    }
-                }
-            }
-        }
-
-        &.off {
+    &.off {
+        .soundBars {
             div {
                 &::after {
                     -webkit-animation-name: soundBarOff;
