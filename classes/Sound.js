@@ -47,6 +47,7 @@ function play (soundID, volume, loop) {
             sound.prev_volume = volume;
         }
         sound.play(soundID);
+        
         return sound;
     }
 
@@ -210,6 +211,7 @@ function off (event, soundID, callbackFn) {
 // }
 
 function addButton (btn) {
+    console.log('SOUND ADD BUTTON!!');
     btn.events.subscribe('mute', muteAll.bind(this));
     btn.events.subscribe('unmute', unmuteAll.bind(this));
 }
@@ -238,6 +240,7 @@ var prototype = {
 
 export var Sound = {
     getInstance: function () {
-        return instance || init();
+        instance = instance || init();
+        return instance;
     }
 };
