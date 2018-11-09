@@ -11,6 +11,7 @@ var data,
     firstClick = true,
     creditsDrawer,
     shareShelf,
+    soundButton,
     mpaaPopup;
 
 var footer = function () {
@@ -72,12 +73,14 @@ function initWidgets (callback) {
     creditsDrawer = (typeof CreditsDrawer !== 'undefined') ? CreditsDrawer.getNew() : false;
     shareShelf = (typeof ShareShelf !== 'undefined') ? ShareShelf.getNew() : false;
     mpaaPopup = (typeof MpaaPopup !== 'undefined') ? MpaaPopup.getNew() : false;
+    soundButton = (typeof SoundButton !== 'undefined') ? SoundButton.getNew() : false;
 
     let functionArr = [];
 
     if (mpaaPopup) functionArr.push({ fn: mpaaPopup.init, scope: mpaaPopup, vars: [document.getElementById('MPAA_requirements')] });
     if (creditsDrawer) functionArr.push({ fn: creditsDrawer.init, scope: creditsDrawer, vars: [document.getElementById('credits')] });
     if (shareShelf) functionArr.push({ fn: shareShelf.init, scope: shareShelf, vars: [document.getElementById('shareShelf')] });
+    if (soundButton) functionArr.push({ fn: soundButton.init, scope: soundButton, vars: [document.getElementById('soundButton')] });
 
     functionArr.push({ fn: callback, vars: null });
 
