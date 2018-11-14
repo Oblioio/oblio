@@ -24,7 +24,7 @@ var prototype = {
 
         this.btn.className = this.btn.className.replace(' off', '') + ' on';
         this.btn.addEventListener('click', this.toggleSound.bind(this), false);
-        this.btn.addEventListener('touchstart', this.toggleSound.bind(this) , supportsPassive ? { passive: true } : false);
+        // this.btn.addEventListener('touchstart', this.toggleSound.bind(this) , supportsPassive ? { passive: true } : false);
 
         sound.events.subscribe('unmute', this.on.bind(this));
         sound.events.subscribe('mute', this.off.bind(this));
@@ -56,7 +56,7 @@ var prototype = {
         //         console.log('unknown page visibility status');
         //     }
         // }.bind(this), false);
-
+console.log('SOUND BUTTON INIT');
         if (callback) callback();
     },
     toggleSound: function (e) {
@@ -71,10 +71,12 @@ var prototype = {
         }
     },
     on: function () {
-        this.btn.classList.replace('off', 'on');
+        this.btn.classList.remove('off');
+        this.btn.classList.add('on');
     },
     off: function () {
-        this.btn.classList.replace('on', 'off');
+        this.btn.classList.remove('on');
+        this.btn.classList.add('off');
     },
     events: Object.create(events.getInstance())
 };
