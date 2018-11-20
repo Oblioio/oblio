@@ -477,12 +477,10 @@ function returnSectionOBJ (id) {
         numSections = sectionLoaderState.sections.length;
 
     while (numSections--) {
-        if (sectionLoaderState.sections[numSections].id === id) {
-            sectionOBJ = sectionLoaderState.sections[numSections];
-        }
+        if (sectionLoaderState.sections[numSections].id === id) return sectionLoaderState.sections[numSections];
     }
 
-    return sectionOBJ;
+    throw 'No section with id: ' + id;
 }
 
 function getSectionLoaderState () {
