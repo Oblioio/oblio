@@ -25,47 +25,72 @@ function init () {
 }
 
 function play (soundID, volume, loop) {
-    var sound = sounds[soundID];
-    
-    if (volume === undefined) {
-        volume = 1;
-    }
+    var sound = sounds[soundID],
+        id;
 
-    if (loop === undefined) {
+    if (typeof loop === 'undefined') {
         loop = false;
     }
 
+    /*
+     * Sound has not been played/added */
     if (typeof sound === 'undefined') {
         sound = this.addSound(soundID, {
             src: [soundID],
             loop: loop
         });
-    } else if (typeof sound === 'string') {
+    } 
+    /*
+     * Sound is a sprite */
+    else if (typeof sound === 'string') {
         sound = sounds[sound];
-        if (volume) {
-            sound.volume(volume);
+
+        id = sound.play(soundID);
+
+        if (typeof volume !== 'undefined') {
+            sound.volume(volume, id);
             sound.prev_volume = volume;
         }
-        sound.play(soundID);
-        
-        return sound;
-    }
 
-    if (volume) {
-        sound.volume(volume);
-        sound.prev_volume = volume;
-        sound.play();
-    } else {
-        sound.play();
-        fadeInAll();
-    }
+        sound.loop(loop, id);
 
-    return sound;
+        // return id for controlling volume of individual sprite
+        return {
+            sound: sound,
+            id: id
+        };
+    }
+    /*
+     * Sound is a single file that has already been played */
+    else {
+        id = sound.play();
+
+        if (typeof volume !== 'undefined') {
+            // sound.volume(volume);
+            sound.prev_volume = volume;
+            sound.volume(volume);
+            sound.loop(loop);
+        } else {
+            fadeInAll();
+        }
+
+        return {
+            sound: sound,
+            id: id
+        };
+    }
 }
 
 function pause (soundID) {
     var sound = sounds[soundID];
-    if (sound) sound.pause();
+    console.log('sOUND =', sound);
+    if (sound) {
+        if (typeof sound === 'string') {
+            sound = sounds[sound];
+        } else {
+            sound.pause();
+        }
+    }
 }
 
 function pauseAll () {
