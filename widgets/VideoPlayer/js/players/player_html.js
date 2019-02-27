@@ -1,5 +1,8 @@
 var player_proto = {
-    play: function () {
+    play: function (time) {
+        if (typeof time !== 'undefined') {
+            this.video_el.currentTime = 0;
+        }
         this.video_el.play();
         this.isPaused = false;
     },
@@ -36,6 +39,22 @@ var player_proto = {
                 console.warning('This browser does not support fullscreen');
             };
         fullscreenFn.call(this.video_el);
+    },
+    loadVideoById: function (src, poster) {
+        return new Promise((resolve, reject) => {
+
+            var onLoadedMetadata = () => {
+                resolve();
+                this.video_el.removeEventListener('loadedmetadata', onLoadedMetadata);
+            }
+    
+            if (poster) {
+                this.video_el.setAttribute('poster', poster);
+            }
+
+            this.video_el.addEventListener('loadedmetadata', onLoadedMetadata);
+            this.video_el.src = src;
+        });
     },
     onStateChange: function (eventName) {
         return function (e) {
@@ -97,14 +116,16 @@ function addEvents () {
 }
 
 function load () {
-    return new Promise (function (resolve, reject) {
+    console.log('LOAD HTML PLAYER, ', this.options.videoSrc);
+
+    return new Promise ((resolve, reject) => {
         this.isPaused = false;
-        this.video_el.addEventListener('loadedmetadata', function () {
+        this.loadVideoById(this.options.videoSrc, this.options.poster).then(() => {
             this.resize = resize(this.video_el.videoWidth, this.video_el.videoHeight);
             addEvents.call(this);
             resolve(this);
-        }.bind(this));
-    }.bind(this));
+        });
+    });
 }
 
 export var player = {
