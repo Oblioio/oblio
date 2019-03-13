@@ -1,13 +1,13 @@
 'use strict';
 
-var backplate = function (bg, loaded, resizeContainer, mode) {
+var backplate = function (bg, loaded, resizeContainer, mode, outer, inner) {
 
     // set loaded to true by default because most backplates will be preloaded with the section
     this.loaded = loaded === undefined ? true : loaded;
 
     this.elements = {
-        outer: document.createElement('div'),
-        inner: document.createElement('div'),
+        outer: outer || document.createElement('div'),
+        inner: inner || document.createElement('div'),
         resizeContainer: resizeContainer || false
     };
 
@@ -136,7 +136,7 @@ backplate.prototype.resize = resize;
 backplate.prototype.changeImage = changeImage;
 
 export var Backplate = {
-    getNew: function (bg, loaded, resizeContainer, mode) {
-        return new backplate(bg, loaded, resizeContainer, mode);
+    getNew: function (bg, loaded, resizeContainer, mode, outer, inner) {
+        return new backplate(bg, loaded, resizeContainer, mode, outer, inner);
     }
 }

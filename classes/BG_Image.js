@@ -10,7 +10,7 @@ var bg_image = function (imgObj, onReady) {
         }
     }
     
-    this.el = new Image();
+    this.el = imgObj.el || new Image();
 
     this.el.style.position = 'absolute';
     this.el.alt = 'Background';
@@ -19,7 +19,9 @@ var bg_image = function (imgObj, onReady) {
         this.onReady();
     }.bind(this));
 
-    this.el.src = imgObj.url;
+    if (imgObj.url) {
+        this.el.src = imgObj.url;
+    }
 
     BG.apply(this, [this.el, onReady]);
 };
