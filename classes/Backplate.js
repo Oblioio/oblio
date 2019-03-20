@@ -79,7 +79,17 @@ function onImageLoaded (e) {
 }
 
 function destroy () {
+    for (const key in this.elements) {
+        if (this.elements.hasOwnProperty(key)) {
+            delete this.elements[key];
+        }
+    }
 
+    this.elements = null;
+
+    if (this.obj) {
+        this.obj.destroy();
+    }
 }
 
 function resize(w, h){
