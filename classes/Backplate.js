@@ -78,6 +78,10 @@ function onImageLoaded (e) {
     }
 }
 
+function destroy () {
+
+}
+
 function resize(w, h){
     if (!this.obj) {
         return;
@@ -131,7 +135,7 @@ function resize(w, h){
 
 backplate.prototype._onImageLoaded = onImageLoaded;
 backplate.prototype._getRatio = getRatio;
-
+backplate.prototype.destroy = destroy;
 backplate.prototype.resize = resize;
 backplate.prototype.changeImage = changeImage;
 
