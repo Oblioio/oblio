@@ -50,7 +50,7 @@ function changeImage (bg) {
     this.onScreen = true;
 
     if (!this.loaded) {
-        this.elements.backplate.className = this.elements.backplate.className + ' loading';
+        this.elements.backplate.classList.add('loading'); // = this.elements.backplate.className + ' loading';
         this.elements.backplate.addEventListener('load', this._onImageLoaded.bind(this));
     }
 }
