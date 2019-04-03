@@ -3,21 +3,25 @@ import { BG } from 'OblioUtils/classes/BG';
 'use strict';
 
 var bg_image = function (imgObj, onReady) {
-    
+
     for (var param in imgObj) {
         if (imgObj.hasOwnProperty(param)) {
             this[param] = imgObj[param];
         }
     }
-    
+
     this.el = imgObj.el || new Image();
 
     this.el.style.position = 'absolute';
     this.el.alt = 'Background';
 
-    this.el.addEventListener('load', function () {
-        this.onReady();
-    }.bind(this));
+    if (this.el.complete) {
+        onReady();
+    } else {
+        this.el.addEventListener('load', function () {
+            onReady();
+        }.bind(this));
+    }
 
     if (imgObj.url) {
         this.el.src = imgObj.url;
