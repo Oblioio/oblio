@@ -187,7 +187,12 @@ function load () {
             var div = document.createElement('div');
             div.innerHTML = html;
             var iframe = div.querySelector('iframe');
-            this.video_el.appendChild(iframe);
+
+            [].slice.call(this.video_el.attributes).forEach(function(item) {
+                iframe.setAttribute(item.name, item.value);
+            });
+
+            this.video_el.replaceWith(iframe);
 
             loadScript('https://player.vimeo.com/api/player.js', function() {
                 var options = {
