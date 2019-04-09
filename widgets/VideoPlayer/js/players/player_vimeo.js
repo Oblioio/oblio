@@ -209,6 +209,7 @@ function load () {
                     this.resize = resize(this.player.element.width, this.player.element.height);
                     addEvents.call(this);
                     this.setVolume(1);
+                    if (this.options.autoplay) this.play();
                     resolve(this);
                 }.bind(this));
             }.bind(this));
