@@ -85,6 +85,10 @@ var player_proto = {
     },
     getRatio: function () {
         return this.ratio;
+    },
+    destroy: function () {
+        // this.stop();
+        this.player.destroy();
     }
 }
 

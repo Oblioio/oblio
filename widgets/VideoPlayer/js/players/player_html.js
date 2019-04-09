@@ -80,6 +80,10 @@ var player_proto = {
                     console.log(eventName);
             }
         }
+    },
+    destroy: function () {
+        // this.stop();
+        // this.player.destroy();
     }
 }
 

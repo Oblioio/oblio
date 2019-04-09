@@ -111,6 +111,10 @@ var player_proto = {
     stop: function () {
         if (this.updateID) masterclock.unregisterCallback(this.updateID);
         this.updateID = undefined;
+    },
+    destroy: function () {
+        this.stop();
+        this.player.destroy();
     }
 };
 
