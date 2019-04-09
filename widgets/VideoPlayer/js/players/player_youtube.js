@@ -163,10 +163,6 @@ function update () {
 function load () {
     return new Promise (function (resolve, reject) {
 
-        var ytScript = document.createElement('script');
-        ytScript.src = 'https://www.youtube.com/iframe_api';
-        document.body.appendChild(ytScript);
-
         var playerID = this.video_el.id;
 
         window.onYouTubeIframeAPIReady = function () {
@@ -197,6 +193,15 @@ function load () {
             });
 
         }.bind(this);
+
+        if (scriptLoaded === false) {
+            var ytScript = document.createElement('script');
+            ytScript.src = 'https://www.youtube.com/iframe_api';
+            document.body.appendChild(ytScript);
+            scriptLoaded = true;
+        } else {
+            onYouTubeIframeAPIReady();
+        }
 
     }.bind(this));
 }
