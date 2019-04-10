@@ -16,7 +16,7 @@ var bg_image = function (imgObj, onReady) {
     this.el.alt = 'Background';
 
     if (this.el.complete) {
-        onReady();
+        window.requestAnimationFrame(onReady);
     } else {
         this.el.addEventListener('load', function () {
             onReady();
