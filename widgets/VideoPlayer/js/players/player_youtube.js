@@ -117,7 +117,9 @@ var player_proto = {
         this.player.destroy();
     },
     getPlayerState: function () {
-        return this.player.getPlayerState();
+        return new Promise((resolve, reject) => {
+            resolve(this.player.getPlayerState());
+        });
     }
 };
 

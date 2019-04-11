@@ -100,7 +100,24 @@ var player_proto = {
             3 – buffering
             5 – video cued
         */
-        return;
+        return new Promise((resolve, reject) => {
+            let state;
+            let ready = false;
+
+            this.player.getPaused().then(paused => {
+                ready = state !== 'undefined';
+                let playing_state = ready ? state : 1;
+                state = paused ? 2 : playing_state;
+                if (ready) resolve(state);
+            });
+
+            this.player.getEnded().then(ended => {
+                ready = state !== 'undefined';
+                let playing_state = ready ? state : 1;
+                state = ended ? 0 : playing_state;
+                if (ready) resolve(state);
+            });
+        });
     }
 }
 

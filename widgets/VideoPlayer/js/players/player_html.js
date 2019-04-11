@@ -95,7 +95,9 @@ var player_proto = {
             3 – buffering
             5 – video cued
         */
-        return;
+        return new Promise((resolve, reject) => {
+            resolve();
+        });
     }
 }
 
