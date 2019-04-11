@@ -115,6 +115,9 @@ var player_proto = {
     destroy: function () {
         this.stop();
         this.player.destroy();
+    },
+    getPlayerState: function () {
+        return this.player.getPlayerState();
     }
 };
 
