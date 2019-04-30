@@ -136,7 +136,7 @@ function onPopState (event) {
 
 function assembleChangeFunction (completeFn) {
 
-    var function_arr = [{fn: this.disable, vars: null}];
+    var function_arr = [{fn: this.disable, scope: this, vars: null}];
     console.log(this.changeOrder);
     for (var i = 0; i < this.changeOrder.length; i++) {
         switch (this.changeOrder[i]) {
@@ -380,8 +380,9 @@ Enable / Disable Functions
 
 // enable navigation
 function enable(completeFn){
-    if(this.verbose)console.log('/////// navigation_enable /////////');
+    if(this.verbose) console.log('/////// navigation_enable /////////');
     this.active = true;
+
     if(this.cover)this.cover.style.display = 'none';
     
     if(completeFn)completeFn();
@@ -389,7 +390,7 @@ function enable(completeFn){
 
 // disable navigation
 function disable(completeFn){
-    if(this.verbose)console.log('/////// navigation_disable /////////');
+    if(this.verbose) console.log('/////// navigation_disable /////////');
     this.active = false;
 
     /* turn on cover's display */
