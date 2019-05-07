@@ -3,7 +3,8 @@ import { loadScript } from 'OblioUtils/utils/loadScript';
 
 var instance,
     verbose = false,
-    arrayExecuter = ArrayExecuter(null, 'SectionLoader');
+    arrayExecuter = ArrayExecuter(null, 'SectionLoader'),
+    preload_images = true;
 
 /*
 --------------------------------------------------------------------------------------------------------------------
@@ -191,17 +192,19 @@ function initScrape (...args) {
     var template = oblio.templates[id];
 
     if (template) sectionOBJ.html = template.render(sectionOBJ.data, partials);
-    
-    // preload images from html
-    var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
-    var results;
-    var files = [];
 
-    while ((results = img_pattern.exec(sectionOBJ.html)) !== null) {
-        files.push(results[1]);
+    if (preload_images) {
+        // preload images from html
+        var img_pattern = /<img [^>]*src="([^"]+)"[^>]*>/g;
+        var results;
+        var files = [];
+
+        while ((results = img_pattern.exec(sectionOBJ.html)) !== null) {
+            files.push(results[1]);
+        }
+
+        addFiles(id, files);
     }
-
-    addFiles(id, files);
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -487,6 +490,15 @@ function getSectionLoaderState () {
     return sectionLoaderState;
 }
 
+/**
+ * 
+ * By default, sectionloader scrapes html for images to preload
+ * to skip preloading images, call setPreloadImages(false)
+ */
+function setPreloadImages (doPreloadImages) {
+    preload_images = doPreloadImages;
+}
+
 var sectionLoader = {
     verbose: false,
     loadJSON: loadJSON,
@@ -522,7 +534,8 @@ var sectionLoader = {
     loadImage: loadImage,
     // miscLoadFile: miscLoadFile,
     arrayExecuter: arrayExecuter,
-    getWidgets: getWidgets
+    getWidgets: getWidgets,
+    setPreloadImages: setPreloadImages
 };
 
 export var SectionLoader = {
