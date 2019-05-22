@@ -12,6 +12,9 @@ var prototype = {
         }.bind(this);
         window.addEventListener('touchstart', touchlistener);
 
+        this.isOpen = true;
+        this.close(true);
+
         callback();
     },
     open: function () {
@@ -50,7 +53,7 @@ var prototype = {
         }.bind(this));
 
     },
-    close: function () {
+    close: function (instant) {
         if (!this.isOpen) return;
 
         let credits = this.el;
@@ -58,7 +61,8 @@ var prototype = {
 
         this.isOpen = false;
 
-        TweenLite.to(credits, 0.5, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
+        let duration = instant ? 0 : 0.5;
+        TweenLite.to(credits, duration, {y: credits_height + 'px', ease:Power4.easeInOut, onComplete: function () {
             credits.style.zIndex = 0;
         }.bind(this)});
     }
