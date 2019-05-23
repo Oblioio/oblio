@@ -1,6 +1,7 @@
 import { clock } from 'OblioUtils/utils/MasterClock.js';
 
 var masterclock = clock.getInstance();
+var scriptLoaded = false;
 
 var player_proto = {
     play: function () {
