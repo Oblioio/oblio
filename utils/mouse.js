@@ -16,8 +16,8 @@ function addListener (mouseHandler) {
 }
 
 function onMouseMove (e) {
-    this.x = e.pageX;
-    this.y = e.pageY;
+    this.x = e.clientX;
+    this.y = e.clientY;
 }
 
 function destroy () {
