@@ -1,17 +1,17 @@
 'use strict';
 
-var instance,
-    removeListener;
+function Mouse () {}
 
-function init () {
-    removeListener = addListener(onMouseMove.bind(this));
+function init (w = window) {
+    this.wrapper = w;
+    this.removeListener = addListener.call(this, onMouseMove.bind(this));
 }
 
 function addListener (mouseHandler) {
-    window.addEventListener('mousemove', mouseHandler);
+    this.wrapper.addEventListener('mousemove', mouseHandler);
 
     return function () {
-        window.removeEventListener('mousemove', mouseHandler);
+        this.wrapper.removeEventListener('mousemove', mouseHandler);
     }
 }
 
@@ -21,21 +21,12 @@ function onMouseMove (e) {
 }
 
 function destroy () {
-    if (removeListener) removeListener();
+    if (this.removeListener) this.removeListener();
 }
 
-var prototype = {
+Mouse.prototype = {
     init: init,
     destroy: destroy
 };
 
-export var Mouse = {
-    getInstance: function () {
-        if (typeof instance === 'undefined') {
-            instance = Object.create(prototype);
-            instance.init();
-        }
-
-        return instance;
-    }
-}
+export { Mouse }
