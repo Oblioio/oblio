@@ -392,9 +392,13 @@ function loadImage(url, callback){
 function getPerc () {
 
     var loaded = sectionLoaderState.filesLoaded;
-    var totalLoad = sectionLoaderState.filesToLoad.reduce(function (acc, curr) {
-        return acc++;
-    }, 0);
+    var totalLoad = sectionLoaderState.filesToLoad.length; 
+    
+    if (this.assetManager) {
+        let assetManagerLoaded = this.assetManager.getLoaded();
+        loaded += assetManagerLoaded.loaded;
+        totalLoad += assetManagerLoaded.total;
+    }
 
     return loaded/totalLoad;
 }

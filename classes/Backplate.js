@@ -102,6 +102,7 @@ function resize(w, h){
     if (!w || !h) {
         // if width & height are not passed, use the resizeContainer, if resizeContainer is not provided, use container;
         rect = this.elements.resizeContainer ? this.elements.resizeContainer.getBoundingClientRect(): this.container.getBoundingClientRect();
+
         w = rect.width;
         h = rect.height;
     }

@@ -2,9 +2,9 @@ import { BG_Image } from 'OblioUtils/classes/BG_Image';
 import { BG_Video } from 'OblioUtils/classes/BG_Video';
 import { Backplate } from 'OblioUtils/classes/Backplate';
 
-var slide_ids = {};
-
 var slideShow = function (data) {
+    this.removeFunctions = [];
+    this.slide_ids = {};
 
     var el = data.el || data;
 
@@ -74,19 +74,44 @@ var slideShow = function (data) {
 function addEventHandlers () {
 
     if (this.slides.length > 1) {
-        this.elements.paginator_container.addEventListener('click', this.clickHandler.bind(this));
+        addListener.call(this, this.elements.paginator_container, 'click', this.clickHandler.bind(this));
+        // this.elements.paginator_container.addEventListener('click', this.clickHandler.bind(this));
 
-        this.elements.wrapper.addEventListener('mousedown', mouseDown.bind(this));
-        this.elements.wrapper.addEventListener('mousemove', mouseMove.bind(this));
-        window.addEventListener('mouseup', mouseUp.bind(this));
+        addListener.call(this, this.elements.wrapper, 'mousedown', mouseDown.bind(this));
+        // this.elements.wrapper.addEventListener('mousedown', mouseDown.bind(this));
+        
+        addListener.call(this, this.elements.wrapper, 'mousemove', mouseMove.bind(this));
+        // this.elements.wrapper.addEventListener('mousemove', mouseMove.bind(this));
+        
+        addListener.call(this, window, 'mouseup', mouseUp.bind(this));
+        // window.addEventListener('mouseup', mouseUp.bind(this));
 
-        this.elements.wrapper.addEventListener('touchstart', touchStart.bind(this));
-        this.elements.wrapper.addEventListener('touchmove', touchMove.bind(this));
+        addListener.call(this, this.elements.wrapper, 'touchstart', touchStart.bind(this))
+        // this.elements.wrapper.addEventListener('touchstart', touchStart.bind(this));
+
+        addListener.call(this, this.elements.wrapper, 'touchmove', touchMove.bind(this));
+        // this.elements.wrapper.addEventListener('touchmove', touchMove.bind(this));
+
+        addListener.call(this, this.elements.wrapper, 'touchend', touchEnd.bind(this));
         this.elements.wrapper.addEventListener('touchend', touchEnd.bind(this));
     } else {
         this.elements.wrapper.className = this.elements.wrapper.className + ' disabled';
     }
 
+}
+
+function addListener (target, event, listener) {
+    target.addEventListener(event, listener);
+    this.removeFunctions.push(() => target.removeEventListener(event, listener));
+}
+
+function removeEventListeners () {
+    let removeFunction = this.removeFunctions.pop();
+
+    while (removeFunction) {
+        removeFunction();
+        removeFunction = this.removeFunctions.pop();
+    }
 }
 
 function startDrag (pageX, pageY) {
@@ -542,7 +567,7 @@ function goToId (id, instant) {
         return;
     }
 
-    var i = slide_ids[id];
+    var i = this.slide_ids[id];
 
     this.state.direction = 'left';
     this.state.last_index = this.state.current_index;
@@ -740,6 +765,27 @@ function exit () {
     }
 }
 
+function destroy () {
+    removeEventListeners.call(this);
+
+    for (let i = 0; i < this.slides.length; i++) {
+        this.slides[i].destroy();
+    }
+
+    for (const key in this.elements) {
+        if (this.elements.hasOwnProperty(key)) {
+            delete this.elements[key];
+        }
+    }
+
+    for (var prop in this) {
+        if (this.hasOwnProperty(prop)) {
+            delete this[prop];
+        }
+    }
+    
+}
+
 slideShow.prototype._go = go;
 slideShow.prototype._updateState = updateState;
 
@@ -768,6 +814,8 @@ slideShow.prototype.startDrag = startDrag;
 slideShow.prototype.drag = drag;
 slideShow.prototype.stopDrag = stopDrag;
 slideShow.prototype.positionSlides = positionSlides;
+
+slideShow.prototype.destroy = destroy;
 
 export var Slideshow = {
     getNew: function (data) {
